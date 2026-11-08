@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FDF7EE">
+<meta name="description" content="角落生物们的治愈小页面：白熊、企鹅？、炸猪排、猫、蜥蜴……大家快乐地生活在一起。">
+<title>角落生物们 · 快乐地生活在一起</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%A7%B8%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#6A5546;
+    --ink-2:#8E7766;
+    --ink-3:#B29B88;
+    --paper:#FFFCF7;
+    --line:#F1E1D0;
+    --pink:#E59A94;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 520px at 10% -6%, #FDEBE4 0%, rgba(253,235,228,0) 62%),
+      radial-gradient(820px 520px at 102% 6%, #E9F2EA 0%, rgba(233,242,234,0) 58%),
+      radial-gradient(760px 460px at 50% 112%, #FBEFDA 0%, rgba(251,239,218,0) 62%),
+      #FDF7EE;
+    background-attachment:fixed;
+    min-height:100vh;
+    -webkit-tap-highlight-color:transparent;
+  }
+  ::selection{background:#F7D8D2;color:#5E4637}
+  .sprite{position:absolute;width:0;height:0;overflow:hidden}
+  .hero{
+    max-width:660px;
+    margin:0 auto;
+    padding:clamp(30px,6vw,60px) 22px 4px;
+    text-align:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin:0;
+    padding:7px 16px;
+    border-radius:999px;
+    background:rgba(255,252,247,.75);
+    border:1px solid #F1DFCE;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    color:#AE907A;
+    box-shadow:0 4px 14px rgba(180,140,110,.07);
+  }
+  .eyebrow::before,.eyebrow::after{
+    content:"✦";
+    font-size:8px;
+    color:#DFAE8F;
+    letter-spacing:0;
+  }
+  .hero h1{
+    margin:18px auto 0;
+    font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-weight:800;
+    line-height:1.3;
+    color:#5F4A3C;
+  }
+  .h1-main{
+    display:block;
+    font-size:clamp(30px,8.4vw,44px);
+    letter-spacing:.1em;
+    text-indent:.1em;
+  }
+  .h1-sub{
+    display:block;
+    margin-top:6px;
+    font-size:clamp(19px,5.4vw,28px);
+    letter-spacing:.14em;
+    text-indent:.14em;
+    color:#DC9892;
+    font-weight:700;
+  }
+  .h1-sub::before,.h1-sub::after{
+    content:"♡";
+    font-size:.56em;
+    vertical-align:.22em;
+    color:#E9B4AE;
+    margin:0 .55em;
+  }
+  .lead{
+    margin:14px auto 0;
+    max-width:29em;
+    font-size:13px;
+    line-height:1.9;
+    color:var(--ink-2);
+  }
+  .stage{
+    width:min(100% - 30px, 540px);
+    margin:24px auto 0;
+  }
+  .frame{
+    position:relative;
+    margin-top:14px;
+    background:#FFFDF9;
+    border-radius:30px;
+    padding:9px;
+    box-shadow:
+      0 30px 70px -30px rgba(167,120,90,.5),
+      0 10px 28px rgba(167,120,90,.12);
+  }
+  .frame::before{
+    content:"";
+    position:absolute;
+    top:-13px;
+    left:50%;
+    width:112px;
+    height:26px;
+    border-radius:4px;
+    background:repeating-linear-gradient(45deg,#F6CFC7 0 10px,#FBE3DE 10px 20px);
+    opacity:.92;
+    transform:translateX(-50%) rotate(-2.5deg);
+    box-shadow:0 2px 6px rgba(180,140,110,.16);
+    z-index:2;
+  }
+  .scene-wrap{
+    border-radius:22px;
+    overflow:hidden;
+    background:#FDF1E3;
+  }
+  .scene-svg{
+    display:block;
+    width:100%;
+    height:auto;
+    touch-action:manipulation;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .stage svg [data-tap]{cursor:pointer}
+  .stage svg [data-tap]:focus{outline:none}
+  .stage svg [data-tap]:focus-visible{filter:drop-shadow(0 0 5px #E8A7A1)}
+  .speech{
+    position:relative;
+    margin:16px auto 0;
+    width:min(100% - 40px, 440px);
+    min-height:46px;
+    padding:11px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:12.5px;
+    line-height:1.7;
+    color:#7A6353;
+    background:var(--paper);
+    border:1.5px solid #F0DCC9;
+    border-radius:18px;
+    box-shadow:0 5px 16px rgba(180,140,110,.08);
+  }
+  .speech::before{
+    content:"";
+    position:absolute;
+    top:-7px;
+    left:50%;
+    width:12px;
+    height:12px;
+    background:var(--paper);
+    border-left:1.5px solid #F0DCC9;
+    border-top:1.5px solid #F0DCC9;
+    transform:translateX(-50%) rotate(45deg);
+  }
+  .speech.pop{animation:bubble-pop .42s ease}
+  .crew{
+    width:min(100% - 30px, 780px);
+    margin:46px auto 0;
+  }
+  .crew-head{
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .crew h2{
+    margin:0;
+    font-size:18px;
+    letter-spacing:.08em;
+    color:#634E3F;
+  }
+  .crew h2 .jp{
+    display:inline-block;
+    margin-left:8px;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.2em;
+    color:var(--ink-3);
+  }
+  .crew h2::before,.crew h2::after{
+    content:"✦";
+    font-size:10px;
+    color:#E9C28F;
+    vertical-align:.25em;
+    margin:0 10px;
+  }
+  .crew-note{
+    margin:8px 0 0;
+    font-size:11.5px;
+    color:var(--ink-3);
+    letter-spacing:.05em;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  @media(min-width:620px){
+    .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  }
+  @media(min-width:960px){
+    .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  }
+  .card{
+    background:#FFFCF6;
+    border:1.5px solid #F4E7D8;
+    border-radius:22px;
+    padding:12px 13px 15px;
+    box-shadow:0 6px 18px rgba(180,140,110,.1);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card-art{
+    height:124px;
+    border-radius:46% 54% 52% 48% / 50% 44% 56% 50%;
+    background:
+      linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,0) 45%),
+      var(--tint,#F7EBDD);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:11px;
+    overflow:hidden;
+  }
+  .card:nth-child(3n+1) .card-art{border-radius:46% 54% 52% 48% / 50% 44% 56% 50%}
+  .card:nth-child(3n+2) .card-art{border-radius:54% 46% 48% 52% / 44% 54% 46% 56%}
+  .card:nth-child(3n) .card-art{border-radius:50% 50% 46% 54% / 54% 48% 52% 46%}
+  .card-art svg{width:100%;height:100%;display:block}
+  .card h3{
+    margin:0;
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    flex-wrap:wrap;
+    font-size:14.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    color:#5F4A3C;
+  }
+  .card h3 span{
+    font-size:9.5px;
+    font-weight:500;
+    letter-spacing:.08em;
+    color:var(--ink-3);
+  }
+  .card p{
+    margin:5px 0 0;
+    font-size:11.5px;
+    line-height:1.65;
+    color:var(--ink-2);
+  }
+  @media(hover:hover){
+    .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(180,140,110,.16)}
+  }
+  .card:active{transform:scale(.985)}
+  footer{
+    max-width:780px;
+    margin:10px auto 0;
+    padding:30px 22px 46px;
+    text-align:center;
+    font-size:11px;
+    line-height:1.9;
+    color:#B4A08E;
+  }
+  footer p{margin:0}
+  footer .made{margin-top:4px;letter-spacing:.06em}
+  footer .made span{color:#E39A94}
+  @media(max-width:420px){
+    .card{padding:10px 11px 13px;border-radius:18px}
+    .card-art{height:108px;margin-bottom:9px}
+    .card h3{font-size:13.5px}
+    .card p{font-size:11px}
+    .frame{border-radius:26px}
+    .scene-wrap{border-radius:19px}
+  }
+
+  /* ---- animations ---- */
+  .char-anim{
+    animation-name:bob;
+    animation-duration:var(--dur,4.6s);
+    animation-delay:var(--delay,0s);
+    animation-timing-function:ease-in-out;
+    animation-iteration-count:infinite;
+    transform-box:fill-box;
+  }
+  .char-anim.is-floaty{
+    animation-name:floaty;
+    animation-duration:var(--dur,5.4s);
+  }
+  .char-anim.boing{
+    animation-name:boing;
+    animation-duration:.72s;
+    animation-delay:0s;
+    animation-timing-function:cubic-bezier(.34,1.56,.64,1);
+    animation-iteration-count:1;
+  }
+  .tw{animation:twinkle 3.8s ease-in-out infinite}
+  .bub{animation:floaty 4.6s ease-in-out infinite}
+  .heart-pop{opacity:0;animation:heart-float 1.15s ease-out forwards}
+  @keyframes bob{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+  }
+  @keyframes floaty{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-13px)}
+  }
+  @keyframes boing{
+    0%{transform:translateY(0)}
+    26%{transform:translateY(-16px)}
+    48%{transform:translateY(0)}
+    64%{transform:translateY(-7px)}
+    82%{transform:translateY(0)}
+    92%{transform:translateY(-3px)}
+    100%{transform:translateY(0)}
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.22}
+    50%{opacity:.95}
+  }
+  @keyframes heart-float{
+    0%{opacity:0;transform:translateY(4px) scale(.55)}
+    18%{opacity:1}
+    100%{opacity:0;transform:translateY(-58px) scale(1.05)}
+  }
+  @keyframes bubble-pop{
+    0%{transform:scale(.97)}
+    60%{transform:scale(1.02)}
+    100%{transform:scale(1)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= 角色图形库（只定义一次，页面内复用） ================= -->
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="eye">
+      <circle r="5.2" fill="#4A3B33"/>
+      <circle cx="1.6" cy="-1.6" r="1.6" fill="#FFFFFF"/>
+    </g>
+    <g id="eye-s">
+      <circle r="3.4" fill="#4A3B33"/>
+      <circle cx="1" cy="-1" r="1" fill="#FFFFFF"/>
+    </g>
+    <g id="blush">
+      <ellipse rx="8" ry="4.5" fill="#F3AFA9" opacity=".8"/>
+    </g>
+    <path id="smile" d="M-7 0 Q0 7 7 0" fill="none" stroke="#5C4A3D" stroke-width="2.4" stroke-linecap="round"/>
+
+    <!-- 白熊 -->
+    <g id="c-shirokuma" stroke-linejoin="round" stroke-linecap="round">
+      <circle cx="-42" cy="-50" r="16" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <circle cx="-42" cy="-50" r="8" fill="#F6E3DE"/>
+      <circle cx="42" cy="-50" r="16" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <circle cx="42" cy="-50" r="8" fill="#F6E3DE"/>
+      <ellipse cx="-57" cy="18" rx="13" ry="21" transform="rotate(18 -57 18)" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <ellipse cx="57" cy="18" rx="13" ry="21" transform="rotate(-18 57 18)" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="61" ry="60" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <ellipse cx="0" cy="24" rx="32" ry="30" fill="#FFF4E6" opacity=".9"/>
+      <ellipse cx="-26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D5C9B9" stroke-width="3"/>
+      <ellipse cx="26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D5C9B9" stroke-width="3"/>
+      <use href="#eye" x="-20" y="-6"/>
+      <use href="#eye" x="20" y="-6"/>
+      <path d="M-6 6 Q0 12 6 6" fill="none" stroke="#5C4A3D" stroke-width="2.4"/>
+      <use href="#blush" x="-36" y="8"/>
+      <use href="#blush" x="36" y="8"/>
+    </g>
+
+    <!-- 企鹅？ -->
+    <g id="c-penguin" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="-50" cy="16" rx="12" ry="25" transform="rotate(16 -50 16)" fill="#9BC4B2" stroke="#78A28D" stroke-width="3"/>
+      <ellipse cx="50" cy="16" rx="12" ry="25" transform="rotate(-16 50 16)" fill="#9BC4B2" stroke="#78A28D" stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="52" ry="62" fill="#A8CDBB" stroke="#78A28D" stroke-width="3"/>
+      <ellipse cx="0" cy="18" rx="31" ry="39" fill="#FBF7EC"/>
+      <ellipse cx="-20" cy="59" rx="15" ry="9" fill="#F3BE5B" stroke="#D6A03E" stroke-width="2.6"/>
+      <ellipse cx="20" cy="59" rx="15" ry="9" fill="#F3BE5B" stroke="#D6A03E" stroke-width="2.6"/>
+      <use href="#eye" x="-18" y="-16"/>
+      <use href="#eye" x="18" y="-16"/>
+      <path d="M0 -9 L11 -3 L0 3 L-10 -3 Z" fill="#F4C05A" stroke="#D9A343" stroke-width="2"/>
+      <use href="#blush" x="-33" y="-2"/>
+      <use href="#blush" x="33" y="-2"/>
+    </g>
+
+    <!-- 炸猪排 -->
+    <g id="c-tonkatsu" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="0" cy="0" rx="58" ry="52" fill="#EBB868" stroke="#C9973F" stroke-width="3"/>
+      <ellipse cx="-40" cy="-26" rx="14" ry="10" transform="rotate(-15 -40 -26)" fill="#FBF0DC" stroke="#C9973F" stroke-width="2.5"/>
+      <ellipse cx="-40" cy="-25" rx="6" ry="4.5" transform="rotate(-15 -40 -25)" fill="#F2BCAF"/>
+      <ellipse cx="-55" cy="18" rx="9" ry="14" transform="rotate(18 -55 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
+      <ellipse cx="55" cy="18" rx="9" ry="14" transform="rotate(-18 55 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
+      <g fill="#D9A94E" opacity=".6">
+        <circle cx="34" cy="-22" r="2.6"/><circle cx="44" cy="-4" r="2.2"/><circle cx="30" cy="30" r="2.4"/>
+        <circle cx="8" cy="-38" r="2"/><circle cx="46" cy="24" r="2"/><circle cx="16" cy="38" r="1.8"/>
+        <circle cx="-6" cy="38" r="2.2"/><circle cx="24" cy="12" r="1.6"/>
+      </g>
+      <ellipse cx="-18" cy="54" rx="14" ry="8" fill="#DCA94F" stroke="#BE8C3B" stroke-width="2.6"/>
+      <ellipse cx="18" cy="54" rx="14" ry="8" fill="#DCA94F" stroke="#BE8C3B" stroke-width="2.6"/>
+      <use href="#eye" x="-8" y="-4"/>
+      <use href="#eye" x="20" y="-4"/>
+      <use href="#smile" x="4" y="12"/>
+      <use href="#blush" x="-26" y="14"/>
+      <use href="#blush" x="34" y="14"/>
+    </g>
+
+    <!-- 猫 -->
+    <g id="c-neko" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M40 34 Q74 40 70 10 Q66 -12 46 -4" fill="none" stroke="#DCC7A6" stroke-width="15" stroke-linecap="round"/>
+      <path d="M-44 -26 L-54 -62 L-18 -44 Z" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
+      <path d="M-43 -32 L-48 -53 L-28 -42 Z" fill="#F3D3CE"/>
+      <path d="M44 -26 L54 -62 L18 -44 Z" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
+      <path d="M43 -32 L48 -53 L28 -42 Z" fill="#F3D3CE"/>
+      <ellipse cx="0" cy="4" rx="56" ry="54" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
+      <path d="M12 -44 Q38 -56 48 -30 Q28 -22 12 -44 Z" fill="#E7D4B6" opacity=".85"/>
+      <ellipse cx="-22" cy="52" rx="15" ry="9" fill="#FBF0DD" stroke="#CDB99C" stroke-width="2.6"/>
+      <ellipse cx="22" cy="52" rx="15" ry="9" fill="#FBF0DD" stroke="#CDB99C" stroke-width="2.6"/>
+      <use href="#eye" x="-19" y="-8"/>
+      <use href="#eye" x="19" y="-8"/>
+      <path d="M-3 2 L3 2 L0 6 Z" fill="#DDA49D"/>
+      <path d="M0 6 Q-6 13 -11 8 M0 6 Q6 13 11 8" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
+      <g stroke="#C6B196" stroke-width="1.6" stroke-linecap="round">
+        <path d="M-30 4 L-46 0"/><path d="M-31 10 L-47 11"/>
+        <path d="M30 4 L46 0"/><path d="M31 10 L47 11"/>
+      </g>
+      <use href="#blush" x="-35" y="10"/>
+      <use href="#blush" x="35" y="10"/>
+    </g>
+
+    <!-- 蜥蜴 -->
+    <g id="c-tokage" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M40 34 Q74 42 78 14 Q80 -4 64 -4" fill="none" stroke="#8FC9C0" stroke-width="20" stroke-linecap="round"/>
+      <ellipse cx="0" cy="2" rx="58" ry="50" fill="#8FC9C0" stroke="#6EA49B" stroke-width="3"/>
+      <ellipse cx="0" cy="22" rx="33" ry="26" fill="#F7EFCF" stroke="#E4D7B2" stroke-width="2"/>
+      <path d="M-22 16 Q0 20 22 16 M-24 26 Q0 30 24 26" stroke="#E8DBB6" stroke-width="2" fill="none"/>
+      <ellipse cx="-48" cy="20" rx="10" ry="16" transform="rotate(20 -48 20)" fill="#8FC9C0" stroke="#6EA49B" stroke-width="2.6"/>
+      <ellipse cx="48" cy="20" rx="10" ry="16" transform="rotate(-20 48 20)" fill="#8FC9C0" stroke="#6EA49B" stroke-width="2.6"/>
+      <ellipse cx="-20" cy="52" rx="16" ry="9" fill="#F7EFCF" stroke="#6EA49B" stroke-width="2.6"/>
+      <ellipse cx="20" cy="52" rx="16" ry="9" fill="#F7EFCF" stroke="#6EA49B" stroke-width="2.6"/>
+      <use href="#eye" x="-18" y="-8"/>
+      <use href="#eye" x="18" y="-8"/>
+      <use href="#smile" x="0" y="4"/>
+      <use href="#blush" x="-34" y="4"/>
+      <use href="#blush" x="34" y="4"/>
+    </g>
+
+    <!-- 珍珠 -->
+    <g id="c-tapioca" stroke-linejoin="round" stroke-linecap="round">
+      <circle cx="-14" cy="30" r="24" fill="#F7EBCB" stroke="#D9C59C" stroke-width="3"/>
+      <circle cx="22" cy="40" r="17" fill="#F7EBCB" stroke="#D9C59C" stroke-width="3"/>
+      <circle cx="10" cy="4" r="14" fill="#F9F0D6" stroke="#D9C59C" stroke-width="3"/>
+      <ellipse cx="-21" cy="20" rx="6" ry="4" transform="rotate(-30 -21 20)" fill="#FFFFFF" opacity=".7"/>
+      <ellipse cx="16" cy="32" rx="4" ry="3" fill="#FFFFFF" opacity=".7"/>
+      <ellipse cx="5" cy="-2" rx="3.5" ry="2.5" fill="#FFFFFF" opacity=".7"/>
+      <use href="#eye-s" x="-22" y="28"/>
+      <use href="#eye-s" x="-6" y="28"/>
+      <path d="M-16 36 Q-14 39 -12 36" stroke="#5C4A3D" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <use href="#eye-s" x="15" y="38"/>
+      <use href="#eye-s" x="28" y="38"/>
+      <path d="M20 45 Q22 48 24 45" stroke="#5C4A3D" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <use href="#eye-s" x="4" y="2"/>
+      <use href="#eye-s" x="16" y="2"/>
+      <path d="M8 9 Q10 12 12 9" stroke="#5C4A3D" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- 假蜗牛 -->
+    <g id="c-nisetsumuri" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="0" cy="40" rx="60" ry="25" fill="#C3CEEE" stroke="#98A5CC" stroke-width="3"/>
+      <circle cx="-34" cy="14" r="28" fill="#C3CEEE" stroke="#98A5CC" stroke-width="3"/>
+      <circle cx="16" cy="2" r="34" fill="#F6F0E4" stroke="#CBBFA6" stroke-width="3"/>
+      <circle cx="16" cy="2" r="23" fill="none" stroke="#DCCFB6" stroke-width="3"/>
+      <circle cx="16" cy="2" r="12" fill="none" stroke="#DCCFB6" stroke-width="3"/>
+      <circle cx="16" cy="2" r="3.5" fill="#DCCFB6"/>
+      <path d="M-46 -8 Q-50 -26 -56 -31" fill="none" stroke="#98A5CC" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="-57" cy="-33" r="4.5" fill="#C3CEEE" stroke="#98A5CC" stroke-width="2"/>
+      <path d="M-30 -12 Q-30 -28 -34 -34" fill="none" stroke="#98A5CC" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="-34.5" cy="-36" r="4.5" fill="#C3CEEE" stroke="#98A5CC" stroke-width="2"/>
+      <use href="#eye" x="-48" y="2"/>
+      <use href="#eye" x="-27" y="4"/>
+      <ellipse cx="-57" cy="15" rx="6.5" ry="4" fill="#F3AFA9" opacity=".8"/>
+      <path d="M-42 15 Q-37 21 -32 15" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <!-- 杂草 -->
+    <g id="c-zassou" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="-30" cy="8" rx="15" ry="44" transform="rotate(-34 -30 8)" fill="#9AC476" stroke="#78A159" stroke-width="3"/>
+      <ellipse cx="32" cy="10" rx="14" ry="42" transform="rotate(30 32 10)" fill="#A6CC84" stroke="#78A159" stroke-width="3"/>
+      <ellipse cx="-46" cy="30" rx="12" ry="26" transform="rotate(-58 -46 30)" fill="#A6CC84" stroke="#78A159" stroke-width="3"/>
+      <ellipse cx="48" cy="32" rx="12" ry="26" transform="rotate(56 48 32)" fill="#9AC476" stroke="#78A159" stroke-width="3"/>
+      <ellipse cx="-2" cy="0" rx="18" ry="54" transform="rotate(-4 -2 0)" fill="#8DBA6B" stroke="#76A054" stroke-width="3"/>
+      <use href="#eye" x="-9.5" y="2"/>
+      <use href="#eye" x="9.5" y="2"/>
+      <ellipse cx="-13.5" cy="13" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
+      <ellipse cx="13.5" cy="13" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
+      <path d="M-4 11 Q0 16 4 11" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
+      <g transform="translate(-44 -34)">
+        <g fill="#FFFDF6" stroke="#EADFCB" stroke-width="1">
+          <circle cx="0" cy="-9" r="5"/><circle cx="8.5" cy="-3" r="5"/><circle cx="5" cy="7" r="5"/>
+          <circle cx="-5" cy="7" r="5"/><circle cx="-8.5" cy="-3" r="5"/>
+        </g>
+        <circle r="4.5" fill="#F4D06F"/>
+      </g>
+    </g>
+
+    <!-- 炸虾尾 -->
+    <g id="c-ebifurai" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-2 -38 C-34 -44 -50 -70 -42 -86 C-22 -80 -10 -58 -2 -38 Z" fill="#F5A48C" stroke="#D9715C" stroke-width="3"/>
+      <path d="M2 -38 C34 -44 50 -70 42 -86 C22 -80 10 -58 2 -38 Z" fill="#F5A48C" stroke="#D9715C" stroke-width="3"/>
+      <path d="M-30 -54 C-27 -64 -22 -72 -16 -77" fill="none" stroke="#FFE9D6" stroke-width="4" stroke-linecap="round" opacity=".95"/>
+      <path d="M30 -54 C27 -64 22 -72 16 -77" fill="none" stroke="#FFE9D6" stroke-width="4" stroke-linecap="round" opacity=".95"/>
+      <path d="M0 -38 C-16 -62 -12 -92 0 -96 C12 -92 16 -62 0 -38 Z" fill="#FFE9D6" stroke="#D9715C" stroke-width="3"/>
+      <ellipse cx="0" cy="10" rx="44" ry="40" fill="#EBB868" stroke="#C9973F" stroke-width="3"/>
+      <ellipse cx="-44" cy="22" rx="8" ry="13" transform="rotate(18 -44 22)" fill="#EBB868" stroke="#C9973F" stroke-width="2.4"/>
+      <ellipse cx="44" cy="22" rx="8" ry="13" transform="rotate(-18 44 22)" fill="#EBB868" stroke="#C9973F" stroke-width="2.4"/>
+      <g fill="#D9A94E" opacity=".6">
+        <circle cx="-26" cy="-12" r="2.4"/><circle cx="26" cy="-14" r="2.2"/><circle cx="30" cy="20" r="2"/>
+        <circle cx="-30" cy="24" r="2"/><circle cx="4" cy="-26" r="1.8"/>
+      </g>
+      <use href="#eye" x="-15" y="0"/>
+      <use href="#eye" x="15" y="0"/>
+      <use href="#smile" x="0" y="12"/>
+      <use href="#blush" x="-30" y="14"/>
+      <use href="#blush" x="30" y="14"/>
+    </g>
+
+    <!-- 灰尘 -->
+    <g id="c-hokori" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-50 30 C-66 28 -70 8 -54 0 C-60 -20 -42 -34 -26 -26 C-20 -46 6 -52 18 -34 C38 -46 60 -30 50 -10 C68 -2 64 24 44 26 C40 42 14 48 4 36 C-8 48 -34 46 -50 30 Z" fill="#D9D2C8" stroke="#B7AC9F" stroke-width="3"/>
+      <g fill="#C3B9AC" opacity=".55">
+        <circle cx="-64" cy="-16" r="2.4"/><circle cx="58" cy="-22" r="2"/><circle cx="52" cy="38" r="2.6"/><circle cx="-54" cy="44" r="2"/>
+      </g>
+      <use href="#eye" x="-13" y="-4"/>
+      <use href="#eye" x="13" y="-4"/>
+      <use href="#smile" x="0" y="8"/>
+      <use href="#blush" x="-28" y="6"/>
+      <use href="#blush" x="28" y="6"/>
+    </g>
+
+    <!-- 麻雀 -->
+    <g id="c-suzume" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M36 34 Q66 36 72 56 Q50 56 34 46 Z" fill="#B08E64" stroke="#96754D" stroke-width="2.6"/>
+      <ellipse cx="0" cy="4" rx="47" ry="44" fill="#CDAB7D" stroke="#A7855C" stroke-width="3"/>
+      <path d="M-40 -18 Q0 -56 40 -18 Q0 -32 -40 -18 Z" fill="#B08E64" opacity=".9"/>
+      <ellipse cx="0" cy="22" rx="28" ry="24" fill="#F7EBD7"/>
+      <ellipse cx="-42" cy="16" rx="11" ry="20" transform="rotate(14 -42 16)" fill="#B08E64" stroke="#96754D" stroke-width="2.4"/>
+      <ellipse cx="42" cy="16" rx="11" ry="20" transform="rotate(-14 42 16)" fill="#B08E64" stroke="#96754D" stroke-width="2.4"/>
+      <ellipse cx="-12" cy="51" rx="10" ry="6" fill="#E3A75F" stroke="#C58C44" stroke-width="2.2"/>
+      <ellipse cx="12" cy="51" rx="10" ry="6" fill="#E3A75F" stroke="#C58C44" stroke-width="2.2"/>
+      <use href="#eye" x="-16" y="-6"/>
+      <use href="#eye" x="16" y="-6"/>
+      <path d="M0 4 L9 9 L0 14 L-9 9 Z" fill="#F0B65A" stroke="#D69A3F" stroke-width="2"/>
+      <use href="#blush" x="-30" y="8"/>
+      <use href="#blush" x="30" y="8"/>
+    </g>
+
+    <!-- 包袱布 -->
+    <g id="c-furoshiki" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-26 -14 L-44 -50 L-8 -30 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
+      <path d="M26 -14 L44 -50 L8 -30 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
+      <path d="M-54 40 Q-60 -2 -22 -8 Q0 -18 22 -8 Q60 -2 54 40 Q0 56 -54 40 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
+      <g fill="#FFF8F5" opacity=".85">
+        <circle cx="-34" cy="14" r="3"/><circle cx="-20" cy="32" r="2.4"/><circle cx="30" cy="10" r="3"/>
+        <circle cx="42" cy="26" r="2.2"/><circle cx="4" cy="32" r="2.6"/><circle cx="-44" cy="30" r="2"/>
+        <circle cx="18" cy="-6" r="2.4"/>
+      </g>
+      <use href="#eye" x="-17" y="6"/>
+      <use href="#eye" x="17" y="6"/>
+      <use href="#smile" x="0" y="16"/>
+      <use href="#blush" x="-31" y="16"/>
+      <use href="#blush" x="31" y="16"/>
+    </g>
+
+    <!-- 饭团 -->
+    <g id="c-onigiri" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M0 -58 C14 -58 50 4 50 24 C50 42 30 50 0 50 C-30 50 -50 42 -50 24 C-50 4 -14 -58 0 -58 Z" fill="#FEFCF6" stroke="#D8D0C0" stroke-width="3"/>
+      <path d="M-24 28 Q0 34 24 28 L22 48 Q0 54 -22 48 Z" fill="#4E5E4C"/>
+      <g stroke="#EFE7D6" stroke-width="2" stroke-linecap="round">
+        <path d="M-30 -26 l4 4"/><path d="M26 -32 l-4 4"/><path d="M34 2 l4 4"/>
+      </g>
+      <use href="#eye" x="-16" y="-4"/>
+      <use href="#eye" x="16" y="-4"/>
+      <use href="#smile" x="0" y="8"/>
+      <use href="#blush" x="-31" y="8"/>
+      <use href="#blush" x="31" y="8"/>
+    </g>
+
+    <!-- 金鱼 -->
+    <g id="c-kingyo" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-30 0 Q-66 -30 -80 -12 Q-64 4 -34 14 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.6"/>
+      <path d="M-32 12 Q-66 24 -70 46 Q-48 42 -28 22 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.6"/>
+      <path d="M-6 -34 Q0 -50 14 -40 Q8 -32 -2 -30 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.4"/>
+      <ellipse cx="2" cy="6" rx="40" ry="36" fill="#F49B77" stroke="#D97D5C" stroke-width="3"/>
+      <ellipse cx="2" cy="18" rx="25" ry="21" fill="#FDEBDD"/>
+      <ellipse cx="-36" cy="14" rx="8" ry="14" transform="rotate(24 -36 14)" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
+      <ellipse cx="40" cy="14" rx="8" ry="14" transform="rotate(-24 40 14)" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
+      <use href="#eye" x="-12" y="-4"/>
+      <use href="#eye" x="16" y="-4"/>
+      <circle cx="2" cy="12" r="3.2" fill="none" stroke="#B65C41" stroke-width="2"/>
+      <use href="#blush" x="-25" y="8"/>
+      <use href="#blush" x="28" y="8"/>
+    </g>
+
+    <!-- 小袋子 -->
+    <g id="c-pochette" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-20 -26 Q-20 -52 0 -52 Q20 -52 20 -26" fill="none" stroke="#9FBCA8" stroke-width="7" stroke-linecap="round"/>
+      <path d="M-46 36 Q-54 -10 -30 -22 Q0 -34 30 -22 Q54 -10 46 36 Q0 52 -46 36 Z" fill="#D9E9DD" stroke="#A9C2B2" stroke-width="3"/>
+      <path d="M-30 -19 Q0 -30 30 -19" fill="none" stroke="#8FA995" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="31" cy="-20" r="4.5" fill="#8FA995"/>
+      <use href="#eye" x="-16" y="4"/>
+      <use href="#eye" x="16" y="4"/>
+      <use href="#smile" x="0" y="14"/>
+      <use href="#blush" x="-30" y="14"/>
+      <use href="#blush" x="30" y="14"/>
+    </g>
+
+    <!-- 幽灵 -->
+    <g id="c-obake" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-44 36 L-44 -6 C-44 -50 44 -50 44 -6 L44 36 Q34 26 24 36 Q14 46 4 36 Q-6 26 -16 36 Q-26 46 -44 36 Z" fill="#F8F9FD" stroke="#D2D6E6" stroke-width="3"/>
+      <ellipse cx="-47" cy="10" rx="9" ry="13" transform="rotate(16 -47 10)" fill="#F8F9FD" stroke="#D2D6E6" stroke-width="2.6"/>
+      <ellipse cx="47" cy="10" rx="9" ry="13" transform="rotate(-16 47 10)" fill="#F8F9FD" stroke="#D2D6E6" stroke-width="2.6"/>
+      <use href="#eye" x="-16" y="-8"/>
+      <use href="#eye" x="16" y="-8"/>
+      <circle cx="0" cy="6" r="3.6" fill="#5C4A3D"/>
+      <use href="#blush" x="-30" y="4"/>
+      <use href="#blush" x="30" y="4"/>
+    </g>
+  </defs>
+</svg>
+
+<header class="hero">
+  <p class="eyebrow">すみっコぐらし · SUMIKKO GURASHI</p>
+  <h1>
+    <span class="h1-main">角落生物们</span>
+    <span class="h1-sub">快乐地生活在一起</span>
+  </h1>
+  <p class="lead">房间的每个小角落里，都住着软乎乎的小伙伴。<br>挤一挤，刚刚好。</p>
+</header>
+
+<main>
+  <!-- ================= 大场景 ================= -->
+  <section class="stage" aria-label="角落生物们的房间插画">
+    <div class="frame">
+      <div class="scene-wrap">
+        <svg id="scene-svg" class="scene-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1560" role="group" aria-label="角落生物们在温暖的房间里快乐地生活，轻点角色会有惊喜">
+          <defs>
+            <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FFF8EE"/>
+              <stop offset="1" stop-color="#FBE9D6"/>
+            </linearGradient>
+            <linearGradient id="gCorner" x1="0" y1="0" x2="1" y2="0">
+              <stop offset=".34" stop-color="#C59B78" stop-opacity="0"/>
+              <stop offset=".48" stop-color="#C59B78" stop-opacity=".10"/>
+              <stop offset=".50" stop-color="#B98F6E" stop-opacity=".16"/>
+              <stop offset=".52" stop-color="#C59B78" stop-opacity=".10"/>
+              <stop offset=".66" stop-color="#C59B78" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="gFloor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#F1DCC5"/>
+              <stop offset="1" stop-color="#EAD0B3"/>
+            </linearGradient>
+            <filter id="soft" x="-40%" y="-80%" width="180%" height="260%">
+              <feGaussianBlur stdDeviation="3.5"/>
+            </filter>
+            <path id="star4" d="M0 -11 Q2.2 -2.2 11 0 Q2.2 2.2 0 11 Q-2.2 2.2 -11 0 Q-2.2 -2.2 0 -11 Z"/>
+            <path id="heart" d="M0 16 C-5 10 -15 3 -13 -4 C-12 -10 -4 -11 0 -5 C4 -11 12 -10 13 -4 C15 3 5 10 0 16 Z"/>
+          </defs>
+
+          <!-- 墙面 -->
+          <rect x="0" y="0" width="900" height="960" fill="url(#gWall)"/>
+          <rect x="0" y="0" width="900" height="960" fill="url(#gCorner)"/>
+          <line x1="450" y1="0" x2="450" y2="958" stroke="#EAD2BA" stroke-width="3" opacity=".7"/>
+
+          <!-- 踢脚线 -->
+          <rect x="0" y="958" width="900" height="48" fill="#F9EAD8"/>
+          <line x1="0" y1="958" x2="900" y2="958" stroke="#E6CBB0" stroke-width="3"/>
+          <line x1="0" y1="1006" x2="900" y2="1006" stroke="#E3C6A9" stroke-width="2.5"/>
+
+          <!-- 地板 -->
+          <rect x="0" y="1006" width="900" height="554" fill="url(#gFloor)"/>
+          <g stroke="#E2C6A8" stroke-width="2" opacity=".5" fill="none">
+            <path d="M0 1074 H900"/>
+            <path d="M0 1160 H900"/>
+            <path d="M0 1268 H900"/>
+            <path d="M0 1392 H900"/>
+            <path d="M0 1524 H900"/>
+            <path d="M170 1074 V1160 M520 1074 V1160 M760 1074 V1160"/>
+            <path d="M90 1160 V1268 M610 1160 V1268 M300 1268 V1392 M800 1268 V1392 M120 1392 V1524 M560 1392 V1524"/>
+          </g>
+
+          <!-- 地毯 -->
+          <ellipse cx="450" cy="1300" rx="362" ry="205" fill="#F9DFD9" stroke="#EFC6C0" stroke-width="4"/>
+          <ellipse cx="450" cy="1300" rx="330" ry="178" fill="none" stroke="#FCEBE7" stroke-width="8" stroke-dasharray="1 26" stroke-linecap="round"/>
+          <g fill="#FFF3F0" opacity=".8">
+            <circle cx="296" cy="1214" r="5"/>
+            <circle cx="520" cy="1166" r="4"/>
+            <circle cx="612" cy="1392" r="5"/>
+            <circle cx="252" cy="1392" r="4"/>
+            <circle cx="436" cy="1462" r="3.5"/>
+            <circle cx="700" cy="1226" r="4"/>
+            <circle cx="368" cy="1330" r="3.5"/>
+          </g>
+
+          <!-- 彩旗 -->
+          <path d="M-10 86 Q225 148 450 108 Q675 148 910 86" fill="none" stroke="#D8B593" stroke-width="3" opacity=".9"/>
+          <g stroke="#00000012" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M64 107 L104 107 L84 151 Z" fill="#EFB1AC"/>
+            <path d="M156 119 L196 119 L176 163 Z" fill="#F3CB84"/>
+            <path d="M248 124 L288 124 L268 168 Z" fill="#A6C7B3"/>
+            <path d="M340 120 L380 120 L360 164 Z" fill="#B9C6E9"/>
+            <path d="M430 108 L470 108 L450 152 Z" fill="#EFB1AC"/>
+            <path d="M520 120 L560 120 L540 164 Z" fill="#F3CB84"/>
+            <path d="M612 124 L652 124 L632 168 Z" fill="#A6C7B3"/>
+            <path d="M704 119 L744 119 L724 163 Z" fill="#B9C6E9"/>
+            <path d="M796 107 L836 107 L816 151 Z" fill="#EFB1AC"/>
+          </g>
+          <g fill="#E3C3A3">
+            <circle cx="84" cy="107" r="2.6"/><circle cx="176" cy="119" r="2.6"/><circle cx="268" cy="124" r="2.6"/>
+            <circle cx="360" cy="120" r="2.6"/><circle cx="450" cy="108" r="2.6"/><circle cx="540" cy="120" r="2.6"/>
+            <circle cx="632" cy="124" r="2.6"/><circle cx="724" cy="119" r="2.6"/><circle cx="816" cy="107" r="2.6"/>
+          </g>
+
+          <!-- 墙上闪光 -->
+          <g>
+            <use href="#star4" transform="translate(300 300) scale(1.1)" fill="#F1CE8C" class="tw" style="animation-delay:-.4s"/>
+            <use href="#star4" transform="translate(560 300) scale(.8)" fill="#F0B9B4" class="tw" style="animation-delay:-1.7s"/>
+            <use href="#star4" transform="translate(840 240) scale(1)" fill="#F1CE8C" class="tw" style="animation-delay:-2.6s"/>
+            <use href="#star4" transform="translate(90 260) scale(.7)" fill="#F0B9B4" class="tw" style="animation-delay:-3.3s"/>
+            <use href="#star4" transform="translate(480 500) scale(1)" fill="#F1CE8C" class="tw" style="animation-delay:-1.1s"/>
+            <use href="#star4" transform="translate(620 620) scale(.7)" fill="#FFFFFF" class="tw" style="animation-delay:-2.1s"/>
+            <use href="#star4" transform="translate(230 560) scale(.65)" fill="#FFFFFF" class="tw" style="animation-delay:-3.8s"/>
+            <use href="#star4" transform="translate(860 520) scale(.8)" fill="#F0B9B4" class="tw" style="animation-delay:-.9s"/>
+            <use href="#star4" transform="translate(380 760) scale(.9)" fill="#F1CE8C" class="tw" style="animation-delay:-2.9s"/>
+            <use href="#star4" transform="translate(70 720) scale(.7)" fill="#F1CE8C" class="tw" style="animation-delay:-1.5s"/>
+            <use href="#star4" transform="translate(800 810) scale(.75)" fill="#F0B9B4" class="tw" style="animation-delay:-3.5s"/>
+            <circle cx="650" cy="250" r="3.5" fill="#E8C9A6" opacity=".55"/>
+            <circle cx="200" cy="450" r="3" fill="#E8C9A6" opacity=".5"/>
+            <circle cx="740" cy="500" r="2.5" fill="#E8C9A6" opacity=".5"/>
+            <circle cx="400" cy="430" r="2.5" fill="#E8C9A6" opacity=".45"/>
+          </g>
+          <use href="#heart" transform="translate(455 700) scale(.9)" fill="#F2BDB8" opacity=".9" class="tw" style="animation-delay:-2.4s"/>
+          <use href="#heart" transform="translate(120 600) scale(.6) rotate(-12)" fill="#F4C7C2" opacity=".85" class="tw" style="animation-delay:-1.2s"/>
+
+          <!-- 金鱼泡泡 -->
+          <g class="bub" style="animation-delay:-1.8s">
+            <circle cx="808" cy="606" r="7" fill="#F2FAFB" stroke="#CFE4E7" stroke-width="2"/>
+            <circle cx="826" cy="574" r="5" fill="#F2FAFB" stroke="#CFE4E7" stroke-width="2"/>
+            <circle cx="798" cy="558" r="3.5" fill="#F2FAFB" stroke="#CFE4E7" stroke-width="2"/>
+          </g>
+
+          <!-- 地面影子 -->
+          <g fill="#B08A6B" opacity=".16" filter="url(#soft)">
+            <ellipse cx="105" cy="1042" rx="78" ry="13"/>
+            <ellipse cx="270" cy="1044" rx="72" ry="12"/>
+            <ellipse cx="442" cy="1050" rx="78" ry="13"/>
+            <ellipse cx="607" cy="1036" rx="70" ry="12"/>
+            <ellipse cx="790" cy="1036" rx="82" ry="13"/>
+            <ellipse cx="190" cy="1292" rx="58" ry="11"/>
+            <ellipse cx="415" cy="1293" rx="64" ry="11"/>
+            <ellipse cx="640" cy="1282" rx="64" ry="11"/>
+            <ellipse cx="818" cy="1285" rx="50" ry="10"/>
+            <ellipse cx="235" cy="1489" rx="82" ry="14"/>
+            <ellipse cx="462" cy="1487" rx="70" ry="13"/>
+            <ellipse cx="695" cy="1489" rx="66" ry="12"/>
+            <ellipse cx="838" cy="1462" rx="40" ry="9"/>
+            <ellipse cx="82" cy="1478" rx="30" ry="8"/>
+          </g>
+
+          <!-- ===== 飘在空中的小伙伴 ===== -->
+          <g transform="translate(175 430) scale(1.15)">
+            <g class="char-anim is-floaty" data-tap data-name="幽灵" data-line="放心，我一点也不可怕哦。" tabindex="0" role="button" aria-label="幽灵" style="--delay:-2.2s;--dur:5.8s">
+              <use href="#c-obake"/>
+            </g>
+          </g>
+          <g transform="translate(715 400) scale(1.2)">
+            <g class="char-anim is-floaty" data-tap data-name="灰尘" data-line="这个角落，就交给我来守护吧。" tabindex="0" role="button" aria-label="灰尘" style="--delay:-1s;--dur:6.4s">
+              <use href="#c-hokori"/>
+            </g>
+          </g>
+          <g transform="translate(300 645) scale(1.2)">
+            <g class="char-anim is-floaty" data-tap data-name="麻雀" data-line="啾啾！今天也一起挤挤吧。" tabindex="0" role="button" aria-label="麻雀" style="--delay:-3.6s;--dur:5.6s">
+              <use href="#c-suzume"/>
+            </g>
+          </g>
+          <g transform="translate(742 662) scale(1.15)">
+            <g class="char-anim is-floaty" data-tap data-name="金鱼" data-line="噗噜噗噜，空气里也能游泳哦。" tabindex="0" role="button" aria-label="金鱼" style="--delay:-.3s;--dur:5.2s">
+              <use href="#c-kingyo"/>
+            </g>
+          </g>
+
+          <!-- ===== 后排：主要五人组 ===== -->
+          <g transform="translate(105 950) scale(1.22)">
+            <g class="char-anim" data-tap data-name="白熊" data-line="这里暖乎乎的，我可以一直待下去吗？" tabindex="0" role="button" aria-label="白熊" style="--delay:-.8s;--dur:4.8s">
+              <use href="#c-shirokuma"/>
+            </g>
+          </g>
+          <g transform="translate(270 950) scale(1.24)">
+            <g class="char-anim" data-tap data-name="企鹅？" data-line="我是企鹅吧……应该是吧？" tabindex="0" role="button" aria-label="企鹅？" style="--delay:-2.1s;--dur:5.4s">
+              <use href="#c-penguin"/>
+            </g>
+          </g>
+          <g transform="translate(442 960) scale(1.3)">
+            <g class="char-anim" data-tap data-name="炸猪排" data-line="99% 都是油脂，也很好吃哦！" tabindex="0" role="button" aria-label="炸猪排" style="--delay:-1.4s;--dur:5s">
+              <use href="#c-tonkatsu"/>
+            </g>
+          </g>
+          <g transform="translate(607 958) scale(1.2)">
+            <g class="char-anim" data-tap data-name="猫" data-line="角落的抓痕，是我留给你的暗号。" tabindex="0" role="button" aria-label="猫" style="--delay:-3s;--dur:4.6s">
+              <use href="#c-neko"/>
+            </g>
+          </g>
+          <g transform="translate(790 958) scale(1.18)">
+            <g class="char-anim" data-tap data-name="蜥蜴" data-line="其实我是恐龙这件事，要保密哦。" tabindex="0" role="button" aria-label="蜥蜴" style="--delay:-.4s;--dur:5.2s">
+              <use href="#c-tokage"/>
+            </g>
+          </g>
+
+          <!-- ===== 中排：小不点们 ===== -->
+          <g transform="translate(190 1198) scale(1.55)">
+            <g class="char-anim" data-tap data-name="珍珠" data-line="贴在一起，就不会滚走啦。" tabindex="0" role="button" aria-label="珍珠" style="--delay:-2.6s;--dur:4.4s">
+              <use href="#c-tapioca"/>
+            </g>
+          </g>
+          <g transform="translate(415 1200) scale(1.3)">
+            <g class="char-anim" data-tap data-name="假蜗牛" data-line="我的壳，是不是很漂亮？" tabindex="0" role="button" aria-label="假蜗牛" style="--delay:-1.1s;--dur:5.6s">
+              <use href="#c-nisetsumuri"/>
+            </g>
+          </g>
+          <g transform="translate(640 1206) scale(1.25)">
+            <g class="char-anim" data-tap data-name="杂草" data-line="总有一天，我也会开花的！" tabindex="0" role="button" aria-label="杂草" style="--delay:-3.4s;--dur:4.9s">
+              <use href="#c-zassou"/>
+            </g>
+          </g>
+          <g transform="translate(818 1228) scale(1.05)">
+            <g class="char-anim" data-tap data-name="炸虾尾" data-line="最后剩下的我，也很香呢。" tabindex="0" role="button" aria-label="炸虾尾" style="--delay:-.6s;--dur:5.1s">
+              <use href="#c-ebifurai"/>
+            </g>
+          </g>
+
+          <!-- ===== 前排：大大的抱抱 ===== -->
+          <g transform="translate(235 1408) scale(1.65)">
+            <g class="char-anim" data-tap data-name="包袱布" data-line="把小小的快乐，都包起来。" tabindex="0" role="button" aria-label="包袱布" style="--delay:-2.4s;--dur:4.7s">
+              <use href="#c-furoshiki"/>
+            </g>
+          </g>
+          <g transform="translate(462 1398) scale(1.65)">
+            <g class="char-anim" data-tap data-name="饭团" data-line="累的时候，就过来歇一会儿吧。" tabindex="0" role="button" aria-label="饭团" style="--delay:-1.8s;--dur:5.3s">
+              <use href="#c-onigiri"/>
+            </g>
+          </g>
+          <g transform="translate(695 1410) scale(1.65)">
+            <g class="char-anim" data-tap data-name="小袋子" data-line="我的肚子里，全是小幸福。" tabindex="0" role="button" aria-label="小袋子" style="--delay:-3.2s;--dur:4.5s">
+              <use href="#c-pochette"/>
+            </g>
+          </g>
+
+          <!-- 小盆栽 -->
+          <g transform="translate(838 1398)" aria-hidden="true">
+            <ellipse cx="0" cy="70" rx="46" ry="9" fill="#B08A6B" opacity=".14"/>
+            <g stroke="#78A159" stroke-width="2.6" fill="none">
+              <path d="M0 14 C-2 2 -4 -10 -10 -22"/>
+              <path d="M2 12 C6 0 10 -12 16 -20"/>
+            </g>
+            <g stroke="#78A159" stroke-width="2.4">
+              <ellipse cx="-16" cy="-10" rx="7.5" ry="18" fill="#9AC476" transform="rotate(-38 -16 -10)"/>
+              <ellipse cx="18" cy="-12" rx="7.5" ry="17" fill="#A6CC84" transform="rotate(36 18 -12)"/>
+              <ellipse cx="-2" cy="-28" rx="7" ry="16" fill="#8DBA6B" transform="rotate(-8 -2 -28)"/>
+            </g>
+            <circle cx="0" cy="-38" r="6" fill="#F4C7C1"/>
+            <circle cx="0" cy="-38" r="2.5" fill="#F2D58C"/>
+            <path d="M-34 16 L34 16 L27 62 L-27 62 Z" fill="#E8BBA9" stroke="#CE9C8B" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="-38" y="8" width="76" height="16" rx="8" fill="#F0C8B8" stroke="#CE9C8B" stroke-width="3"/>
+          </g>
+
+          <!-- 毛线球 -->
+          <g transform="translate(82 1462)" aria-hidden="true">
+            <ellipse cx="6" cy="22" rx="30" ry="7" fill="#B08A6B" opacity=".14"/>
+            <circle cx="0" cy="0" r="19" fill="#F2C7C1" stroke="#D9A79F" stroke-width="3"/>
+            <g stroke="#E4B3AC" stroke-width="2.4" fill="none" stroke-linecap="round">
+              <path d="M-18 0 Q0 -11 18 0"/>
+              <path d="M-16 8 Q0 -3 16 8"/>
+              <path d="M-10 -13 Q0 3 10 -13"/>
+            </g>
+            <path d="M18 7 Q34 12 38 26" stroke="#D9A79F" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          </g>
+
+          <!-- 特效层（爱心从这里冒出来） -->
+          <g id="fx"></g>
+        </svg>
+      </div>
+    </div>
+    <p id="speech" class="speech" aria-live="polite">轻点小伙伴，听它们说悄悄话～</p>
+  </section>
+
+  <!-- ================= 成员图鉴 ================= -->
+  <section class="crew">
+    <div class="crew-head">
+      <h2>角落的小伙伴们<span class="jp">すみっコたち</span></h2>
+      <p class="crew-note">16 位软乎乎的朋友，都住在这间小屋里</p>
+    </div>
+    <div class="grid">
+
+      <article class="card" style="--tint:#EAF2F6">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-shirokuma" transform="translate(0 -2.6) scale(1.31)"/></svg></div>
+        <h3>白熊 <span>しろくま</span></h3>
+        <p>怕冷的小白熊，从北方一路逃到了温暖的角落。</p>
+      </article>
+
+      <article class="card" style="--tint:#E7F1E9">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-penguin" transform="translate(0 -3.5) scale(1.38)"/></svg></div>
+        <h3>企鹅？ <span>ぺんぎん？</span></h3>
+        <p>一直不太确定自己是不是企鹅，说不定是河童呢。</p>
+      </article>
+
+      <article class="card" style="--tint:#FBEDD3">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-tonkatsu" transform="translate(0 -8.8) scale(1.46)"/></svg></div>
+        <h3>炸猪排 <span>とんかつ</span></h3>
+        <p>99% 是油脂、1% 是肉，那 1% 特别珍贵。</p>
+      </article>
+
+      <article class="card" style="--tint:#F7EEE0">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-neko" transform="translate(-13 .7) scale(1.31)"/></svg></div>
+        <h3>猫 <span>ねこ</span></h3>
+        <p>害羞的小猫，喜欢在角落咔嚓咔嚓地磨爪子。</p>
+      </article>
+
+      <article class="card" style="--tint:#E3F2EF">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-tokage" transform="translate(-26.5 -6.3) scale(1.15)"/></svg></div>
+        <h3>蜥蜴 <span>とかげ</span></h3>
+        <p>其实是恐龙，却一本正经地假装成蜥蜴。</p>
+      </article>
+
+      <article class="card" style="--tint:#FBF2DC">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-tapioca" transform="translate(-1.2 -56.6) scale(2.36)"/></svg></div>
+        <h3>珍珠 <span>たぴおか</span></h3>
+        <p>圆滚滚的珍珠，要黏在一起才安心。</p>
+      </article>
+
+      <article class="card" style="--tint:#ECEEF9">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-nisetsumuri" transform="translate(9.8 -23) scale(1.64)"/></svg></div>
+        <h3>假蜗牛 <span>にせつむり</span></h3>
+        <p>明明是蛞蝓，却一直努力地扮成一只蜗牛。</p>
+      </article>
+
+      <article class="card" style="--tint:#EAF3E0">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-zassou" transform="translate(-2.2 0) scale(1.47)"/></svg></div>
+        <h3>杂草 <span>ざっそう</span></h3>
+        <p>有梦想的小杂草，也想被温柔地对待。</p>
+      </article>
+
+      <article class="card" style="--tint:#FBEDD9">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-ebifurai" transform="translate(0 29) scale(1.26)"/></svg></div>
+        <h3>炸虾尾 <span>えびふらいのしっぽ</span></h3>
+        <p>炸虾的尾巴，香喷喷地留到了最后。</p>
+      </article>
+
+      <article class="card" style="--tint:#F1EEEA">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-hokori" transform="translate(1.3 0) scale(1.31)"/></svg></div>
+        <h3>灰尘 <span>ほこり</span></h3>
+        <p>轻飘飘的灰尘精灵，角落里的元老居民。</p>
+      </article>
+
+      <article class="card" style="--tint:#F7EFE4">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-suzume" transform="translate(-18.4 0) scale(1.53)"/></svg></div>
+        <h3>麻雀 <span>すずめ</span></h3>
+        <p>圆滚滚的小麻雀，啾啾地和大家挤在一起。</p>
+      </article>
+
+      <article class="card" style="--tint:#FBE9E7">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-furoshiki" transform="translate(0 3.8) scale(1.53)"/></svg></div>
+        <h3>包袱布 <span>ふろしき</span></h3>
+        <p>软软的包袱布，能包住所有小小的心事。</p>
+      </article>
+
+      <article class="card" style="--tint:#F6F3EA">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-onigiri" transform="translate(0 6.8) scale(1.7)"/></svg></div>
+        <h3>饭团 <span>おにぎり</span></h3>
+        <p>朴实的小饭团，是让人安心的一口。</p>
+      </article>
+
+      <article class="card" style="--tint:#FDECE4">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-kingyo" transform="translate(23 5.8) scale(1.44)"/></svg></div>
+        <h3>金鱼 <span>きんぎょ</span></h3>
+        <p>在空气里游泳的小金鱼，噗噜噗噜吐泡泡。</p>
+      </article>
+
+      <article class="card" style="--tint:#EAF3ED">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-pochette" transform="translate(0 4.7) scale(1.86)"/></svg></div>
+        <h3>小袋子 <span>ぽしぇっと</span></h3>
+        <p>迷你小挎包，肚子里装满小小的幸福。</p>
+      </article>
+
+      <article class="card" style="--tint:#F1F2F9">
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-obake" transform="translate(0 5.7) scale(1.9)"/></svg></div>
+        <h3>幽灵 <span>おばけ</span></h3>
+        <p>一点也不可怕的幽灵，只想安静地陪着你。</p>
+      </article>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>非官方粉丝同人作品 · 角色版权归 San-X 所有</p>
+    <p class="made">made with <span>♡</span> for the little corners</p>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const svg = document.getElementById('scene-svg');
+  const fx = document.getElementById('fx');
+  const speech = document.getElementById('speech');
+  const DEFAULT_TEXT = speech.textContent;
+  const NS = 'http://www.w3.org/2000/svg';
+  const HEART_COLORS = ['#F29C96', '#F4BBA6', '#F0C977', '#B7D3C2', '#C6CFEC'];
+  let resetTimer = 0;
+
+  function getAnchor(el) {
+    const r = el.getBoundingClientRect();
+    const pt = svg.createSVGPoint();
+    pt.x = r.left + r.width / 2;
+    pt.y = r.top + r.height * 0.18;
+    const m = svg.getScreenCTM();
+    return m ? pt.matrixTransform(m.inverse()) : { x: 450, y: 400 };
+  }
+
+  function spawnHearts(el) {
+    const p = getAnchor(el);
+    for (let i = 0; i < 3; i++) {
+      const wrap = document.createElementNS(NS, 'g');
+      wrap.setAttribute('transform', 'translate(' + (p.x + (i - 1) * 16) + ' ' + (p.y + (i % 2) * 8) + ')');
+
+      const inner = document.createElementNS(NS, 'g');
+      inner.setAttribute('class', 'heart-pop');
+      inner.style.animationDelay = (i * 90) + 'ms';
+
+      const heart = document.createElementNS(NS, 'path');
+      heart.setAttribute('d', 'M0 16 C-5 10 -15 3 -13 -4 C-12 -10 -4 -11 0 -5 C4 -11 12 -10 13 -4 C15 3 5 10 0 16 Z');
+      heart.setAttribute('fill', HEART_COLORS[(Math.random() * HEART_COLORS.length) | 0]);
+
+      inner.appendChild(heart);
+      wrap.appendChild(inner);
+      fx.appendChild(wrap);
+      inner.addEventListener('animationend', () => wrap.remove(), { once: true });
+    }
+  }
+
+  function react(el) {
+    const name = el.dataset.name || '';
+    const line = el.dataset.line || '';
+
+    el.classList.remove('boing');
+    void el.getBoundingClientRect();
+    el.classList.add('boing');
+    window.clearTimeout(el._boingTimer);
+    el._boingTimer = window.setTimeout(() => el.classList.remove('boing'), 800);
+
+    speech.textContent = name ? name + '：「' + line + '」' : DEFAULT_TEXT;
+    speech.classList.remove('pop');
+    void speech.offsetWidth;
+    speech.classList.add('pop');
+
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => { speech.textContent = DEFAULT_TEXT; }, 8000);
+
+    spawnHearts(el);
+  }
+
+  svg.addEventListener('click', (e) => {
+    const target = e.target.closest ? e.target.closest('[data-tap]') : null;
+    if (target) react(target);
+  });
+
+  svg.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const target = e.target.closest ? e.target.closest('[data-tap]') : null;
+    if (!target) return;
+    e.preventDefault();
+    react(target);
+  });
+})();
+</script>
+</body>
+</html>
