@@ -297,6 +297,316 @@
     .scene-wrap{border-radius:19px}
   }
 
+  /* ---- 小游戏入口 ---- */
+  .game-entry{
+    width:min(100% - 30px,780px);
+    margin:34px auto 0;
+    padding:18px 20px;
+    display:flex;align-items:center;gap:16px;
+    position:relative;overflow:hidden;
+    border-radius:26px;border:1.5px solid #F1DFCE;
+    background:linear-gradient(120deg,#FFF1E5 0%,#FBE8DD 45%,#EAF3E9 100%);
+    box-shadow:0 12px 30px -18px rgba(170,125,95,.35);
+  }
+  .game-entry::after{
+    content:"";position:absolute;right:-44px;top:-52px;width:150px;height:150px;
+    border-radius:50%;background:#F6CFC7;opacity:.24;pointer-events:none;
+  }
+  .game-entry-art{
+    flex:none;width:98px;height:98px;border-radius:22px;overflow:hidden;
+    background:#F8E8D8;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);
+  }
+  .game-entry-art svg{display:block;width:100%;height:100%}
+  .game-entry-copy{flex:1;min-width:0;position:relative;z-index:1}
+  .game-entry-kicker{
+    margin:0 0 3px;font-size:9px;letter-spacing:.2em;color:#B58F79;
+  }
+  .game-entry h2{
+    margin:0;
+    font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:22px;letter-spacing:.06em;color:#5F4A3C;
+  }
+  .game-entry p{margin:5px 0 0;font-size:11.5px;line-height:1.65;color:#8E7766}
+  .game-entry-btn{
+    flex:none;position:relative;z-index:1;
+    padding:12px 18px;border:0;border-radius:14px;
+    background:#E59A94;color:#FFFFFF;font-family:inherit;font-weight:700;
+    font-size:13px;letter-spacing:.06em;cursor:pointer;
+    box-shadow:0 8px 16px -8px rgba(200,120,110,.7);
+    transition:transform .15s ease,background .2s ease;
+  }
+  .game-entry-btn:hover{background:#D98F89;transform:translateY(-1px)}
+  .game-entry-btn:active{transform:scale(.98)}
+  .game-entry-btn span{margin-left:2px}
+  @media(max-width:560px){
+    .game-entry{flex-wrap:wrap;align-items:flex-start;gap:12px;padding:15px}
+    .game-entry-art{width:74px;height:74px;border-radius:18px}
+    .game-entry-copy{flex:1 1 calc(100% - 88px)}
+    .game-entry h2{font-size:20px}
+    .game-entry-btn{width:100%;padding:11px;margin-top:1px}
+  }
+
+  /* ---- 小游戏弹层 ---- */
+  body.game-open{overflow:hidden}
+  .game-overlay{
+    position:fixed;inset:0;z-index:8000;
+    display:grid;place-items:center;padding:14px;overflow-y:auto;
+    background:rgba(251,241,230,.78);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    opacity:0;transition:opacity .22s ease;
+  }
+  .game-overlay[hidden]{display:none}
+  .game-overlay.is-open{opacity:1}
+  .game-shell{
+    width:min(100%,640px);max-height:calc(100dvh - 28px);
+    display:flex;flex-direction:column;overflow:hidden;
+    background:#FFFBF4;border:1.5px solid #F0DCC9;border-radius:28px;
+    box-shadow:0 30px 90px -30px rgba(140,100,75,.55);
+    transform:translateY(10px);opacity:0;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .game-overlay.is-open .game-shell{transform:translateY(0);opacity:1}
+  .game-head{
+    display:flex;align-items:center;gap:10px;padding:11px 14px;flex:none;
+    background:#FFFDF8;border-bottom:1px solid #F4E6D6;
+  }
+  .game-icon-btn{
+    width:34px;height:34px;flex:none;display:grid;place-items:center;
+    border:1px solid #F0DCC9;border-radius:50%;background:#FFF9F1;
+    color:#8E7766;font-family:inherit;font-size:20px;line-height:1;cursor:pointer;
+    transition:background .2s ease;
+  }
+  .game-icon-btn:hover{background:#F8EFE5}
+  .game-heading{
+    flex:1;text-align:center;font-weight:800;font-size:15px;letter-spacing:.06em;
+    color:#5F4A3C;line-height:1.2;display:flex;flex-direction:column;align-items:center;gap:1px;
+  }
+  .game-heading span{font-size:7.5px;letter-spacing:.22em;color:#BBA38F;font-weight:600}
+  .game-mode-tag{
+    flex:none;min-width:44px;text-align:center;padding:5px 10px;border-radius:999px;
+    background:#F8EDE3;color:#AA8B76;font-size:9.5px;letter-spacing:.08em;
+  }
+  .game-body{flex:1;min-height:0;overflow-y:auto;padding:16px}
+  .game-setup{max-width:540px;margin:0 auto}
+  .game-intro{text-align:center;margin-bottom:12px}
+  .game-intro .game-entry-kicker{margin-bottom:2px}
+  .game-intro h2{
+    margin:2px 0 0;font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:25px;letter-spacing:.08em;color:#5F4A3C;
+  }
+  .game-intro p:last-child{margin:5px 0 0;font-size:11.5px;line-height:1.65;color:#9A8271}
+  .mode-switch{
+    display:flex;justify-content:center;gap:4px;width:max-content;
+    margin:0 auto 14px;padding:4px;border-radius:999px;
+    background:#F7EDE1;border:1px solid #F0DFCE;
+  }
+  .mode-btn{
+    border:0;border-radius:999px;background:transparent;
+    padding:8px 16px;font-family:inherit;font-size:11.5px;font-weight:700;
+    letter-spacing:.04em;color:#A78E7B;cursor:pointer;
+    transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+  }
+  .mode-btn.is-active{background:#FFFFFF;color:#5F4A3C;box-shadow:0 3px 8px rgba(160,120,90,.12)}
+  .game-picker-block{
+    background:#FFF8EF;border:1.5px solid #F2E3D2;border-radius:18px;
+    padding:10px 12px;margin-bottom:12px;
+  }
+  .game-section-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-bottom:7px;font-size:10.5px;letter-spacing:.06em;color:#A78E7B;
+  }
+  .game-section-head strong{font-size:12px;letter-spacing:.03em;color:#5F4A3C}
+  .game-picker{display:flex;flex-wrap:wrap;gap:6px}
+  .pick-btn{
+    width:42px;height:42px;flex:none;padding:0;position:relative;
+    border:2px solid transparent;border-radius:50%;overflow:hidden;cursor:pointer;
+    background:var(--tint,#F7EBDD);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);
+    transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+  }
+  .pick-btn svg{display:block;width:100%;height:100%}
+  .pick-btn:hover{transform:translateY(-2px)}
+  .pick-btn[aria-selected="true"]{border-color:#E59A94;box-shadow:0 0 0 3px rgba(229,154,148,.22)}
+  .pick-btn[aria-selected="true"]::after{
+    content:"✓";position:absolute;right:1px;bottom:1px;width:13px;height:13px;
+    border-radius:50%;background:#E59A94;color:#FFFFFF;font-size:8px;
+    line-height:13px;text-align:center;font-weight:700;
+  }
+  .game-note{margin:0 0 12px;font-size:11px;line-height:1.7;color:#9A8271}
+  .solo-panel{text-align:center;padding:4px 0 2px}
+  .game-primary,.game-secondary{
+    font-family:inherit;cursor:pointer;border-radius:14px;font-weight:700;
+    letter-spacing:.06em;transition:background .2s ease,transform .15s ease,box-shadow .2s ease;
+  }
+  .game-primary{
+    padding:12px 28px;border:0;background:#E59A94;color:#FFFFFF;font-size:13px;
+    box-shadow:0 8px 16px -8px rgba(200,120,110,.7);
+  }
+  .game-primary:hover{background:#D98F89}
+  .game-primary:active{transform:scale(.98)}
+  .game-primary:disabled{background:#E8D3CA;box-shadow:none;cursor:not-allowed}
+  .game-primary.compact{padding:10px 18px;font-size:12px;border-radius:12px}
+  .game-secondary{
+    padding:10px 18px;border:1.5px solid #EBD9C7;background:#FFFFFF;color:#8E7766;font-size:12px;
+  }
+  .game-secondary:hover{background:#FFF9F1}
+  .game-secondary.small{padding:8px 14px;font-size:11px;border-radius:11px}
+  .game-link{
+    margin-top:8px;padding:2px;border:0;border-bottom:1px dashed #D9C4B2;
+    background:none;font-family:inherit;font-size:10px;color:#A78E7B;cursor:pointer;
+  }
+  .room-entry,.room-lobby{
+    background:#FFF8EF;border:1.5px solid #F2E3D2;border-radius:20px;padding:14px;
+  }
+  .room-required{font-size:8.5px;color:#C6A184;letter-spacing:.02em}
+  .room-create-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .room-or{font-size:10px;color:#B49A86}
+  .room-join{display:flex;flex:1;min-width:170px;gap:6px}
+  .room-join input{
+    flex:1;min-width:0;width:100%;padding:10px 12px;
+    border:1.5px solid #EBD9C7;border-radius:12px;background:#FFFFFF;
+    font-family:inherit;font-size:16px;letter-spacing:.14em;text-transform:uppercase;
+    color:#5F4A3C;outline:none;
+  }
+  .room-join input:focus{border-color:#E3AFA8;box-shadow:0 0 0 3px rgba(227,175,168,.15)}
+  .room-join input::placeholder{font-size:12px;letter-spacing:.02em;color:#C5B2A1}
+  .room-status{min-height:18px;margin:9px 0 0;font-size:11px;line-height:1.55;color:#C77A71}
+  .room-code-line{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:13px}
+  .room-code-line span{font-size:10px;letter-spacing:.1em;color:#B49A86}
+  .room-code-line strong{font-size:24px;letter-spacing:.18em;color:#5F4A3C;font-weight:800}
+  .mini-btn{
+    padding:4px 9px;border:1px solid #EBD9C7;border-radius:8px;background:#FFFFFF;
+    font-family:inherit;font-size:10px;color:#9A8271;cursor:pointer;
+  }
+  .lobby-players{
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px;
+  }
+  .lobby-slot{
+    min-width:0;display:flex;align-items:center;gap:7px;
+    padding:8px;border:1.5px solid #F1E1D1;border-radius:16px;background:#FFFDF8;
+  }
+  .lobby-slot.is-you{border-color:#F2CDC6}
+  .lobby-avatar{
+    width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;
+    display:grid;place-items:center;background:#F7EBDD;color:#C4AE99;
+    font-size:16px;font-weight:700;
+  }
+  .lobby-avatar svg{display:block;width:100%;height:100%}
+  .lobby-avatar.is-empty{background:#F4EDE4;border:1px dashed #DCC9B7}
+  .lobby-meta{min-width:0;display:flex;flex-direction:column;gap:1px}
+  .lobby-meta b{font-size:11px;color:#5F4A3C}
+  .lobby-meta span{font-size:10px;color:#A78E7B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lobby-state{margin-left:auto;font-size:8px;letter-spacing:.02em;color:#8FAE94;white-space:nowrap}
+  .lobby-state.is-offline{color:#C49A8D}
+  .lobby-vs{font-size:9px;font-weight:800;color:#C4A78E;letter-spacing:.06em}
+  .room-hint{text-align:center;font-size:11px;line-height:1.6;color:#9A8271;margin:11px 0 9px}
+  .lobby-actions{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .waiting-host{font-size:11px;color:#A78E7B;margin:0}
+  .room-footnote{text-align:center;font-size:9px;line-height:1.5;color:#B8A18E;margin:10px 0 0}
+
+  /* ---- 游戏画面 ---- */
+  .game-play{max-width:520px;margin:0 auto;display:flex;flex-direction:column;min-height:100%}
+  .game-hud{display:flex;justify-content:center;gap:7px;margin-bottom:8px;flex:none}
+  .hud-card{
+    display:flex;align-items:center;gap:7px;min-width:0;
+    padding:5px 11px 5px 5px;border:1.5px solid #F1E0CF;border-radius:999px;
+    background:#FFFFFF;box-shadow:0 4px 12px rgba(180,140,110,.07);
+  }
+  .hud-card.is-foe{border-color:#E7E3F4}
+  .hud-avatar{width:32px;height:32px;flex:none;border-radius:50%;overflow:hidden;background:var(--tint,#F7EBDD)}
+  .hud-avatar svg{display:block;width:100%;height:100%}
+  .hud-meta{display:flex;flex-direction:column;min-width:0;line-height:1.05}
+  .hud-meta b{font-size:10px;color:#5F4A3C}
+  .hud-meta span{font-size:8.5px;color:#B49A86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:74px}
+  .hud-score{min-width:26px;text-align:center;font-size:20px;font-weight:800;color:#5F4A3C}
+  .hud-card.is-out{opacity:.55;filter:grayscale(.35)}
+  .hud-card.is-out .hud-score{text-decoration:line-through}
+  .game-board-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+  .game-board{
+    position:relative;overflow:hidden;border-radius:20px;background:#F9EBDC;
+    width:min(100%,460px,max(240px,calc(75dvh - 150px)));
+    aspect-ratio:3/4;
+    box-shadow:inset 0 0 0 1px #EFDCC8,0 12px 28px rgba(150,105,78,.18);
+    touch-action:none;user-select:none;-webkit-user-select:none;outline:none;cursor:pointer;
+  }
+  .game-board:focus-visible{box-shadow:inset 0 0 0 1px #EFDCC8,0 0 0 3px rgba(227,175,168,.5),0 12px 28px rgba(150,105,78,.18)}
+  .game-svg{display:block;width:100%;height:100%;pointer-events:none}
+  .game-controls{flex:none;text-align:center;margin:8px 0 0;font-size:10px;letter-spacing:.04em;color:#B49A86}
+  .game-tap-hint{
+    position:absolute;left:50%;bottom:13px;transform:translateX(-50%);z-index:1;
+    padding:6px 12px;border-radius:999px;border:1px solid #F0DCC9;
+    background:rgba(255,252,247,.88);color:#9A8271;font-size:10px;letter-spacing:.04em;
+    white-space:nowrap;pointer-events:none;transition:opacity .3s ease;
+  }
+  .game-tap-hint.is-hidden{opacity:0}
+  .game-countdown{
+    position:absolute;inset:0;z-index:2;display:grid;place-items:center;
+    background:rgba(255,248,238,.18);pointer-events:none;
+  }
+  .game-countdown span{
+    display:block;font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:82px;font-weight:800;color:#5F4A3C;
+    text-shadow:0 3px 0 rgba(255,255,255,.65);
+    animation:count-pop .5s ease;
+  }
+  @keyframes count-pop{
+    0%{transform:scale(.6);opacity:0}
+    30%{opacity:1}
+    100%{transform:scale(1);opacity:1}
+  }
+  .game-wait{
+    position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:20px;
+    background:rgba(255,248,238,.52);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  }
+  .game-wait-card{
+    text-align:center;padding:18px 22px;border-radius:20px;
+    background:#FFFBF4;border:1.5px solid #F0DCC9;
+    box-shadow:0 16px 40px -20px rgba(150,105,78,.4);
+  }
+  .game-wait-card p{margin:4px 0 2px;font-size:16px;font-weight:800;color:#5F4A3C}
+  .game-wait-card span{font-size:11px;line-height:1.5;color:#9A8271}
+  .mini-heart{color:#E29A94;font-size:18px}
+  .game-over{
+    position:absolute;inset:0;z-index:4;display:grid;place-items:center;padding:18px;
+    background:rgba(255,248,238,.7);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  }
+  .game-over-card{
+    width:100%;max-width:290px;max-height:100%;overflow-y:auto;
+    padding:16px 20px 18px;text-align:center;border-radius:22px;
+    background:#FFFBF4;border:1.5px solid #F0DCC9;
+    box-shadow:0 20px 50px -22px rgba(150,105,78,.45);
+  }
+  .game-over-art{
+    width:64px;height:64px;margin:0 auto 6px;border-radius:50%;
+    overflow:hidden;background:#F8EFE5;
+  }
+  .game-over-art svg{display:block;width:100%;height:100%}
+  .game-over-kicker{margin:0;font-size:8px;letter-spacing:.2em;color:#BBA38F}
+  .game-over-card h3{margin:3px 0 4px;font-size:19px;letter-spacing:.04em;color:#5F4A3C}
+  .game-over-score{margin:2px 0 0;font-size:12px;line-height:1.6;color:#8E7766}
+  .game-over-best{margin:3px 0 0;min-height:14px;font-size:10px;color:#B49A86}
+  .game-over-actions{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:11px}
+  .game-over-actions .game-primary,.game-over-actions .game-secondary{padding:9px 16px;font-size:11.5px;border-radius:12px}
+  .game-overlay[hidden],.game-over[hidden],.game-wait[hidden],.game-countdown[hidden],
+  .game-play[hidden],.game-setup[hidden],.online-panel[hidden],.room-entry[hidden],
+  .room-lobby[hidden],.waiting-host[hidden]{display:none!important}
+  @media(max-width:480px){
+    .game-body{padding:12px}
+    .game-intro h2{font-size:22px}
+    .game-heading{font-size:14px}
+    .game-board{width:min(100%,max(230px,calc(75dvh - 138px)))}
+    .game-hud{gap:5px}
+    .hud-card{padding:4px 8px 4px 4px;gap:5px}
+    .hud-avatar{width:28px;height:28px}
+    .hud-score{font-size:18px;min-width:22px}
+    .hud-meta span{max-width:58px}
+    .lobby-slot{padding:6px;gap:5px}
+    .lobby-avatar{width:34px;height:34px}
+    .lobby-state{font-size:7.5px}
+    .room-code-line strong{font-size:21px}
+    .game-over-card{padding:14px 16px 16px}
+  }
+
   /* ---- 密码锁 ---- */
   .sr-only{
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
@@ -1116,6 +1426,30 @@
     <p id="speech" class="speech" aria-live="polite">轻点小伙伴，听它们说悄悄话～</p>
   </section>
 
+  <!-- ================= 小游戏入口 ================= -->
+  <section class="game-entry" aria-labelledby="game-entry-title">
+    <div class="game-entry-art" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="55" fill="#F8E8D8"/>
+        <path d="M15 112 V55 Q15 18 60 18 Q105 18 105 55 V112" fill="#E8CFB6" stroke="#CBAC8F" stroke-width="3"/>
+        <path d="M30 112 V58 Q30 33 60 33 Q90 33 90 58 V112" fill="#FFF7EA"/>
+        <g transform="translate(60 82) scale(0.28)">
+          <use href="#c-shirokuma" transform="translate(0 -2.6) scale(1.31)"/>
+        </g>
+        <circle cx="32" cy="40" r="3" fill="#F1CE8C"/>
+        <circle cx="89" cy="35" r="2.4" fill="#F0B9B4"/>
+        <path d="M84 80 l1.4 4 4 1.4 -4 1.4 -1.4 4 -1.4 -4 -4 -1.4 4 -1.4z" fill="#F2D08D"/>
+        <path d="M22 84 l1.2 3.4 3.4 1.2 -3.4 1.2 -1.2 3.4 -1.2 -3.4 -3.4 -1.2 3.4 -1.2z" fill="#F0B9B4"/>
+      </svg>
+    </div>
+    <div class="game-entry-copy">
+      <p class="game-entry-kicker">MINI GAME · 角落小游戏</p>
+      <h2 id="game-entry-title">穿过小山洞</h2>
+      <p>选一只小伙伴，单人挑战；或和另一位已解锁页面的朋友开房间联机比赛。</p>
+    </div>
+    <button id="game-open" class="game-entry-btn" type="button" aria-haspopup="dialog">去玩一局 <span aria-hidden="true">→</span></button>
+  </section>
+
   <!-- ================= 成员图鉴 ================= -->
   <section class="crew">
     <div class="crew-head">
@@ -1229,6 +1563,156 @@
     <button id="relock-btn" class="relock" type="button">锁定小角落</button>
   </footer>
 </main>
+
+<!-- ================= 小游戏 ================= -->
+<div id="game-overlay" class="game-overlay" hidden>
+  <div class="game-shell" role="dialog" aria-modal="true" aria-labelledby="game-heading">
+    <header class="game-head">
+      <button id="game-close" class="game-icon-btn" type="button" aria-label="关闭小游戏">×</button>
+      <div class="game-heading" id="game-heading">角落小山洞 <span>SUMIKKO CAVE</span></div>
+      <span id="game-mode-tag" class="game-mode-tag">单人</span>
+    </header>
+    <div class="game-body">
+      <section id="game-setup" class="game-setup">
+        <div class="game-intro">
+          <p class="game-entry-kicker">MINI GAME · 角落小游戏</p>
+          <h2>穿过小山洞</h2>
+          <p>点一点屏幕，让小伙伴飞过一个个小山洞。</p>
+        </div>
+        <div class="mode-switch" role="group" aria-label="游戏模式">
+          <button class="mode-btn is-active" type="button" data-mode="solo" aria-pressed="true">单人飞行</button>
+          <button class="mode-btn" type="button" data-mode="online" aria-pressed="false">双人联机</button>
+        </div>
+        <div class="game-picker-block">
+          <div class="game-section-head">
+            <span>你的小伙伴</span>
+            <strong id="pick-name">白熊</strong>
+          </div>
+          <div id="game-picker" class="game-picker" role="listbox" aria-label="选择你的角色"></div>
+        </div>
+        <div id="solo-panel" class="solo-panel">
+          <p class="game-note">点击屏幕 / 按空格上升。飞过的小山洞越多，分数越高。</p>
+          <button id="solo-start" class="game-primary" type="button">开始飞行</button>
+        </div>
+        <div id="online-panel" class="online-panel" hidden>
+          <div id="room-entry" class="room-entry">
+            <div class="game-section-head"><span>双人联机房间</span><span class="room-required">需 2 位已解锁玩家</span></div>
+            <p class="game-note">两位玩家都要先在本页面输入暗号解锁。创建房间后，把房间码发给另一位玩家。</p>
+            <div class="room-create-row">
+              <button id="room-create" class="game-primary compact" type="button">创建房间</button>
+              <span class="room-or">或</span>
+              <div class="room-join">
+                <input id="room-code-input" type="text" maxlength="6" inputmode="text" autocomplete="off" spellcheck="false" placeholder="输入房间码" aria-label="输入房间码">
+                <button id="room-join" class="game-secondary compact" type="button">加入</button>
+              </div>
+            </div>
+            <p id="room-status" class="room-status" aria-live="polite"></p>
+          </div>
+          <div id="room-lobby" class="room-lobby" hidden>
+            <div class="room-code-line">
+              <span>房间码</span>
+              <strong id="room-code">-----</strong>
+              <button id="copy-room" class="mini-btn" type="button">复制</button>
+            </div>
+            <div class="lobby-players">
+              <div class="lobby-slot is-you">
+                <div id="lobby-avatar-me" class="lobby-avatar"></div>
+                <div class="lobby-meta"><b>你</b><span id="lobby-char-me">白熊</span></div>
+                <span class="lobby-state" id="lobby-state-me">在线</span>
+              </div>
+              <div class="lobby-vs" aria-hidden="true">VS</div>
+              <div class="lobby-slot">
+                <div id="lobby-avatar-foe" class="lobby-avatar is-empty"><span>?</span></div>
+                <div class="lobby-meta"><b>对手</b><span id="lobby-char-foe">等待加入…</span></div>
+                <span class="lobby-state" id="lobby-state-foe">未连接</span>
+              </div>
+            </div>
+            <p id="room-hint" class="room-hint">等待另一位玩家加入房间…</p>
+            <div class="lobby-actions">
+              <button id="room-start" class="game-primary" type="button" disabled>开始游戏</button>
+              <p id="waiting-host" class="waiting-host" hidden>等待房主开始…</p>
+              <button id="room-leave" class="game-secondary small" type="button">离开房间</button>
+            </div>
+            <p class="room-footnote">两位玩家都在线后，房主才能开始。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-play" class="game-play" hidden>
+        <div id="game-hud" class="game-hud"></div>
+        <div class="game-board-wrap">
+          <div id="game-board" class="game-board" tabindex="0" aria-label="点击或按空格控制你的角色飞行">
+            <svg id="game-svg" class="game-svg" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <defs>
+                <linearGradient id="gCaveSky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#FFF8EC"/>
+                  <stop offset="1" stop-color="#FBE4D0"/>
+                </linearGradient>
+                <linearGradient id="gCaveRock" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#DEC9AF"/>
+                  <stop offset=".5" stop-color="#D3B99C"/>
+                  <stop offset="1" stop-color="#C4A687"/>
+                </linearGradient>
+              </defs>
+              <rect width="600" height="800" fill="url(#gCaveSky)"/>
+              <g id="game-bg" aria-hidden="true">
+                <circle cx="105" cy="150" r="52" fill="#F8E0B0" opacity=".55"/>
+                <g fill="#FFFDF8" opacity=".8">
+                  <ellipse cx="170" cy="210" rx="52" ry="18"/><ellipse cx="212" cy="200" rx="30" ry="14"/><ellipse cx="132" cy="200" rx="28" ry="12"/>
+                  <ellipse cx="472" cy="300" rx="44" ry="16"/><ellipse cx="506" cy="290" rx="26" ry="12"/><ellipse cx="444" cy="292" rx="22" ry="10"/>
+                </g>
+                <g fill="#F1CE8C">
+                  <path d="M300 130 q2 8 10 10 q-8 2 -10 10 q-2 -8 -10 -10 q8 -2 10 -10z"/>
+                  <circle cx="540" cy="190" r="3" opacity=".7"/><circle cx="365" cy="240" r="2.5" opacity=".6"/>
+                  <path d="M90 330 q1.6 6 8 8 q-6.4 2 -8 8 q-1.6 -6 -8 -8 q6.4 -2 8 -8z" opacity=".7"/>
+                </g>
+              </g>
+              <g id="game-obstacles"></g>
+              <g id="game-walls" aria-hidden="true">
+                <path d="M0 0 H600 V15 Q560 25 520 17 Q480 9 440 21 Q400 29 360 17 Q320 7 280 19 Q240 29 200 15 Q160 7 120 21 Q80 29 40 17 Q20 13 0 21 Z" fill="url(#gCaveRock)" stroke="#AC8D70" stroke-width="3"/>
+                <path d="M0 800 H600 V778 Q560 768 520 774 Q480 782 440 772 Q400 764 360 774 Q320 782 280 772 Q240 764 200 774 Q160 782 120 774 Q80 768 40 776 Q20 780 0 774 Z" fill="#C9B092" stroke="#A8896C" stroke-width="3"/>
+                <path d="M0 779 Q40 771 80 777 Q120 783 160 775 Q200 767 240 777 Q280 785 320 775 Q360 767 400 777 Q440 785 480 775 Q520 767 560 777 Q580 781 600 777" fill="none" stroke="#A6CB85" stroke-width="7" opacity=".9" stroke-linecap="round"/>
+                <g fill="#9AC476" opacity=".9">
+                  <ellipse cx="60" cy="774" rx="7" ry="4"/><ellipse cx="150" cy="777" rx="5" ry="3"/>
+                  <ellipse cx="330" cy="776" rx="6" ry="3.5"/><ellipse cx="470" cy="776" rx="5" ry="3"/>
+                </g>
+                <g fill="#F4C7B8">
+                  <circle cx="245" cy="770" r="3.5"/><circle cx="532" cy="771" r="3"/>
+                </g>
+              </g>
+              <g id="game-players"></g>
+              <g id="game-fx"></g>
+            </svg>
+            <div id="game-countdown" class="game-countdown" hidden aria-hidden="true"></div>
+            <div id="game-wait" class="game-wait" hidden aria-live="polite">
+              <div class="game-wait-card">
+                <div class="mini-heart" aria-hidden="true">♡</div>
+                <p>已出局</p>
+                <span>等待对手完成这一局…</span>
+              </div>
+            </div>
+            <div id="game-over" class="game-over" hidden>
+              <div class="game-over-card" role="alertdialog" aria-modal="false" aria-labelledby="game-over-title">
+                <div id="game-over-art" class="game-over-art" aria-hidden="true"></div>
+                <p id="game-over-kicker" class="game-over-kicker">ROUND OVER</p>
+                <h3 id="game-over-title">撞到山洞啦</h3>
+                <p id="game-over-score" class="game-over-score"></p>
+                <p id="game-over-best" class="game-over-best"></p>
+                <div class="game-over-actions">
+                  <button id="game-again" class="game-primary" type="button">再来一局</button>
+                  <button id="game-change" class="game-secondary" type="button">换角色</button>
+                </div>
+                <button id="game-to-lobby" class="game-link" type="button" hidden>回到房间</button>
+              </div>
+            </div>
+            <div id="game-tap-hint" class="game-tap-hint">点击屏幕 / 空格上升</div>
+          </div>
+        </div>
+        <p id="game-controls" class="game-controls">点击屏幕或按空格上升</p>
+      </section>
+    </div>
+  </div>
+</div>
 
 </div><!-- /page-content -->
 
@@ -1385,6 +1869,1130 @@
   if (document.documentElement.classList.contains('pre-unlocked')) {
     unlock(false);
   }
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const CHARS = [
+    { key:'shirokuma', name:'白熊', sym:'c-shirokuma', tf:'translate(0 -2.6) scale(1.31)', tint:'#EAF2F6' },
+    { key:'penguin', name:'企鹅？', sym:'c-penguin', tf:'translate(0 -3.5) scale(1.38)', tint:'#E7F1E9' },
+    { key:'tonkatsu', name:'炸猪排', sym:'c-tonkatsu', tf:'translate(0 -8.8) scale(1.46)', tint:'#FBEDD3' },
+    { key:'neko', name:'猫', sym:'c-neko', tf:'translate(-21.6 .6) scale(1.25)', tint:'#F7EEE0' },
+    { key:'tokage', name:'蜥蜴', sym:'c-tokage', tf:'translate(-18 -1.2) scale(1.2)', tint:'#E3F2EF' },
+    { key:'tapioca', name:'珍珠', sym:'c-tapioca', tf:'translate(-1.2 -56.6) scale(2.36)', tint:'#FBF2DC' },
+    { key:'nisetsumuri', name:'假蜗牛', sym:'c-nisetsumuri', tf:'translate(7 -18) scale(1.4)', tint:'#ECEEF9' },
+    { key:'zassou', name:'杂草', sym:'c-zassou', tf:'translate(0 -18.4) scale(1.6)', tint:'#EAF3E0' },
+    { key:'ebifurai', name:'炸虾尾', sym:'c-ebifurai', tf:'translate(0 28) scale(1.15)', tint:'#FBEDD9' },
+    { key:'hokori', name:'灰尘', sym:'c-hokori', tf:'translate(1.3 0) scale(1.31)', tint:'#F1EEEA' },
+    { key:'suzume', name:'麻雀', sym:'c-suzume', tf:'translate(-18.4 0) scale(1.53)', tint:'#F7EFE4' },
+    { key:'furoshiki', name:'包袱布', sym:'c-furoshiki', tf:'translate(0 3.8) scale(1.53)', tint:'#FBE9E7' },
+    { key:'onigiri', name:'饭团', sym:'c-onigiri', tf:'translate(0 6.8) scale(1.7)', tint:'#F6F3EA' },
+    { key:'kingyo', name:'金鱼', sym:'c-kingyo', tf:'translate(16 -4) scale(1.25)', tint:'#FDECE4' },
+    { key:'pochette', name:'小袋子', sym:'c-pochette', tf:'translate(0 4.7) scale(1.86)', tint:'#EAF3ED' },
+    { key:'obake', name:'幽灵', sym:'c-obake', tf:'translate(0 5.7) scale(1.9)', tint:'#F1F2F9' }
+  ];
+  const W = { top:24, bottom:776, r:23, x:190, gravity:1350, flap:-410 };
+  const BROKERS = ['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt'];
+  const TOPIC_PREFIX = 'sumikko-cave/v1/';
+  const BEST_KEY = 'ruiqing-cave-best';
+  const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const $ = (id) => document.getElementById(id);
+
+  const ui = {
+    entry: $('game-open'), overlay: $('game-overlay'),
+    close: $('game-close'), modeTag: $('game-mode-tag'),
+    setup: $('game-setup'), play: $('game-play'), body: document.querySelector('.game-body'),
+    picker: $('game-picker'), pickName: $('pick-name'),
+    soloPanel: $('solo-panel'), soloStart: $('solo-start'), onlinePanel: $('online-panel'),
+    roomEntry: $('room-entry'), roomCreate: $('room-create'), roomCodeInput: $('room-code-input'),
+    roomJoin: $('room-join'), roomStatus: $('room-status'),
+    roomLobby: $('room-lobby'), roomCode: $('room-code'), copyRoom: $('copy-room'), roomLeave: $('room-leave'),
+    roomStart: $('room-start'), waitingHost: $('waiting-host'), roomHint: $('room-hint'),
+    lobbyAvatarMe: $('lobby-avatar-me'), lobbyCharMe: $('lobby-char-me'), lobbyStateMe: $('lobby-state-me'),
+    lobbyAvatarFoe: $('lobby-avatar-foe'), lobbyCharFoe: $('lobby-char-foe'), lobbyStateFoe: $('lobby-state-foe'),
+    hud: $('game-hud'), board: $('game-board'),
+    obstacles: $('game-obstacles'), players: $('game-players'), fx: $('game-fx'),
+    countdown: $('game-countdown'), wait: $('game-wait'), over: $('game-over'),
+    overArt: $('game-over-art'), overKicker: $('game-over-kicker'), overTitle: $('game-over-title'),
+    overScore: $('game-over-score'), overBest: $('game-over-best'),
+    again: $('game-again'), change: $('game-change'), toLobby: $('game-to-lobby'),
+    tapHint: $('game-tap-hint'), controls: $('game-controls'),
+    modeBtns: Array.from(document.querySelectorAll('.mode-btn'))
+  };
+
+  const S = {
+    open: false, mode: 'solo', pick: 0, best: 0,
+    overlayTimer: 0, tapTimer: 0, countdownTimer: 0,
+    room: null, game: null
+  };
+
+  try { S.best = parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0; } catch (e) {}
+
+  /* ---------- helpers ---------- */
+  function svgEl(tag, attrs) {
+    const node = document.createElementNS(NS, tag);
+    if (attrs) for (const k in attrs) node.setAttribute(k, attrs[k]);
+    return node;
+  }
+  function charSvg(meta) {
+    return '<svg viewBox="-100 -100 200 200" aria-hidden="true"><use href="#' + meta.sym + '" transform="' + meta.tf + '"/></svg>';
+  }
+  function metaByKey(key) {
+    return CHARS.find((c) => c.key === key) || null;
+  }
+  function randBytes(n) {
+    const a = new Uint8Array(n);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+    else for (let i = 0; i < n; i++) a[i] = Math.floor(Math.random() * 256);
+    return a;
+  }
+  function randomCode(len) {
+    const bytes = randBytes(len);
+    let code = '';
+    for (const b of bytes) code += ALPHABET[b % ALPHABET.length];
+    return code;
+  }
+  function randomId() {
+    return Array.from(randBytes(8), (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  function randomSeed() {
+    const a = new Uint32Array(1);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+    else a[0] = Math.floor(Math.random() * 4294967295);
+    return a[0] || 1;
+  }
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  /* ---------- character picker ---------- */
+  function buildPicker() {
+    ui.picker.innerHTML = '';
+    CHARS.forEach((meta, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pick-btn';
+      button.dataset.index = index;
+      button.style.setProperty('--tint', meta.tint);
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-label', meta.name);
+      button.setAttribute('aria-selected', index === S.pick ? 'true' : 'false');
+      button.innerHTML = charSvg(meta);
+      button.addEventListener('click', () => selectChar(index));
+      ui.picker.appendChild(button);
+    });
+    ui.pickName.textContent = CHARS[S.pick].name;
+  }
+  function selectChar(index) {
+    S.pick = index;
+    Array.from(ui.picker.children).forEach((button, i) => {
+      button.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+    ui.pickName.textContent = CHARS[index].name;
+    if (S.room) {
+      updateRoomUi();
+      publishState();
+    }
+  }
+
+  /* ---------- minimal MQTT over WebSocket ---------- */
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  function mqttLen(n) {
+    const out = [];
+    do {
+      let d = n % 128;
+      n = Math.floor(n / 128);
+      if (n > 0) d |= 128;
+      out.push(d);
+    } while (n > 0);
+    return out;
+  }
+  function concatBytes() {
+    const arrays = Array.from(arguments);
+    let total = 0;
+    for (const a of arrays) total += a.length;
+    const out = new Uint8Array(total);
+    let offset = 0;
+    for (const a of arrays) { out.set(a, offset); offset += a.length; }
+    return out;
+  }
+  function mqttString(str) {
+    const bytes = encoder.encode(str);
+    return concatBytes(Uint8Array.from([bytes.length >> 8, bytes.length & 255]), bytes);
+  }
+  function mqttPacket(header, body) {
+    return concatBytes(Uint8Array.from([header].concat(mqttLen(body.length))), body);
+  }
+
+  class MqttLite {
+    constructor(options) {
+      this.urls = options.urls;
+      this.clientId = options.clientId;
+      this.onStatus = options.onStatus || function () {};
+      this.onMessage = options.onMessage || function () {};
+      this.onReady = options.onReady || function () {};
+      this.closed = false;
+      this.connected = false;
+      this.ws = null;
+      this.topic = '';
+      this.brokerIndex = 0;
+      this.failures = 0;
+      this.retryTimer = 0;
+      this.connectTimer = 0;
+      this.pingTimer = 0;
+      this.packetId = 1;
+    }
+    connect() {
+      this.closed = false;
+      this.brokerIndex = 0;
+      this.failures = 0;
+      this.open();
+    }
+    open() {
+      if (this.closed) return;
+      const url = this.urls[this.brokerIndex % this.urls.length];
+      this.onStatus('connecting');
+      let ws;
+      try { ws = new WebSocket(url, ['mqtt']); } catch (e) { this.scheduleRetry(); return; }
+      this.ws = ws;
+      ws.binaryType = 'arraybuffer';
+      const current = ws;
+      clearTimeout(this.connectTimer);
+      this.connectTimer = window.setTimeout(() => {
+        if (!this.connected && this.ws === current) {
+          try { ws.close(); } catch (e) {}
+        }
+      }, 8000);
+      ws.onopen = () => {
+        if (this.ws !== current) return;
+        this.sendConnect();
+      };
+      ws.onmessage = (event) => {
+        if (this.ws !== current) return;
+        this.handle(event.data);
+      };
+      ws.onerror = () => {};
+      ws.onclose = () => {
+        if (this.ws !== current) return;
+        const wasConnected = this.connected;
+        this.connected = false;
+        this.ws = null;
+        clearTimeout(this.connectTimer);
+        clearInterval(this.pingTimer);
+        if (this.closed) return;
+        this.onStatus(wasConnected ? 'reconnecting' : 'connecting');
+        this.scheduleRetry();
+      };
+    }
+    scheduleRetry() {
+      if (this.closed || this.retryTimer) return;
+      this.failures += 1;
+      if (this.failures > 2) this.brokerIndex += 1;
+      this.retryTimer = window.setTimeout(() => {
+        this.retryTimer = 0;
+        this.open();
+      }, 1400);
+    }
+    sendConnect() {
+      const variable = Uint8Array.from([0x00, 0x04, 0x4d, 0x51, 0x54, 0x54, 0x04, 0x02, 0x00, 0x1e]);
+      this.send(mqttPacket(0x10, concatBytes(variable, mqttString(this.clientId))));
+    }
+    subscribe(topic) {
+      this.topic = topic;
+      if (!this.connected) return;
+      const pid = this.packetId;
+      this.packetId = (this.packetId % 65535) + 1;
+      const body = concatBytes(Uint8Array.from([pid >> 8, pid & 255]), mqttString(topic), Uint8Array.from([0]));
+      this.send(mqttPacket(0x82, body));
+    }
+    publish(topic, payload) {
+      if (!this.connected) return false;
+      const body = concatBytes(mqttString(topic), encoder.encode(payload));
+      this.send(mqttPacket(0x30, body));
+      return true;
+    }
+    send(bytes) {
+      try { if (this.ws && this.ws.readyState === 1) this.ws.send(bytes); } catch (e) {}
+    }
+    startPing() {
+      clearInterval(this.pingTimer);
+      this.pingTimer = window.setInterval(() => this.send(Uint8Array.from([0xc0, 0x00])), 20000);
+    }
+    handle(data) {
+      let bytes;
+      if (data instanceof ArrayBuffer) bytes = new Uint8Array(data);
+      else if (data && data.buffer) bytes = new Uint8Array(data.buffer);
+      else return;
+      let pos = 0;
+      while (pos < bytes.length) {
+        const header = bytes[pos];
+        const type = header >> 4;
+        const qos = (header >> 1) & 3;
+        let mul = 1, length = 0, i = pos + 1, digit;
+        do {
+          if (i >= bytes.length) return;
+          digit = bytes[i++];
+          length += (digit & 127) * mul;
+          mul *= 128;
+        } while (digit & 128);
+        if (i + length > bytes.length) return;
+        const body = bytes.subarray(i, i + length);
+        pos = i + length;
+        if (type === 2) {
+          const code = body.length > 1 ? body[1] : 1;
+          if (code === 0) {
+            this.connected = true;
+            this.failures = 0;
+            clearTimeout(this.connectTimer);
+            this.onStatus('connected');
+            this.startPing();
+            if (this.topic) this.subscribe(this.topic);
+            this.onReady();
+          } else {
+            this.onStatus('failed');
+            try { this.ws.close(); } catch (e) {}
+          }
+        } else if (type === 3) {
+          if (body.length < 2) continue;
+          const topicLength = (body[0] << 8) | body[1];
+          if (body.length < 2 + topicLength) continue;
+          const topic = decoder.decode(body.subarray(2, 2 + topicLength));
+          let offset = 2 + topicLength;
+          if (qos > 0) offset += 2;
+          const payload = decoder.decode(body.subarray(offset));
+          this.onMessage(topic, payload);
+        }
+      }
+    }
+    close() {
+      this.closed = true;
+      clearTimeout(this.retryTimer);
+      clearTimeout(this.connectTimer);
+      clearInterval(this.pingTimer);
+      this.connected = false;
+      if (this.ws && this.ws.readyState === 1) {
+        try { this.send(Uint8Array.from([0xe0, 0x00])); } catch (e) {}
+      }
+      if (this.ws) {
+        const ws = this.ws;
+        this.ws = null;
+        try { ws.close(); } catch (e) {}
+      }
+    }
+  }
+
+  /* ---------- UI: overlay / modes / setup ---------- */
+  function openGame() {
+    if (S.open) return;
+    S.open = true;
+    clearTimeout(S.overlayTimer);
+    showSetup();
+    setMode('solo');
+    ui.overlay.hidden = false;
+    document.body.classList.add('game-open');
+    window.requestAnimationFrame(() => ui.overlay.classList.add('is-open'));
+    ui.close.focus();
+  }
+  function closeGame() {
+    if (!S.open) return;
+    S.open = false;
+    stopGame();
+    leaveRoom();
+    ui.overlay.classList.remove('is-open');
+    document.body.classList.remove('game-open');
+    clearTimeout(S.overlayTimer);
+    S.overlayTimer = window.setTimeout(() => {
+      if (!S.open) ui.overlay.hidden = true;
+    }, 240);
+    ui.entry.focus();
+  }
+  function showSetup() {
+    stopGame();
+    ui.setup.hidden = false;
+    ui.play.hidden = true;
+    ui.over.hidden = true;
+    ui.wait.hidden = true;
+    ui.countdown.hidden = true;
+    updateOnlinePanel();
+  }
+  function setMode(mode) {
+    if (mode === 'solo' && S.room) leaveRoom();
+    S.mode = mode;
+    ui.modeBtns.forEach((button) => {
+      const active = button.dataset.mode === mode;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    ui.soloPanel.hidden = mode !== 'solo';
+    ui.onlinePanel.hidden = mode !== 'online';
+    ui.modeTag.textContent = mode === 'solo' ? '单人' : '双人';
+    updateOnlinePanel();
+  }
+  function updateOnlinePanel() {
+    if (S.mode !== 'online') return;
+    if (S.room) {
+      ui.roomEntry.hidden = true;
+      ui.roomLobby.hidden = false;
+      updateRoomUi();
+    } else {
+      ui.roomEntry.hidden = false;
+      ui.roomLobby.hidden = true;
+    }
+  }
+
+  /* ---------- room / MQTT sync ---------- */
+  function setRoomStatus(text) {
+    ui.roomStatus.textContent = text || '';
+  }
+  function peerOnline() {
+    return !!(S.room && S.room.peer && Date.now() - S.room.lastPeer < 3000);
+  }
+  function peerReady() {
+    return !!(S.room && S.room.connected && peerOnline());
+  }
+  function createRoom() {
+    if (S.room) return;
+    setRoomStatus('');
+    connectRoom(randomCode(5), true);
+  }
+  function joinRoom() {
+    if (S.room) return;
+    const code = ui.roomCodeInput.value.trim().toUpperCase();
+    if (!/^[A-Z0-9]{4,8}$/.test(code)) {
+      setRoomStatus('请输入 4–6 位房间码。');
+      return;
+    }
+    setRoomStatus('');
+    connectRoom(code, false);
+  }
+  function connectRoom(code, host) {
+    if (S.room) return;
+    const pid = randomId();
+    const room = {
+      code, pid, host, topic: TOPIC_PREFIX + code, connected: false,
+      peerPid: null, peer: null, lastPeer: 0, round: 0, startedRound: 0,
+      createdAt: Date.now()
+    };
+    S.room = room;
+    room.mqtt = new MqttLite({
+      urls: BROKERS,
+      clientId: 'sk' + pid.slice(0, 12),
+      onStatus: (status) => {
+        if (S.room !== room) return;
+        if (status === 'connected') {
+          room.connected = true;
+          updateRoomUi();
+          publishState();
+        } else {
+          room.connected = false;
+          updateRoomUi();
+        }
+      },
+      onMessage: (topic, payload) => {
+        if (S.room === room) handleMqtt(payload);
+      },
+      onReady: () => {
+        if (S.room !== room) return;
+        room.connected = true;
+        publishState();
+        updateRoomUi();
+      }
+    });
+    ui.roomEntry.hidden = true;
+    ui.roomLobby.hidden = false;
+    ui.roomCode.textContent = code;
+    updateRoomUi();
+    room.mqtt.subscribe(room.topic);
+    room.mqtt.connect();
+    S.roomHeartbeat = window.setInterval(publishState, 700);
+    S.roomWatch = window.setInterval(checkPeer, 700);
+  }
+  function publishState() {
+    const room = S.room;
+    if (!room || !room.connected || !room.mqtt) return;
+    const game = S.game;
+    const active = !!(game && game.active);
+    room.mqtt.publish(room.topic, JSON.stringify({
+      t: 'state',
+      from: room.pid,
+      host: room.host,
+      char: CHARS[S.pick].key,
+      score: active ? game.score : 0,
+      alive: active ? game.alive : true,
+      round: active ? game.round : room.round,
+      playing: active,
+      phase: active ? (game.resultsShown ? 'results' : 'playing') : 'lobby',
+      ts: Date.now()
+    }));
+  }
+  function publishStateNow() { publishState(); }
+  function publishStart(seed, round, delay) {
+    const room = S.room;
+    if (!room || !room.connected || !room.mqtt) return;
+    const message = JSON.stringify({
+      t: 'start', from: room.pid, host: true, seed, round, delay,
+      hostChar: CHARS[S.pick].key, ts: Date.now()
+    });
+    room.mqtt.publish(room.topic, message);
+  }
+  function handleMqtt(payload) {
+    const room = S.room;
+    if (!room) return;
+    let msg;
+    try { msg = JSON.parse(payload); } catch (e) { return; }
+    if (!msg || msg.from === room.pid) return;
+    if (room.peerPid && msg.from !== room.peerPid) return;
+    if (msg.t === 'leave') {
+      clearPeer();
+      return;
+    }
+    if (msg.t === 'start' && !room.host) {
+      if (!room.peerPid) room.peerPid = msg.from;
+      if (!Number.isFinite(msg.round) || msg.round <= room.startedRound) return;
+      room.startedRound = msg.round;
+      room.round = msg.round;
+      if (!room.peer) {
+        room.peer = { pid: msg.from, char: msg.hostChar || 'shirokuma', score: 0, alive: true, online: true, playing: false, round: msg.round };
+        room.lastPeer = Date.now();
+      }
+      beginOnlineRound(msg.seed, clamp(Number(msg.delay) || 3000, 1200, 8000), msg.round);
+      return;
+    }
+    if (msg.t === 'state') {
+      if (!room.peerPid) room.peerPid = msg.from;
+      room.peer = {
+        pid: msg.from,
+        char: msg.char || (room.peer && room.peer.char) || 'shirokuma',
+        score: Number(msg.score) || 0,
+        alive: msg.alive !== false,
+        online: true,
+        playing: !!msg.playing,
+        round: Number(msg.round) || 0
+      };
+      room.lastPeer = Date.now();
+      updateRoomUi();
+      if (S.game && S.game.active) {
+        updateHudPeer();
+        if (!S.game.alive) maybeFinishOnline();
+      }
+    }
+  }
+  function clearPeer() {
+    const room = S.room;
+    if (!room) return;
+    room.peer = null;
+    room.peerPid = null;
+    room.lastPeer = 0;
+    updateRoomUi();
+    if (S.game && S.game.active) {
+      updateHudPeer();
+      if (!S.game.alive) {
+        setWaitText('对手已离开', '可以关闭小游戏，或等待新的玩家加入。');
+      }
+    }
+  }
+  function checkPeer() {
+    const room = S.room;
+    if (!room) return;
+    if (!room.peer) {
+      updateRoomUi();
+      return;
+    }
+    const online = Date.now() - room.lastPeer < 3000;
+    const changed = room.peer.online !== online;
+    room.peer.online = online;
+    if (changed) {
+      updateRoomUi();
+      updateHudPeer();
+      if (S.game && S.game.active && !S.game.alive) {
+        if (!online) setWaitText('对手掉线了', '等待对手重新连接…');
+        else maybeFinishOnline();
+      }
+    }
+    if (!online && Date.now() - room.lastPeer > 15000) clearPeer();
+  }
+  function updateRoomUi() {
+    const room = S.room;
+    if (!room) return;
+    ui.roomCode.textContent = room.code;
+    const me = CHARS[S.pick];
+    ui.lobbyAvatarMe.innerHTML = charSvg(me);
+    ui.lobbyCharMe.textContent = me.name;
+    ui.lobbyStateMe.textContent = room.connected ? '在线' : '连接中';
+    ui.lobbyStateMe.classList.toggle('is-offline', !room.connected);
+
+    if (room.peer) {
+      const foe = metaByKey(room.peer.char) || CHARS[0];
+      if (room.peer.char) ui.lobbyAvatarFoe.innerHTML = charSvg(foe);
+      else ui.lobbyAvatarFoe.innerHTML = '<span>?</span>';
+      ui.lobbyAvatarFoe.classList.remove('is-empty');
+      ui.lobbyCharFoe.textContent = foe.name;
+      const online = peerOnline();
+      ui.lobbyStateFoe.textContent = online ? '已就绪' : '离线';
+      ui.lobbyStateFoe.classList.toggle('is-offline', !online);
+    } else {
+      ui.lobbyAvatarFoe.innerHTML = '<span>?</span>';
+      ui.lobbyAvatarFoe.classList.add('is-empty');
+      ui.lobbyCharFoe.textContent = '等待加入…';
+      ui.lobbyStateFoe.textContent = '未连接';
+      ui.lobbyStateFoe.classList.add('is-offline');
+    }
+
+    const connected = room.connected;
+    const ready = peerReady();
+    if (room.host) {
+      ui.roomStart.hidden = false;
+      ui.waitingHost.hidden = true;
+      ui.roomStart.disabled = !ready || !!S.game;
+    } else {
+      ui.roomStart.hidden = true;
+      ui.waitingHost.hidden = !connected;
+    }
+    if (!connected) {
+      ui.roomHint.textContent = '正在连接联机中继…';
+    } else if (!room.peer) {
+      ui.roomHint.textContent = room.host
+        ? '把房间码发给另一位已解锁页面的玩家，等待对方加入…'
+        : (Date.now() - room.createdAt > 9000 ? '还没有找到房主，确认房间码是否输入正确。' : '正在寻找房主…');
+    } else if (!peerOnline()) {
+      ui.roomHint.textContent = '对手暂时离线，等待重新连接…';
+    } else if (room.host) {
+      ui.roomHint.textContent = '对方已就绪，可以开始游戏了。';
+    } else {
+      ui.roomHint.textContent = '已经和房主连上，等待房主开始…';
+    }
+    if (!S.game) ui.roomStart.disabled = !ready;
+  }
+  function leaveRoom() {
+    const room = S.room;
+    if (!room) return;
+    if (room.mqtt) {
+      if (room.connected) {
+        try { room.mqtt.publish(room.topic, JSON.stringify({ t:'leave', from:room.pid, ts:Date.now() })); } catch (e) {}
+      }
+      room.mqtt.close();
+    }
+    window.clearInterval(S.roomHeartbeat);
+    window.clearInterval(S.roomWatch);
+    S.roomHeartbeat = 0;
+    S.roomWatch = 0;
+    S.room = null;
+    ui.roomLobby.hidden = true;
+    ui.roomEntry.hidden = false;
+    ui.roomStatus.textContent = '';
+    ui.roomCode.textContent = '-----';
+    if (S.game) stopGame();
+    if (S.mode === 'online') {
+      ui.soloPanel.hidden = true;
+      ui.onlinePanel.hidden = false;
+    }
+  }
+
+  /* ---------- game: setup / rounds ---------- */
+  function startSoloRound() {
+    if (S.room) leaveRoom();
+    setMode('solo');
+    prepareRound(false, randomSeed(), 3000, 1, null);
+  }
+  function hostStartRound() {
+    const room = S.room;
+    if (!room || !room.host || !peerReady()) {
+      updateRoomUi();
+      return;
+    }
+    const seed = randomSeed();
+    room.round = (room.round || 0) + 1;
+    room.startedRound = room.round;
+    const round = room.round;
+    publishStart(seed, round, 3000);
+    window.setTimeout(() => { if (S.room === room) publishStart(seed, round, 3000); }, 350);
+    window.setTimeout(() => { if (S.room === room) publishStart(seed, round, 3000); }, 700);
+    beginOnlineRound(seed, 3000, round);
+  }
+  function beginOnlineRound(seed, delay, round) {
+    const room = S.room;
+    if (!room) return;
+    const oppMeta = metaByKey(room.peer && room.peer.char) || metaByKey(room.hostChar) || CHARS[0];
+    prepareRound(true, seed, delay, round, oppMeta);
+  }
+  function prepareRound(online, seed, delay, round, oppMeta) {
+    stopGame();
+    setMode(online ? 'online' : 'solo');
+    ui.modeTag.textContent = online ? '双人' : '单人';
+    const game = {
+      active: true, online, seed, round,
+      rng: mulberry32(seed),
+      score: 0, alive: true, y: 400, vy: -150, angle: 0,
+      obstacles: [], puffs: [], speed: online ? 170 : 160, gapH: online ? 270 : 275,
+      spawnAcc: 0, running: false, raf: 0, last: 0, resultTimer: 0,
+      resultsShown: false, oppMeta
+    };
+    S.game = game;
+    ui.setup.hidden = true;
+    ui.play.hidden = false;
+    ui.over.hidden = true;
+    ui.wait.hidden = true;
+    ui.tapHint.classList.remove('is-hidden');
+    ui.tapHint.textContent = '点击屏幕 / 空格上升';
+    ui.controls.textContent = '点击屏幕或按空格上升';
+    ui.obstacles.innerHTML = '';
+    ui.players.innerHTML = '';
+    ui.fx.innerHTML = '';
+    if (ui.body) ui.body.scrollTop = 0;
+    buildHud(game);
+    buildBird(game);
+    updateBird(game, true);
+    ui.countdown.hidden = false;
+    let target = performance.now() + delay;
+    let lastNumber = null;
+    const updateCountdown = () => {
+      if (S.game !== game) return;
+      const remain = target - performance.now();
+      if (remain <= 0) {
+        window.clearInterval(S.countdownTimer);
+        S.countdownTimer = 0;
+        ui.countdown.hidden = true;
+        startRun(game);
+        return;
+      }
+      const number = Math.ceil(remain / 1000);
+      if (number !== lastNumber) {
+        lastNumber = number;
+        ui.countdown.innerHTML = '<span>' + number + '</span>';
+      }
+    };
+    window.clearInterval(S.countdownTimer);
+    updateCountdown();
+    S.countdownTimer = window.setInterval(updateCountdown, 80);
+    ui.board.focus({ preventScroll: true });
+  }
+  function buildHud(game) {
+    ui.hud.innerHTML = '';
+    const me = CHARS[S.pick];
+    ui.hud.appendChild(makeHudCard(me, '你', 'me'));
+    if (game.online) {
+      const foe = game.oppMeta || CHARS[0];
+      ui.hud.appendChild(makeHudCard(foe, '对手', 'foe'));
+    }
+  }
+  function makeHudCard(meta, label, kind) {
+    const card = document.createElement('div');
+    card.className = 'hud-card' + (kind === 'foe' ? ' is-foe' : '');
+    card.innerHTML = '<div class="hud-avatar" style="--tint:' + meta.tint + '">' + charSvg(meta) + '</div>' +
+      '<div class="hud-meta"><b>' + label + '</b><span>' + meta.name + '</span></div>' +
+      '<div class="hud-score">0</div>';
+    return card;
+  }
+  function hudCard(kind) {
+    return ui.hud.querySelector('.hud-card' + (kind === 'foe' ? '.is-foe' : ':not(.is-foe)'));
+  }
+  function setHudScore(kind, score) {
+    const card = hudCard(kind);
+    if (card) card.querySelector('.hud-score').textContent = String(score);
+  }
+  function setHudOut(kind, out) {
+    const card = hudCard(kind);
+    if (!card) return;
+    card.classList.toggle('is-out', out);
+    const meta = card.querySelector('.hud-meta span');
+    if (meta) {
+      const name = meta.textContent.replace(' · 出局', '').replace(' · 离线', '');
+      meta.textContent = name + (out ? ' · 出局' : '');
+    }
+  }
+  function updateHudPeer() {
+    const game = S.game;
+    const room = S.room;
+    if (!game || !game.online || !room || !room.peer) return;
+    const foe = hudCard('foe');
+    if (!foe) return;
+    setHudScore('foe', room.peer.score || 0);
+    foe.classList.toggle('is-out', room.peer.alive === false);
+    const meta = metaByKey(room.peer.char);
+    if (meta) {
+      foe.querySelector('.hud-avatar').innerHTML = charSvg(meta);
+      const name = foe.querySelector('.hud-meta span');
+      name.textContent = meta.name + (room.peer.alive === false ? ' · 出局' : (room.peer.online === false ? ' · 离线' : ''));
+    }
+  }
+  function buildBird(game) {
+    const meta = CHARS[S.pick];
+    const group = svgEl('g', { class: 'game-bird' });
+    group.innerHTML = '<circle cx="0" cy="0" r="42" fill="' + meta.tint + '" opacity=".85"></circle>' +
+      '<circle cx="0" cy="0" r="34" fill="none" stroke="#FFFFFF" stroke-width="2.5" opacity=".65" stroke-dasharray="2 7" stroke-linecap="round"></circle>' +
+      '<g transform="scale(0.4)"><use href="#' + meta.sym + '" transform="' + meta.tf + '"></use></g>';
+    ui.players.appendChild(group);
+    game.bird = group;
+  }
+  function updateBird(game, force) {
+    if (!game || !game.bird) return;
+    const target = Math.max(-28, Math.min(62, game.vy * 0.085));
+    game.angle += (target - game.angle) * (force ? 1 : 0.16);
+    game.bird.setAttribute('transform', 'translate(' + W.x + ' ' + game.y + ') rotate(' + game.angle.toFixed(2) + ')');
+  }
+  function startRun(game) {
+    if (S.game !== game || !game.active) return;
+    game.running = true;
+    game.last = performance.now();
+    spawnObstacle(game);
+    game.spawnAcc = 0;
+    ui.board.focus({ preventScroll: true });
+    window.clearTimeout(S.tapTimer);
+    S.tapTimer = window.setTimeout(() => { if (S.game === game) ui.tapHint.classList.add('is-hidden'); }, 2800);
+    game.raf = window.requestAnimationFrame((now) => tick(now, game));
+  }
+  function tick(now, game) {
+    if (S.game !== game || !game.running) return;
+    const dt = Math.min(0.033, Math.max(0.001, (now - game.last) / 1000));
+    game.last = now;
+
+    if (!game.online) {
+      game.speed = 160 + Math.min(85, game.score * 2.2);
+      game.gapH = Math.max(205, 275 - game.score * 2);
+    }
+    game.spawnAcc += game.speed * dt;
+    while (game.spawnAcc >= 300) {
+      game.spawnAcc -= 300;
+      spawnObstacle(game);
+    }
+    for (let i = game.obstacles.length - 1; i >= 0; i--) {
+      const obstacle = game.obstacles[i];
+      obstacle.x -= game.speed * dt;
+      obstacle.el.setAttribute('transform', 'translate(' + obstacle.x.toFixed(2) + ' 0)');
+      if (!obstacle.scored && obstacle.x + obstacle.w < W.x - W.r) {
+        obstacle.scored = true;
+        game.score += 1;
+        setHudScore('me', game.score);
+        if (game.online) publishStateNow();
+      }
+      if (obstacle.x + obstacle.w < -80) {
+        obstacle.el.remove();
+        game.obstacles.splice(i, 1);
+      }
+    }
+
+    game.vy = Math.min(730, game.vy + W.gravity * dt);
+    game.y += game.vy * dt;
+
+    let dead = false;
+    if (game.y - W.r < W.top || game.y + W.r > W.bottom) dead = true;
+    if (!dead) {
+      for (const obstacle of game.obstacles) {
+        if (W.x + W.r > obstacle.x && W.x - W.r < obstacle.x + obstacle.w) {
+          if (game.y - W.r < obstacle.gapTop || game.y + W.r > obstacle.gapBottom) {
+            dead = true;
+            break;
+          }
+        }
+      }
+    }
+    updateBird(game);
+    updatePuffs(game, dt);
+    if (dead) {
+      die(game);
+      return;
+    }
+    game.raf = window.requestAnimationFrame((t) => tick(t, game));
+  }
+  function topRockPath(w, y) {
+    return 'M0 0 H' + w + ' V' + (y - 18) +
+      ' C' + (w * .84) + ' ' + (y - 5) + ' ' + (w * .76) + ' ' + (y - 20) + ' ' + (w * .6) + ' ' + (y - 9) +
+      ' C' + (w * .48) + ' ' + (y - 2) + ' ' + (w * .34) + ' ' + (y - 16) + ' ' + (w * .18) + ' ' + (y - 7) +
+      ' C' + (w * .1) + ' ' + (y - 3) + ' ' + (w * .04) + ' ' + (y - 11) + ' 0 ' + (y - 5) + ' Z';
+  }
+  function bottomRockPath(w, y) {
+    return 'M0 800 H' + w + ' V' + (y + 18) +
+      ' C' + (w * .84) + ' ' + (y + 5) + ' ' + (w * .76) + ' ' + (y + 20) + ' ' + (w * .6) + ' ' + (y + 9) +
+      ' C' + (w * .48) + ' ' + (y + 2) + ' ' + (w * .34) + ' ' + (y + 16) + ' ' + (w * .18) + ' ' + (y + 7) +
+      ' C' + (w * .1) + ' ' + (y + 3) + ' ' + (w * .04) + ' ' + (y + 11) + ' 0 ' + (y + 5) + ' Z';
+  }
+  function spawnObstacle(game) {
+    const gapH = game.gapH;
+    const minCenter = W.top + gapH / 2 + 50;
+    const maxCenter = W.bottom - gapH / 2 - 50;
+    const center = minCenter + game.rng() * (maxCenter - minCenter);
+    const gapTop = center - gapH / 2;
+    const gapBottom = center + gapH / 2;
+    const w = 88;
+    const x = 640;
+    const group = svgEl('g', { class: 'game-obstacle' });
+    group.appendChild(svgEl('path', {
+      d: topRockPath(w, gapTop), fill: 'url(#gCaveRock)', stroke: '#AC8D70', 'stroke-width': 3
+    }));
+    group.appendChild(svgEl('path', {
+      d: bottomRockPath(w, gapBottom), fill: 'url(#gCaveRock)', stroke: '#AC8D70', 'stroke-width': 3
+    }));
+    const moss = svgEl('g', { fill: '#9CC57D' });
+    [[14, -8], [36, -7], [60, -9], [77, -6]].forEach(([mx, dy]) => {
+      moss.appendChild(svgEl('ellipse', { cx: mx, cy: gapTop + dy, rx: 5, ry: 3.4 }));
+      moss.appendChild(svgEl('ellipse', { cx: mx + 3, cy: gapBottom - dy, rx: 4.6, ry: 3 }));
+    });
+    group.appendChild(moss);
+    if (game.obstacles.length % 3 === 1) {
+      group.appendChild(svgEl('circle', { cx: 40, cy: gapTop - 12, r: 4.2, fill: '#F2C7C1' }));
+      group.appendChild(svgEl('circle', { cx: 40, cy: gapTop - 12, r: 1.8, fill: '#F2D58C' }));
+    }
+    const speck = svgEl('g', { fill: '#B99B7D', opacity: '.55' });
+    speck.appendChild(svgEl('circle', { cx: 20, cy: Math.max(50, gapTop - 60), r: 3 }));
+    speck.appendChild(svgEl('circle', { cx: 62, cy: Math.min(740, gapBottom + 60), r: 2.5 }));
+    group.appendChild(speck);
+    group.setAttribute('transform', 'translate(' + x + ' 0)');
+    ui.obstacles.appendChild(group);
+    game.obstacles.push({ x, w, gapTop, gapBottom, el: group, scored: false });
+  }
+  function flap() {
+    const game = S.game;
+    if (!game || !game.running || !game.alive) return;
+    game.vy = W.flap;
+    spawnPuff(game);
+    ui.tapHint.classList.add('is-hidden');
+  }
+  function spawnPuff(game) {
+    const puff = svgEl('circle', {
+      cx: W.x - 34, cy: game.y + 16, r: 4, fill: '#FFF9EE', opacity: '.72'
+    });
+    ui.fx.appendChild(puff);
+    game.puffs.push({ el: puff, life: 0.5, maxLife: 0.5, x: W.x - 34, y: game.y + 16 });
+  }
+  function spawnCrash(game) {
+    for (let i = 0; i < 5; i++) {
+      const angle = (Math.PI * 2 * i) / 5;
+      const star = svgEl('circle', {
+        cx: W.x + Math.cos(angle) * 12, cy: game.y + Math.sin(angle) * 12,
+        r: 3.4, fill: i % 2 ? '#F2C7C1' : '#F2D58C', opacity: '.9'
+      });
+      ui.fx.appendChild(star);
+      game.puffs.push({ el: star, life: 0.55, maxLife: 0.55, x: W.x + Math.cos(angle) * 12, y: game.y + Math.sin(angle) * 12, burst: true });
+    }
+  }
+  function updatePuffs(game, dt) {
+    for (let i = game.puffs.length - 1; i >= 0; i--) {
+      const puff = game.puffs[i];
+      puff.life -= dt;
+      if (puff.life <= 0) {
+        puff.el.remove();
+        game.puffs.splice(i, 1);
+        continue;
+      }
+      const t = 1 - puff.life / puff.maxLife;
+      if (puff.burst) {
+        puff.el.setAttribute('cx', String(puff.x + (puff.x - W.x) * t * 1.8));
+        puff.el.setAttribute('cy', String(puff.y + (puff.y - game.y) * t * 1.8));
+        puff.el.setAttribute('opacity', String(1 - t));
+      } else {
+        puff.el.setAttribute('cx', String(puff.x - t * 20));
+        puff.el.setAttribute('cy', String(puff.y + t * 18));
+        puff.el.setAttribute('r', String(4 + t * 9));
+        puff.el.setAttribute('opacity', String(0.72 * (1 - t)));
+      }
+    }
+  }
+  function die(game) {
+    if (!game || !game.alive) return;
+    game.alive = false;
+    game.running = false;
+    if (game.raf) window.cancelAnimationFrame(game.raf);
+    game.raf = 0;
+    game.angle = 58;
+    updateBird(game, true);
+    if (game.bird) game.bird.classList.add('is-dead');
+    setHudOut('me', true);
+    ui.tapHint.classList.add('is-hidden');
+    spawnCrash(game);
+    publishStateNow();
+    if (game.online) {
+      setWaitText('已出局', '等待对手完成这一局…');
+      ui.wait.hidden = false;
+      window.setTimeout(() => {
+        if (S.game === game) maybeFinishOnline();
+      }, 500);
+    } else {
+      window.setTimeout(() => { if (S.game === game) showSoloResults(game); }, 500);
+    }
+  }
+  function setWaitText(title, sub) {
+    const p = ui.wait.querySelector('.game-wait-card p');
+    const span = ui.wait.querySelector('.game-wait-card span');
+    if (p) p.textContent = title;
+    if (span) span.textContent = sub;
+  }
+  function maybeFinishOnline() {
+    const game = S.game;
+    const room = S.room;
+    if (!game || !game.online || !game.active || game.alive || game.resultsShown) return;
+    if (!room || !room.peer) return;
+    if (room.peer.alive !== false) return;
+    if (Number(room.peer.round) !== Number(game.round)) return;
+    if (game.resultTimer) return;
+    game.resultTimer = window.setTimeout(() => {
+      if (S.game === game) showOnlineResults(game);
+    }, 350);
+  }
+  function showSoloResults(game) {
+    if (!game || S.game !== game) return;
+    game.resultsShown = true;
+    const isNew = game.score > S.best;
+    if (isNew) {
+      S.best = game.score;
+      try { localStorage.setItem(BEST_KEY, String(S.best)); } catch (e) {}
+    }
+    ui.overArt.innerHTML = charSvg(CHARS[S.pick]);
+    ui.overKicker.textContent = 'ROUND OVER';
+    ui.overTitle.textContent = game.score > 0 ? '撞到山洞啦' : '再试一次吧';
+    ui.overScore.textContent = '你穿过了 ' + game.score + ' 个山洞';
+    ui.overBest.textContent = isNew && game.score > 0 ? '新纪录！最佳记录 ' + S.best + ' 个' : '最佳记录 ' + S.best + ' 个';
+    ui.again.hidden = false;
+    ui.again.disabled = false;
+    ui.change.hidden = false;
+    ui.toLobby.hidden = true;
+    ui.wait.hidden = true;
+    ui.over.hidden = false;
+    ui.again.focus({ preventScroll: true });
+    publishStateNow();
+  }
+  function showOnlineResults(game) {
+    if (!game || S.game !== game) return;
+    game.resultsShown = true;
+    const room = S.room;
+    const myScore = game.score;
+    const foeScore = room && room.peer ? (Number(room.peer.score) || 0) : 0;
+    const online = room && room.peer && peerOnline();
+    const myMeta = CHARS[S.pick];
+    ui.overArt.innerHTML = charSvg(myMeta);
+    ui.overKicker.textContent = 'ROUND RESULT';
+    ui.overTitle.textContent = myScore > foeScore ? '你赢啦！' : (myScore < foeScore ? '对手赢啦' : '平局！');
+    ui.overScore.textContent = '你 ' + myScore + ' 个山洞 · 对手 ' + foeScore + ' 个山洞';
+    ui.again.hidden = !(room && room.host);
+    ui.again.disabled = !online;
+    ui.change.hidden = true;
+    ui.toLobby.hidden = false;
+    if (room && room.host) {
+      ui.overBest.textContent = online ? '再来一局会同步开始' : '对手离线，暂时不能再来一局';
+    } else {
+      ui.overBest.textContent = '等待房主再来一局…';
+    }
+    ui.wait.hidden = true;
+    ui.over.hidden = false;
+    publishStateNow();
+    if (room && room.host) ui.again.focus({ preventScroll: true });
+    else ui.toLobby.focus({ preventScroll: true });
+  }
+  function stopGame() {
+    if (S.game) {
+      S.game.running = false;
+      if (S.game.raf) window.cancelAnimationFrame(S.game.raf);
+      S.game = null;
+    }
+    window.clearInterval(S.countdownTimer);
+    clearTimeout(S.tapTimer);
+    S.countdownTimer = 0;
+    ui.countdown.hidden = true;
+    ui.wait.hidden = true;
+    ui.over.hidden = true;
+    ui.tapHint.classList.remove('is-hidden');
+    ui.obstacles.innerHTML = '';
+    ui.players.innerHTML = '';
+    ui.fx.innerHTML = '';
+  }
+  function returnToLobby() {
+    if (!S.room) {
+      stopGame();
+      ui.play.hidden = true;
+      ui.setup.hidden = false;
+      setMode('solo');
+      return;
+    }
+    stopGame();
+    ui.play.hidden = true;
+    ui.setup.hidden = false;
+    setMode('online');
+    ui.roomEntry.hidden = true;
+    ui.roomLobby.hidden = false;
+    updateRoomUi();
+    publishStateNow();
+  }
+
+  /* ---------- controls ---------- */
+  ui.entry.addEventListener('click', openGame);
+  ui.close.addEventListener('click', closeGame);
+  ui.modeBtns.forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+  ui.soloStart.addEventListener('click', startSoloRound);
+  ui.roomCreate.addEventListener('click', createRoom);
+  ui.roomJoin.addEventListener('click', joinRoom);
+  ui.roomCodeInput.addEventListener('input', () => {
+    ui.roomCodeInput.value = ui.roomCodeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+  });
+  ui.roomCodeInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); joinRoom(); }
+  });
+  ui.roomLeave.addEventListener('click', () => { leaveRoom(); setMode('online'); });
+  ui.roomStart.addEventListener('click', hostStartRound);
+  ui.copyRoom.addEventListener('click', async () => {
+    const room = S.room;
+    if (!room) return;
+    try {
+      await navigator.clipboard.writeText(room.code);
+      ui.copyRoom.textContent = '已复制';
+    } catch (e) {
+      ui.copyRoom.textContent = '请长按上方房间码';
+    }
+    window.setTimeout(() => { ui.copyRoom.textContent = '复制'; }, 1500);
+  });
+  ui.board.addEventListener('pointerdown', (event) => {
+    const game = S.game;
+    if (!game || !game.running) return;
+    event.preventDefault();
+    flap();
+  });
+  ui.again.addEventListener('click', () => {
+    if (S.room) {
+      if (S.room.host) { ui.over.hidden = true; hostStartRound(); }
+    } else {
+      ui.over.hidden = true;
+      startSoloRound();
+    }
+  });
+  ui.change.addEventListener('click', () => {
+    stopGame();
+    ui.over.hidden = true;
+    ui.play.hidden = true;
+    ui.setup.hidden = false;
+    setMode('solo');
+  });
+  ui.toLobby.addEventListener('click', returnToLobby);
+  window.addEventListener('keydown', (event) => {
+    if (!S.open) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeGame();
+      return;
+    }
+    if ((event.code === 'Space' || event.code === 'ArrowUp') && S.game && S.game.running) {
+      event.preventDefault();
+      flap();
+    }
+  }, { passive: false });
+  window.addEventListener('pagehide', () => {
+    const room = S.room;
+    if (room && room.connected && room.mqtt) {
+      try { room.mqtt.publish(room.topic, JSON.stringify({ t:'leave', from:room.pid, ts:Date.now() })); } catch (e) {}
+    }
+  });
+
+  buildPicker();
+  setMode('solo');
 })();
 </script>
 </body>
