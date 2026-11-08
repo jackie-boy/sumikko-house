@@ -607,6 +607,277 @@
     .game-over-card{padding:14px 16px 16px}
   }
 
+  /* ---- 小窝入口 ---- */
+  .care-entry{
+    width:min(100% - 30px,780px);
+    margin:16px auto 0;
+    padding:16px 20px;
+    display:flex;align-items:center;gap:16px;
+    position:relative;overflow:hidden;
+    border-radius:26px;border:1.5px solid #E3EADF;
+    background:linear-gradient(120deg,#EFF6EA 0%,#FAF3E7 58%,#FBE7E2 100%);
+    box-shadow:0 12px 30px -18px rgba(140,150,120,.3);
+  }
+  .care-entry::after{
+    content:"";position:absolute;left:-48px;bottom:-58px;width:150px;height:150px;
+    border-radius:50%;background:#CDE3D5;opacity:.3;pointer-events:none;
+  }
+  .care-entry-art{
+    flex:none;width:88px;height:88px;border-radius:22px;overflow:hidden;
+    background:#EEF6EA;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);
+  }
+  .care-entry-art svg{display:block;width:100%;height:100%}
+  .care-entry-copy{flex:1;min-width:0;position:relative;z-index:1}
+  .care-entry-kicker{margin:0 0 3px;font-size:9px;letter-spacing:.2em;color:#93A48B}
+  .care-entry h2{
+    margin:0;
+    font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:21px;letter-spacing:.06em;color:#5F4A3C;
+  }
+  .care-entry p{margin:5px 0 0;font-size:11.5px;line-height:1.65;color:#8E7766}
+  .care-entry-side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px;position:relative;z-index:2}
+  .coin-pill{
+    display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;
+    background:#FFF4DA;border:1px solid #F0DCB8;color:#A77A3C;
+    font-size:10px;font-weight:700;white-space:nowrap;
+  }
+  .coin-pill strong{font-size:13px;color:#8A612B}
+  .coin-dot{
+    width:16px;height:16px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(145deg,#F6D27A,#E6B24E);color:#FFF9E8;font-size:8px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);
+  }
+  .care-entry-btn{
+    padding:11px 16px;border:0;border-radius:13px;
+    background:#A9CBB8;color:#4F4438;font-family:inherit;font-weight:700;
+    font-size:12.5px;letter-spacing:.05em;cursor:pointer;
+    box-shadow:0 8px 16px -8px rgba(120,150,125,.65);
+    transition:transform .15s ease,background .2s ease;
+  }
+  .care-entry-btn:hover{background:#98C0AA;transform:translateY(-1px)}
+  .care-entry-btn:active{transform:scale(.98)}
+  .care-entry-btn span{margin-left:2px}
+  @media(max-width:560px){
+    .care-entry{flex-wrap:wrap;align-items:flex-start;gap:12px;padding:15px}
+    .care-entry-art{width:70px;height:70px;border-radius:18px}
+    .care-entry-copy{flex:1 1 calc(100% - 84px)}
+    .care-entry h2{font-size:19px}
+    .care-entry-side{width:100%;flex-direction:row;justify-content:space-between;align-items:center}
+    .care-entry-btn{padding:10px 14px}
+  }
+
+  /* ---- 小窝弹层 ---- */
+  body.care-open{overflow:hidden}
+  .care-overlay{
+    position:fixed;inset:0;z-index:8000;
+    display:grid;place-items:center;padding:14px;overflow-y:auto;
+    background:rgba(248,243,234,.8);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    opacity:0;transition:opacity .22s ease;
+  }
+  .care-overlay[hidden]{display:none}
+  .care-overlay.is-open{opacity:1}
+  .care-shell{
+    position:relative;
+    width:min(100%,860px);max-height:calc(100dvh - 28px);
+    display:flex;flex-direction:column;overflow:hidden;
+    background:#FFFBF4;border:1.5px solid #F0DCC9;border-radius:28px;
+    box-shadow:0 30px 90px -30px rgba(140,100,75,.55);
+    transform:translateY(10px);opacity:0;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .care-overlay.is-open .care-shell{transform:translateY(0);opacity:1}
+  .care-head{
+    display:flex;align-items:center;gap:10px;padding:11px 14px;flex:none;
+    background:#FFFDF8;border-bottom:1px solid #F4E6D6;
+  }
+  .care-heading{
+    flex:1;text-align:center;font-weight:800;font-size:15px;letter-spacing:.06em;
+    color:#5F4A3C;line-height:1.2;display:flex;flex-direction:column;align-items:center;gap:1px;
+  }
+  .care-heading span{font-size:7.5px;letter-spacing:.22em;color:#BBA38F;font-weight:600}
+  .care-head .coin-pill{flex:none}
+  .care-body{
+    flex:1;min-height:0;overflow-y:auto;padding:16px;
+    display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.8fr);gap:14px;
+  }
+  .care-main{min-width:0}
+  .care-block{min-width:0}
+  .care-section-title{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-bottom:7px;font-size:10.5px;letter-spacing:.06em;color:#A78E7B;
+  }
+  .care-section-sub{font-size:8.5px;letter-spacing:.02em;color:#BBA38F}
+  .care-char-strip{display:flex;flex-wrap:wrap;gap:8px 6px}
+  .care-char-btn{
+    width:44px;height:44px;flex:none;position:relative;padding:0;overflow:visible;
+    border:0;border-radius:50%;background:transparent;cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .care-char-face{
+    display:block;width:100%;height:100%;overflow:hidden;
+    border:2px solid transparent;border-radius:50%;background:var(--tint,#F7EBDD);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);
+    transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  .care-char-face svg{display:block;width:100%;height:100%}
+  .care-char-btn:hover{transform:translateY(-2px)}
+  .care-char-btn[aria-selected="true"] .care-char-face{
+    border-color:#E59A94;box-shadow:0 0 0 3px rgba(229,154,148,.22);
+  }
+  .care-level-badge{
+    position:absolute;right:-3px;bottom:-3px;z-index:2;min-width:20px;padding:1px 3px;
+    border-radius:6px;background:#FFFBF4;border:1px solid #EBD8C6;
+    color:#A78E7B;font-size:7px;line-height:1.3;font-weight:700;text-align:center;
+  }
+  .care-detail{
+    display:flex;align-items:center;gap:14px;margin-top:10px;padding:14px;
+    border:1.5px solid #F2E3D2;border-radius:20px;background:#FFF8EF;position:relative;
+  }
+  .care-portrait-wrap{position:relative;width:112px;height:112px;flex:none}
+  .care-portrait{
+    width:100%;height:100%;border-radius:50%;overflow:hidden;
+    background:radial-gradient(circle at 35% 28%,#FFFDF8 0%,var(--tint,#F8EFE5) 72%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),0 6px 16px rgba(160,120,90,.1);
+    transform-origin:50% 55%;
+  }
+  .care-portrait svg{display:block;width:100%;height:100%}
+  .care-fx{position:absolute;inset:-20px;pointer-events:none;overflow:visible}
+  .care-heart-fx{
+    position:absolute;color:#E8A19A;font-size:14px;line-height:1;
+    animation:care-heart-float 1.1s ease-out forwards;
+  }
+  @keyframes care-heart-float{
+    0%{opacity:0;transform:translateY(6px) scale(.6)}
+    20%{opacity:1}
+    100%{opacity:0;transform:translateY(-40px) scale(1.05)}
+  }
+  .care-portrait.act-pet{animation:care-pet .6s ease}
+  .care-portrait.act-hop{animation:care-hop .72s ease}
+  .care-portrait.act-spin{animation:care-spin .8s ease}
+  .care-portrait.act-rain{animation:care-rain .8s ease}
+  .care-portrait.act-hug{animation:care-hug .9s ease}
+  @keyframes care-pet{
+    0%,100%{transform:scale(1)}
+    30%{transform:scale(1.06) translateY(-3px)}
+    60%{transform:scale(.98)}
+  }
+  @keyframes care-hop{
+    0%,100%{transform:translateY(0) scale(1)}
+    30%{transform:translateY(-12px) scale(1.03)}
+    55%{transform:translateY(0) scale(.98)}
+    75%{transform:translateY(-4px) scale(1)}
+  }
+  @keyframes care-spin{
+    0%{transform:rotate(0)}
+    100%{transform:rotate(360deg)}
+  }
+  @keyframes care-rain{
+    0%,100%{transform:scale(1)}
+    40%{transform:scale(1.08)}
+  }
+  @keyframes care-hug{
+    0%,100%{transform:scale(1)}
+    25%{transform:scale(1.12) translateY(-4px)}
+    55%{transform:scale(.98)}
+  }
+  .care-detail-info{flex:1;min-width:0}
+  .care-kicker{margin:0 0 2px;font-size:8px;letter-spacing:.2em;color:#BBA38F}
+  .care-detail-info h2{
+    margin:0;font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:22px;letter-spacing:.06em;color:#5F4A3C;
+  }
+  .care-affection-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:8px;font-size:10px;color:#A78E7B}
+  .care-affection-row strong{font-size:10px;color:#C58A82;font-weight:700}
+  .care-affection-bar{height:8px;margin-top:4px;border-radius:999px;background:#F3E6D6;overflow:hidden}
+  .care-affection-bar span{display:block;width:0;height:100%;border-radius:999px;background:linear-gradient(90deg,#F2B7B3,#E59A94);transition:width .35s ease}
+  .care-level-note{margin:5px 0 0;min-height:14px;font-size:9.5px;line-height:1.5;color:#B49A86}
+  .care-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .care-action{
+    padding:5px 8px;border:1px solid #EBDAC9;border-radius:999px;background:#FFFDF8;
+    font-family:inherit;font-size:9px;line-height:1.2;color:#8E7766;cursor:pointer;
+    letter-spacing:.02em;transition:background .2s ease,transform .15s ease;
+  }
+  .care-action:hover:not(:disabled){background:#FFF4E8;transform:translateY(-1px)}
+  .care-action:disabled{opacity:.5;cursor:not-allowed;background:#F7F1E9}
+  .care-action b{font-weight:700;color:#5F4A3C}
+  .care-action small{display:inline-block;margin-left:3px;font-size:7.5px;color:#BBA38F}
+  .care-speech{
+    position:relative;margin:10px 0 0;padding:9px 12px;border-radius:14px;
+    background:#FFFDF8;border:1.5px solid #F2E4D5;color:#7E6756;
+    font-size:11px;line-height:1.6;
+  }
+  .care-speech::before{
+    content:"♡";position:absolute;top:-9px;left:20px;width:16px;height:16px;
+    border-radius:50%;background:#FFFBF4;border:1.5px solid #F2E4D5;
+    color:#E8A19A;font-size:9px;line-height:14px;text-align:center;
+  }
+  .care-feed{margin-top:12px}
+  .food-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .food-card{
+    display:flex;align-items:center;gap:8px;min-width:0;padding:8px;
+    border:1.5px solid #F1E2D1;border-radius:14px;background:#FFFDF8;
+  }
+  .food-icon{
+    width:42px;height:42px;flex:none;border-radius:12px;overflow:hidden;
+    display:grid;place-items:center;background:#FFF6E8;
+  }
+  .food-icon svg{display:block;width:38px;height:38px}
+  .food-info{flex:1;min-width:0}
+  .food-info h4{margin:0;font-size:10.5px;color:#5F4A3C;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .food-info p{margin:2px 0 0;font-size:8.5px;line-height:1.35;color:#B49A86;white-space:normal}
+  .food-btn{
+    flex:none;padding:6px 8px;border:0;border-radius:9px;background:#F3D6D1;color:#A7625C;
+    font-family:inherit;font-size:9px;font-weight:700;line-height:1.2;cursor:pointer;
+    transition:background .2s ease,transform .15s ease;
+  }
+  .food-btn:hover:not(:disabled){background:#EEC6C0}
+  .food-btn:active:not(:disabled){transform:scale(.97)}
+  .food-btn:disabled{background:#F0E8DE;color:#C4B4A4;cursor:not-allowed}
+  .food-btn.buy{background:#F5E2BC;color:#9C7136}
+  .food-btn.buy:hover:not(:disabled){background:#F0D7A4}
+  .care-shop{
+    min-width:0;padding:14px;border:1.5px solid #F2E3D2;border-radius:20px;
+    background:#FFF8EF;align-self:start;
+  }
+  .care-shop .food-row{grid-template-columns:1fr}
+  .care-shop-note{margin:10px 0 0;font-size:9px;line-height:1.65;color:#B49A86}
+  .care-toast{
+    position:absolute;left:50%;bottom:18px;z-index:5;
+    transform:translate(-50%,10px);max-width:80%;padding:8px 14px;
+    border-radius:999px;background:#FFFDF8;border:1.5px solid #F0DCC9;
+    box-shadow:0 10px 24px -12px rgba(150,105,78,.4);
+    font-size:10.5px;line-height:1.4;color:#7E6756;text-align:center;
+    opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;
+  }
+  .care-toast.show{opacity:1;transform:translate(-50%,0)}
+  .care-overlay[hidden]{display:none}
+  .game-over-coins{margin:4px 0 0;min-height:14px;font-size:10.5px;font-weight:700;color:#C08A4A}
+  @media(max-width:760px){
+    .care-body{grid-template-columns:1fr;padding:12px}
+    .care-shop{order:3}
+    .care-portrait-wrap{width:96px;height:96px}
+    .care-detail{gap:10px;padding:11px}
+    .care-detail-info h2{font-size:20px}
+    .food-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .care-shop .food-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:430px){
+    .care-heading{font-size:14px}
+    .care-head .coin-pill{padding:4px 8px}
+    .care-char-btn{width:40px;height:40px}
+    .care-level-badge{font-size:6.5px}
+    .care-detail{align-items:flex-start}
+    .care-portrait-wrap{width:82px;height:82px}
+    .care-actions{gap:4px}
+    .care-action{font-size:8.5px;padding:4px 7px}
+    .food-card{padding:7px;gap:6px}
+    .food-icon{width:36px;height:36px}
+    .food-info h4{font-size:9.5px}
+    .food-info p{font-size:8px}
+    .food-btn{padding:5px 7px;font-size:8.5px}
+  }
+
   /* ---- 密码锁 ---- */
   .sr-only{
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
@@ -1450,6 +1721,31 @@
     <button id="game-open" class="game-entry-btn" type="button" aria-haspopup="dialog">去玩一局 <span aria-hidden="true">→</span></button>
   </section>
 
+  <!-- ================= 小窝入口 ================= -->
+  <section class="care-entry" aria-labelledby="care-entry-title">
+    <div class="care-entry-art" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="55" fill="#EEF6EA"/>
+        <ellipse cx="60" cy="87" rx="36" ry="8" fill="#D9C4AA" opacity=".35"/>
+        <path d="M27 58 Q28 88 60 88 Q92 88 93 58 Q60 70 27 58Z" fill="#F4C8B9" stroke="#D6A493" stroke-width="3"/>
+        <ellipse cx="60" cy="58" rx="33" ry="9" fill="#FFF4E8" stroke="#D6A493" stroke-width="3"/>
+        <path d="M60 45 C55 35 41 37 43 48 C45 56 60 64 60 64 C60 64 75 56 77 48 C79 37 65 35 60 45Z" fill="#F2AFA9"/>
+        <circle cx="46" cy="42" r="2.6" fill="#FFF9EE" opacity=".8"/>
+        <circle cx="74" cy="38" r="2" fill="#FFF9EE" opacity=".8"/>
+        <path d="M39 34 l1.4 4 4 1.4 -4 1.4 -1.4 4 -1.4 -4 -4 -1.4 4 -1.4z" fill="#F2D08D"/>
+      </svg>
+    </div>
+    <div class="care-entry-copy">
+      <p class="care-entry-kicker">SUMIKKO HOME · 小窝</p>
+      <h2 id="care-entry-title">喂饱小伙伴</h2>
+      <p>用游戏里赚到的金币买食物，喂给角落生物，提升好感度，解锁更多互动动作。</p>
+    </div>
+    <div class="care-entry-side">
+      <span class="coin-pill"><span class="coin-dot" aria-hidden="true">✦</span><strong id="care-entry-coins">0</strong> 金币</span>
+      <button id="care-open" class="care-entry-btn" type="button" aria-haspopup="dialog">进入小窝 <span aria-hidden="true">→</span></button>
+    </div>
+  </section>
+
   <!-- ================= 成员图鉴 ================= -->
   <section class="crew">
     <div class="crew-head">
@@ -1698,6 +1994,7 @@
                 <h3 id="game-over-title">撞到山洞啦</h3>
                 <p id="game-over-score" class="game-over-score"></p>
                 <p id="game-over-best" class="game-over-best"></p>
+                <p id="game-over-coins" class="game-over-coins"></p>
                 <div class="game-over-actions">
                   <button id="game-again" class="game-primary" type="button">再来一局</button>
                   <button id="game-change" class="game-secondary" type="button">换角色</button>
@@ -1711,6 +2008,50 @@
         <p id="game-controls" class="game-controls">点击屏幕或按空格上升</p>
       </section>
     </div>
+  </div>
+</div>
+
+<!-- ================= 小窝 ================= -->
+<div id="care-overlay" class="care-overlay" hidden>
+  <div class="care-shell" role="dialog" aria-modal="true" aria-labelledby="care-heading">
+    <header class="care-head">
+      <button id="care-close" class="game-icon-btn" type="button" aria-label="关闭小窝">×</button>
+      <div class="care-heading" id="care-heading">小角落小窝 <span>SUMIKKO HOME</span></div>
+      <span class="coin-pill"><span class="coin-dot" aria-hidden="true">✦</span><strong id="care-coins">0</strong> 金币</span>
+    </header>
+    <div class="care-body">
+      <section class="care-main">
+        <div class="care-block">
+          <div class="care-section-title"><span>小伙伴们</span><span class="care-section-sub">好感度会一直保存在本机</span></div>
+          <div id="care-char-strip" class="care-char-strip" role="listbox" aria-label="选择要互动的小伙伴"></div>
+        </div>
+        <div class="care-detail">
+          <div class="care-portrait-wrap">
+            <div id="care-portrait" class="care-portrait" aria-hidden="true"></div>
+            <div id="care-fx" class="care-fx" aria-hidden="true"></div>
+          </div>
+          <div class="care-detail-info">
+            <p class="care-kicker">YOUR LITTLE FRIEND</p>
+            <h2 id="care-name">白熊</h2>
+            <div class="care-affection-row"><span id="care-level">好感度 Lv.1</span><strong id="care-points">0 / 12</strong></div>
+            <div class="care-affection-bar"><span id="care-affection-fill"></span></div>
+            <p id="care-level-note" class="care-level-note">再喂一点，就能解锁新动作。</p>
+            <div id="care-actions" class="care-actions" aria-label="互动动作"></div>
+          </div>
+        </div>
+        <p id="care-speech" class="care-speech" aria-live="polite">今天想喂我什么呀？</p>
+        <div class="care-feed">
+          <div class="care-section-title"><span>喂食</span><span class="care-section-sub">选择一份库存食物</span></div>
+          <div id="care-inventory" class="food-row"></div>
+        </div>
+      </section>
+      <aside class="care-shop">
+        <div class="care-section-title"><span>小角落商店</span><span class="care-section-sub">用金币换好吃的</span></div>
+        <div id="care-shop-list" class="food-row"></div>
+        <p class="care-shop-note">玩游戏可以赚金币。食物、金币和好感度都会保存在本机浏览器里，下次打开还在。</p>
+      </aside>
+    </div>
+    <div id="care-toast" class="care-toast" role="status" aria-live="polite"></div>
   </div>
 </div>
 
@@ -2859,6 +3200,12 @@
     ui.toLobby.hidden = true;
     ui.wait.hidden = true;
     ui.over.hidden = false;
+    if (!game.rewarded) {
+      game.rewarded = true;
+      document.dispatchEvent(new CustomEvent('sumikko:round-end', {
+        detail: { mode: 'solo', score: game.score, won: false }
+      }));
+    }
     ui.again.focus({ preventScroll: true });
     publishStateNow();
   }
@@ -2885,6 +3232,12 @@
     }
     ui.wait.hidden = true;
     ui.over.hidden = false;
+    if (!game.rewarded) {
+      game.rewarded = true;
+      document.dispatchEvent(new CustomEvent('sumikko:round-end', {
+        detail: { mode: 'online', score: myScore, won: myScore > foeScore }
+      }));
+    }
     publishStateNow();
     if (room && room.host) ui.again.focus({ preventScroll: true });
     else ui.toLobby.focus({ preventScroll: true });
@@ -2993,6 +3346,410 @@
 
   buildPicker();
   setMode('solo');
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  const PROFILE_KEY = 'ruiqing-sumikko-profile-v1';
+  const CHARS = [
+    { key:'shirokuma', name:'白熊', sym:'c-shirokuma', tf:'translate(0 -2.6) scale(1.31)', tint:'#EAF2F6' },
+    { key:'penguin', name:'企鹅？', sym:'c-penguin', tf:'translate(0 -3.5) scale(1.38)', tint:'#E7F1E9' },
+    { key:'tonkatsu', name:'炸猪排', sym:'c-tonkatsu', tf:'translate(0 -8.8) scale(1.46)', tint:'#FBEDD3' },
+    { key:'neko', name:'猫', sym:'c-neko', tf:'translate(-21.6 .6) scale(1.25)', tint:'#F7EEE0' },
+    { key:'tokage', name:'蜥蜴', sym:'c-tokage', tf:'translate(-18 -1.2) scale(1.2)', tint:'#E3F2EF' },
+    { key:'tapioca', name:'珍珠', sym:'c-tapioca', tf:'translate(-1.2 -56.6) scale(2.36)', tint:'#FBF2DC' },
+    { key:'nisetsumuri', name:'假蜗牛', sym:'c-nisetsumuri', tf:'translate(7 -18) scale(1.4)', tint:'#ECEEF9' },
+    { key:'zassou', name:'杂草', sym:'c-zassou', tf:'translate(0 -18.4) scale(1.6)', tint:'#EAF3E0' },
+    { key:'ebifurai', name:'炸虾尾', sym:'c-ebifurai', tf:'translate(0 28) scale(1.15)', tint:'#FBEDD9' },
+    { key:'hokori', name:'灰尘', sym:'c-hokori', tf:'translate(1.3 0) scale(1.31)', tint:'#F1EEEA' },
+    { key:'suzume', name:'麻雀', sym:'c-suzume', tf:'translate(-18.4 0) scale(1.53)', tint:'#F7EFE4' },
+    { key:'furoshiki', name:'包袱布', sym:'c-furoshiki', tf:'translate(0 3.8) scale(1.53)', tint:'#FBE9E7' },
+    { key:'onigiri', name:'饭团', sym:'c-onigiri', tf:'translate(0 6.8) scale(1.7)', tint:'#F6F3EA' },
+    { key:'kingyo', name:'金鱼', sym:'c-kingyo', tf:'translate(16 -4) scale(1.25)', tint:'#FDECE4' },
+    { key:'pochette', name:'小袋子', sym:'c-pochette', tf:'translate(0 4.7) scale(1.86)', tint:'#EAF3ED' },
+    { key:'obake', name:'幽灵', sym:'c-obake', tf:'translate(0 5.7) scale(1.9)', tint:'#F1F2F9' }
+  ];
+  const FOODS = [
+    {
+      key:'cookie', name:'小饼干', price:8, love:3,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="34" r="23" fill="#E9C184" stroke="#C9995E" stroke-width="3"/><g fill="#B9824C"><circle cx="23" cy="27" r="3"/><circle cx="39" cy="24" r="2.5"/><circle cx="42" cy="38" r="3"/><circle cx="29" cy="44" r="2.5"/><circle cx="18" cy="38" r="2"/></g><path d="M37 12 q2 -5 7 -3" fill="none" stroke="#D9A96C" stroke-width="2.5" stroke-linecap="round"/></svg>'
+    },
+    {
+      key:'onigiri', name:'小饭团', price:14, love:5,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 9 C40 9 55 42 52 49 C50 54 14 54 12 49 C9 42 24 9 32 9Z" fill="#FEFCF6" stroke="#D3C9B9" stroke-width="3"/><path d="M22 41 Q32 45 42 41 L40 52 Q32 55 24 52Z" fill="#4E5E4C"/><g fill="#EFE6D5"><circle cx="24" cy="27" r="1.6"/><circle cx="39" cy="30" r="1.4"/></g></svg>'
+    },
+    {
+      key:'pudding', name:'焦糖布丁', price:20, love:7,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="55" rx="22" ry="4" fill="#E5D1BA" opacity=".6"/><path d="M17 27 L47 27 L42 51 Q32 55 22 51Z" fill="#F5D393" stroke="#D5A65B" stroke-width="3"/><ellipse cx="32" cy="27" rx="15" ry="6.5" fill="#C98B50" stroke="#A8703B" stroke-width="3"/><path d="M38 19 q1 -6 7 -7 q-4 3 -3 8" fill="#FFF8EC"/></svg>'
+    },
+    {
+      key:'strawberry', name:'草莓', price:24, love:8,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 55 C18 43 14 31 20 23 C26 15 38 15 44 23 C50 31 46 43 32 55Z" fill="#EF9A8E" stroke="#D77C70" stroke-width="3"/><path d="M20 22 Q32 11 44 22 Q32 17 20 22Z" fill="#9CC57D" stroke="#78A159" stroke-width="2"/><g fill="#FFF3E2"><circle cx="26" cy="31" r="1.5"/><circle cx="36" cy="29" r="1.5"/><circle cx="32" cy="39" r="1.5"/><circle cx="24" cy="40" r="1.5"/><circle cx="39" cy="39" r="1.5"/></g></svg>'
+    },
+    {
+      key:'dango', name:'三色团子', price:30, love:10,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 56 L32 8" stroke="#C9A67B" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="16" r="9" fill="#F4C7C4" stroke="#D99E9A" stroke-width="2"/><circle cx="32" cy="32" r="9" fill="#FBF2E2" stroke="#DDC9AE" stroke-width="2"/><circle cx="32" cy="48" r="9" fill="#A8CC84" stroke="#7EA45A" stroke-width="2"/></svg>'
+    },
+    {
+      key:'cake', name:'奶油蛋糕', price:40, love:12,
+      icon:'<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M12 47 L52 47 L52 54 L12 54Z" fill="#F0D5C0" stroke="#D0AC90" stroke-width="2"/><path d="M16 27 L48 27 L48 47 L16 47Z" fill="#F9E3D8" stroke="#D7B3A0" stroke-width="3"/><path d="M16 33 L48 33" stroke="#EEB9A7" stroke-width="4"/><path d="M16 27 Q22 21 28 27 Q34 21 40 27 Q46 21 48 27" fill="#F4BFC3" stroke="#D9939A" stroke-width="2"/><circle cx="41" cy="19" r="5" fill="#EF9A8E" stroke="#D77C70" stroke-width="2"/><path d="M41 14 q-2 -4 2 -6" stroke="#9CC57D" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>'
+    }
+  ];
+  const LEVELS = [0, 10, 25, 50, 85];
+  const MAX_AFFECTION = LEVELS[LEVELS.length - 1];
+  const LEVEL_TITLES = ['初次见面', '有点熟了', '好朋友', '很喜欢', '最最喜欢'];
+  const ACTIONS = [
+    { key:'pet', name:'摸摸头', level:1, line:'唔…好舒服。' },
+    { key:'hop', name:'蹦蹦跳', level:2, line:'嘿咻！' },
+    { key:'spin', name:'转圈圈', level:3, line:'转呀转～' },
+    { key:'rain', name:'爱心雨', level:4, line:'好多爱心，好开心！' },
+    { key:'hug', name:'抱抱', level:5, line:'最喜欢你了！' }
+  ];
+  const LEVEL_LINES = [
+    '今天想喂我什么呀？',
+    '和你待在一起，好像更暖和了。',
+    '要一起在角落里打滚吗？',
+    '今天也最喜欢你了。',
+    '只要和你一起，哪里都是最好的角落。'
+  ];
+  const SCENE_LINES = [
+    null,
+    '和你待在一起，好像更暖和了。',
+    '要一起在角落里打滚吗？',
+    '今天也最喜欢你了。',
+    '只要和你一起，哪里都是最好的角落。'
+  ];
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    entry: $('care-open'), entryCoins: $('care-entry-coins'),
+    overlay: $('care-overlay'), close: $('care-close'), coins: $('care-coins'),
+    strip: $('care-char-strip'), portrait: $('care-portrait'), fx: $('care-fx'),
+    name: $('care-name'), level: $('care-level'), points: $('care-points'),
+    fill: $('care-affection-fill'), levelNote: $('care-level-note'),
+    actions: $('care-actions'), speech: $('care-speech'),
+    inventory: $('care-inventory'), shop: $('care-shop-list'),
+    toast: $('care-toast')
+  };
+  let profile = loadProfile();
+  let toastTimer = 0;
+  let actTimer = 0;
+
+  function defaultProfile() {
+    const p = { version:1, coins:0, inventory:{}, affection:{}, lastChar:'shirokuma' };
+    FOODS.forEach((food) => { p.inventory[food.key] = 0; });
+    CHARS.forEach((char) => { p.affection[char.key] = 0; });
+    return p;
+  }
+  function normalizeProfile(raw) {
+    const p = defaultProfile();
+    if (!raw || typeof raw !== 'object') return p;
+    p.coins = Math.max(0, Math.floor(Number(raw.coins) || 0));
+    if (raw.inventory) {
+      FOODS.forEach((food) => {
+        p.inventory[food.key] = Math.max(0, Math.floor(Number(raw.inventory[food.key]) || 0));
+      });
+    }
+    if (raw.affection) {
+      CHARS.forEach((char) => {
+        p.affection[char.key] = Math.max(0, Math.min(MAX_AFFECTION, Math.floor(Number(raw.affection[char.key]) || 0)));
+      });
+    }
+    if (raw.lastChar && CHARS.some((char) => char.key === raw.lastChar)) p.lastChar = raw.lastChar;
+    return p;
+  }
+  function loadProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (raw) return normalizeProfile(JSON.parse(raw));
+    } catch (e) {}
+    return defaultProfile();
+  }
+  function saveProfile() {
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (e) {}
+    renderCoins();
+  }
+  function currentMeta() {
+    return CHARS.find((char) => char.key === profile.lastChar) || CHARS[0];
+  }
+  function levelIndex(points) {
+    let index = 0;
+    for (let i = 0; i < LEVELS.length; i++) {
+      if (points >= LEVELS[i]) index = i;
+    }
+    return index;
+  }
+  function charSvg(meta) {
+    return '<svg viewBox="-100 -100 200 200" aria-hidden="true"><use href="#' + meta.sym + '" transform="' + meta.tf + '"/></svg>';
+  }
+  function isMaxed() {
+    return (profile.affection[currentMeta().key] || 0) >= MAX_AFFECTION;
+  }
+  function renderCoins() {
+    ui.entryCoins.textContent = String(profile.coins);
+    ui.coins.textContent = String(profile.coins);
+  }
+  function renderAll() {
+    renderCoins();
+    renderCharStrip();
+    renderDetail();
+    renderInventory();
+    renderShop();
+  }
+  function renderCharStrip() {
+    ui.strip.innerHTML = '';
+    CHARS.forEach((meta) => {
+      const level = levelIndex(profile.affection[meta.key] || 0) + 1;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'care-char-btn';
+      button.style.setProperty('--tint', meta.tint);
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', meta.key === profile.lastChar ? 'true' : 'false');
+      button.setAttribute('aria-label', meta.name + '，好感度 Lv.' + level);
+      button.title = meta.name + ' · 好感度 Lv.' + level;
+      button.innerHTML = '<span class="care-char-face">' + charSvg(meta) + '</span>' +
+        '<span class="care-level-badge">Lv.' + level + '</span>';
+      button.addEventListener('click', () => selectChar(meta.key));
+      ui.strip.appendChild(button);
+    });
+  }
+  function selectChar(key) {
+    profile.lastChar = key;
+    saveProfile();
+    renderAll();
+    setDefaultSpeech();
+  }
+  function renderDetail() {
+    const meta = currentMeta();
+    const points = profile.affection[meta.key] || 0;
+    const index = levelIndex(points);
+    const level = index + 1;
+    ui.portrait.style.setProperty('--tint', meta.tint);
+    ui.portrait.innerHTML = charSvg(meta);
+    ui.name.textContent = meta.name;
+    ui.level.textContent = '好感度 Lv.' + level + ' · ' + LEVEL_TITLES[index];
+    ui.points.textContent = points + ' / ' + MAX_AFFECTION;
+    ui.fill.style.width = Math.min(100, (points / MAX_AFFECTION) * 100) + '%';
+    if (points >= MAX_AFFECTION) {
+      ui.levelNote.textContent = '好感度满啦，已经是最喜欢的朋友。';
+    } else {
+      const next = LEVELS[index + 1];
+      ui.levelNote.textContent = '距离 Lv.' + (index + 2) + ' 还差 ' + (next - points) + ' 点，解锁「' + ACTIONS[index + 1].name + '」';
+    }
+    renderActions(level);
+  }
+  function renderActions(level) {
+    ui.actions.innerHTML = '';
+    ACTIONS.forEach((action) => {
+      const unlocked = level >= action.level;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'care-action';
+      button.disabled = !unlocked;
+      button.innerHTML = '<b>' + action.name + '</b>' + (unlocked ? '' : '<small>Lv.' + action.level + '</small>');
+      button.title = unlocked ? action.line : '好感度 Lv.' + action.level + ' 解锁';
+      button.setAttribute('aria-label', action.name + (unlocked ? '' : '，好感度 Lv.' + action.level + ' 解锁'));
+      if (unlocked) button.addEventListener('click', () => doAction(action));
+      ui.actions.appendChild(button);
+    });
+  }
+  function renderInventory() {
+    const meta = currentMeta();
+    const maxed = isMaxed();
+    ui.inventory.innerHTML = '';
+    FOODS.forEach((food) => {
+      const count = profile.inventory[food.key] || 0;
+      const card = document.createElement('div');
+      card.className = 'food-card';
+      card.innerHTML = '<div class="food-icon">' + food.icon + '</div>' +
+        '<div class="food-info"><h4>' + food.name + '</h4><p>×' + count + ' · +' + food.love + ' 好感</p></div>';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'food-btn';
+      button.textContent = maxed ? '已满' : '喂食';
+      button.disabled = count <= 0 || maxed;
+      button.setAttribute('aria-label', '喂' + food.name + '给' + meta.name);
+      button.addEventListener('click', () => feedFood(food));
+      card.appendChild(button);
+      ui.inventory.appendChild(card);
+    });
+  }
+  function renderShop() {
+    ui.shop.innerHTML = '';
+    FOODS.forEach((food) => {
+      const card = document.createElement('div');
+      card.className = 'food-card';
+      card.innerHTML = '<div class="food-icon">' + food.icon + '</div>' +
+        '<div class="food-info"><h4>' + food.name + '</h4><p>' + food.price + ' 金币 · +' + food.love + ' 好感</p></div>';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'food-btn buy';
+      button.textContent = '购买';
+      button.disabled = profile.coins < food.price;
+      button.setAttribute('aria-label', '购买' + food.name + '，需要 ' + food.price + ' 金币');
+      button.addEventListener('click', () => buyFood(food));
+      card.appendChild(button);
+      ui.shop.appendChild(card);
+    });
+  }
+  function buyFood(food) {
+    if (profile.coins < food.price) {
+      showToast('金币不够，再去玩一局吧。');
+      return;
+    }
+    profile.coins -= food.price;
+    profile.inventory[food.key] = (profile.inventory[food.key] || 0) + 1;
+    saveProfile();
+    renderAll();
+    showToast('买到了「' + food.name + '」');
+  }
+  function feedFood(food) {
+    const meta = currentMeta();
+    const points = profile.affection[meta.key] || 0;
+    if (points >= MAX_AFFECTION) {
+      showToast(meta.name + '已经吃得饱饱的啦。');
+      return;
+    }
+    const count = profile.inventory[food.key] || 0;
+    if (count <= 0) {
+      showToast('库存里没有这个食物，去商店买一点吧。');
+      return;
+    }
+    const beforeLevel = levelIndex(points);
+    profile.inventory[food.key] = count - 1;
+    profile.affection[meta.key] = Math.min(MAX_AFFECTION, points + food.love);
+    saveProfile();
+    renderAll();
+    animatePortrait('act-hop');
+    spawnCareHearts(5);
+    const afterLevel = levelIndex(profile.affection[meta.key]);
+    const lines = [
+      '好吃…谢谢你！',
+      '唔，和你一起吃更香。',
+      '下次还想吃这个。',
+      '最喜欢你喂的饭啦。',
+      '和你一起，吃什么都最开心。'
+    ];
+    setSpeech(meta.name + '：' + lines[afterLevel]);
+    if (afterLevel > beforeLevel) {
+      showToast('好感度升到 Lv.' + (afterLevel + 1) + ' · ' + LEVEL_TITLES[afterLevel] + '，解锁「' + ACTIONS[afterLevel].name + '」');
+    } else {
+      showToast('好感度 +' + food.love);
+    }
+  }
+  function doAction(action) {
+    const meta = currentMeta();
+    const level = levelIndex(profile.affection[meta.key] || 0) + 1;
+    if (level < action.level) {
+      showToast('好感度还不够，再喂喂看吧。');
+      return;
+    }
+    animatePortrait('act-' + action.key);
+    const counts = { pet:3, hop:5, spin:5, rain:12, hug:9 };
+    spawnCareHearts(counts[action.key] || 4);
+    setSpeech(meta.name + '：' + action.line);
+  }
+  function animatePortrait(className) {
+    const portrait = ui.portrait;
+    ['act-pet','act-hop','act-spin','act-rain','act-hug'].forEach((cls) => portrait.classList.remove(cls));
+    void portrait.offsetWidth;
+    portrait.classList.add(className);
+    window.clearTimeout(actTimer);
+    actTimer = window.setTimeout(() => portrait.classList.remove(className), 950);
+  }
+  function spawnCareHearts(count) {
+    const glyphs = ['♡','♥','✦'];
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement('span');
+      heart.className = 'care-heart-fx';
+      heart.textContent = glyphs[i % glyphs.length];
+      heart.style.left = (8 + Math.random() * 84) + '%';
+      heart.style.top = (30 + Math.random() * 50) + '%';
+      heart.style.animationDelay = (Math.random() * 180) + 'ms';
+      heart.style.fontSize = (11 + Math.random() * 8) + 'px';
+      heart.style.color = i % 3 === 2 ? '#F2C77F' : (i % 2 ? '#E8A19A' : '#F3BDB8');
+      ui.fx.appendChild(heart);
+      heart.addEventListener('animationend', () => heart.remove(), { once: true });
+    }
+  }
+  function setSpeech(text) {
+    ui.speech.textContent = text;
+  }
+  function setDefaultSpeech() {
+    const meta = currentMeta();
+    const index = levelIndex(profile.affection[meta.key] || 0);
+    setSpeech(meta.name + '：' + LEVEL_LINES[index]);
+  }
+  function showToast(text) {
+    ui.toast.textContent = text;
+    ui.toast.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => ui.toast.classList.remove('show'), 2200);
+  }
+  function openCare() {
+    if (!ui.overlay.hidden) return;
+    renderAll();
+    setDefaultSpeech();
+    ui.overlay.hidden = false;
+    document.body.classList.add('care-open');
+    window.requestAnimationFrame(() => ui.overlay.classList.add('is-open'));
+    ui.close.focus();
+  }
+  function closeCare() {
+    if (ui.overlay.hidden) return;
+    ui.overlay.classList.remove('is-open');
+    document.body.classList.remove('care-open');
+    window.setTimeout(() => {
+      if (!ui.overlay.classList.contains('is-open')) ui.overlay.hidden = true;
+    }, 220);
+    ui.entry.focus();
+  }
+
+  ui.entry.addEventListener('click', openCare);
+  ui.close.addEventListener('click', closeCare);
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !ui.overlay.hidden) {
+      event.preventDefault();
+      closeCare();
+    }
+  });
+  document.addEventListener('sumikko:round-end', (event) => {
+    const detail = event.detail || {};
+    const score = Math.max(0, Math.floor(Number(detail.score) || 0));
+    const reward = 12 + score * 4 + (detail.mode === 'online' && detail.won ? 10 : 0);
+    profile.coins += reward;
+    saveProfile();
+    renderCoins();
+    const line = document.getElementById('game-over-coins');
+    if (line) line.textContent = '金币 +' + reward + '，已放进小窝';
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key !== PROFILE_KEY) return;
+    profile = loadProfile();
+    renderCoins();
+    if (!ui.overlay.hidden) {
+      renderAll();
+      setDefaultSpeech();
+    }
+  });
+  const scene = document.getElementById('scene-svg');
+  if (scene) {
+    scene.addEventListener('click', (event) => {
+      const tap = event.target.closest ? event.target.closest('[data-tap]') : null;
+      if (!tap) return;
+      const meta = CHARS.find((char) => char.name === tap.dataset.name);
+      if (!meta) return;
+      const index = levelIndex(profile.affection[meta.key] || 0);
+      if (index <= 0 || !SCENE_LINES[index]) return;
+      const speech = document.getElementById('speech');
+      if (speech) speech.textContent = meta.name + '：「' + SCENE_LINES[index] + '」';
+    });
+  }
+
+  renderCoins();
 })();
 </script>
 </body>
