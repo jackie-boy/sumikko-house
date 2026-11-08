@@ -4,9 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FDF7EE">
-<meta name="description" content="角落生物们的治愈小页面：白熊、企鹅？、炸猪排、猫、蜥蜴……大家快乐地生活在一起。">
-<title>角落生物们 · 快乐地生活在一起</title>
+<meta name="description" content="睿清的小角落：角落生物们的治愈小页面，白熊、企鹅？、炸猪排、猫、蜥蜴……大家快乐地生活在一起。">
+<meta name="robots" content="noindex, nofollow">
+<title>睿清的小角落 · 角落生物们快乐地生活在一起</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%A7%B8%3C/text%3E%3C/svg%3E">
+<script>
+  try {
+    if (sessionStorage.getItem('ruiqing-unlocked') === '1') {
+      document.documentElement.classList.add('pre-unlocked');
+    }
+  } catch (e) {}
+</script>
 <style>
   :root{
     --ink:#6A5546;
@@ -289,6 +297,119 @@
     .scene-wrap{border-radius:19px}
   }
 
+  /* ---- 密码锁 ---- */
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+  #page-content{transition:opacity .55s ease, visibility .55s ease}
+  body.locked{overflow:hidden}
+  body.locked #page-content{opacity:0;visibility:hidden}
+  html.pre-unlocked #page-content{opacity:1;visibility:visible}
+  html.pre-unlocked #lock-screen{display:none}
+  .lock-screen{
+    position:fixed;inset:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    padding:32px 18px;overflow:auto;
+    background:
+      radial-gradient(760px 520px at 8% -12%,#FBE3DE 0%,rgba(251,227,222,0) 62%),
+      radial-gradient(700px 480px at 108% 110%,#E8F1E8 0%,rgba(232,241,232,0) 58%),
+      linear-gradient(160deg,#FFF9F0 0%,#FDF1E5 56%,#F9EBDD 100%);
+    transition:opacity .55s ease, visibility .55s ease;
+  }
+  body:not(.locked) .lock-screen{opacity:0;visibility:hidden;pointer-events:none}
+  .lock-screen::before,.lock-screen::after{
+    content:"";position:absolute;border-radius:50%;pointer-events:none;
+  }
+  .lock-screen::before{width:220px;height:220px;left:-70px;bottom:-60px;background:#F7DCD6;opacity:.45}
+  .lock-screen::after{width:260px;height:260px;right:-90px;top:-70px;background:#DDEBE2;opacity:.5}
+  .lock-spark{
+    position:absolute;color:#EBC28E;font-size:13px;pointer-events:none;
+    animation:lock-float 6s ease-in-out infinite;
+  }
+  .lock-spark.s1{left:14%;top:20%;animation-delay:-1s}
+  .lock-spark.s2{right:16%;top:30%;font-size:10px;color:#E7AFA9;animation-delay:-2.8s}
+  .lock-spark.s3{left:22%;bottom:18%;font-size:9px;color:#E7AFA9;animation-delay:-4.2s}
+  .lock-spark.s4{right:12%;bottom:24%;animation-delay:-.4s}
+  .lock-spark.s5{left:46%;top:9%;font-size:8px;color:#C6CFEC;animation-delay:-3.4s}
+  @keyframes lock-float{
+    0%,100%{transform:translateY(0);opacity:.45}
+    50%{transform:translateY(-10px);opacity:.95}
+  }
+  .lock-card{
+    position:relative;width:min(100%,376px);margin-top:44px;
+    padding:56px 26px 24px;text-align:center;
+    background:rgba(255,252,247,.93);
+    border:1.5px solid #F1DFCE;border-radius:30px;
+    box-shadow:0 30px 80px -28px rgba(150,105,78,.5),0 10px 30px rgba(167,120,90,.1);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    animation:lock-in .6s ease both;
+  }
+  @keyframes lock-in{
+    0%{opacity:0;transform:translateY(10px)}
+    100%{opacity:1;transform:translateY(0)}
+  }
+  .lock-art{
+    position:absolute;left:50%;top:-46px;transform:translateX(-50%);
+    width:104px;height:104px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 34% 28%,#FFFDF8 0%,#EAF2F6 68%,#DDE9F0 100%);
+    border:5px solid #FFFCF7;
+    box-shadow:0 8px 18px rgba(150,105,78,.16);overflow:hidden;
+  }
+  .lock-art svg{width:100%;height:100%;display:block;animation:lock-bob 4.5s ease-in-out infinite}
+  @keyframes lock-bob{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
+  }
+  .lock-kicker{margin:0 0 7px;font-size:9px;letter-spacing:.22em;color:#BFA28C;text-transform:uppercase}
+  .lock-title{
+    margin:0;font-family:"Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:27px;letter-spacing:.08em;color:#5F4A3C;font-weight:800;
+  }
+  .lock-sub{margin:9px 0 18px;font-size:12px;line-height:1.7;color:#9A8271}
+  .lock-field{
+    display:flex;align-items:center;gap:6px;padding:4px;
+    background:#FFF9F1;border:1.5px solid #F0DCC9;border-radius:16px;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .lock-field:focus-within{border-color:#E3AFA8;box-shadow:0 0 0 3px rgba(227,175,168,.18)}
+  .lock-field.shake{animation:lock-shake .42s ease}
+  @keyframes lock-shake{
+    0%,100%{transform:translateX(0)}
+    15%{transform:translateX(-7px)}
+    30%{transform:translateX(7px)}
+    45%{transform:translateX(-5px)}
+    60%{transform:translateX(5px)}
+    75%{transform:translateX(-2px)}
+  }
+  .lock-field input{
+    flex:1;min-width:0;width:100%;padding:11px 12px;border:0;background:transparent;outline:none;
+    font-family:inherit;font-size:16px;color:#6A5546;letter-spacing:.06em;
+  }
+  .lock-field input::placeholder{color:#C5B2A1;letter-spacing:.02em}
+  .lock-field button{
+    flex:none;padding:11px 18px;border:0;border-radius:12px;
+    background:#E59A94;color:#FFFFFF;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.08em;
+    cursor:pointer;transition:background .2s ease, transform .15s ease;
+  }
+  .lock-field button:hover{background:#D98F89}
+  .lock-field button:active{transform:scale(.97)}
+  .lock-error{margin:9px 3px 0;min-height:18px;text-align:left;font-size:11.5px;line-height:1.5;color:#D3766E}
+  .lock-note{margin:14px 0 0;font-size:10px;letter-spacing:.1em;color:#B7A08D}
+  @media(max-width:380px){
+    .lock-card{padding:50px 18px 20px;margin-top:40px}
+    .lock-art{width:94px;height:94px;top:-42px}
+    .lock-title{font-size:24px}
+    .lock-field button{padding:10px 14px}
+  }
+  .relock{
+    margin-top:14px;padding:4px 2px;border:0;border-bottom:1px dashed #D9C4B2;
+    background:none;font-family:inherit;font-size:10.5px;letter-spacing:.08em;
+    color:#A68F7C;cursor:pointer;
+  }
+  .relock:hover{color:#8E7460}
+
   /* ---- animations ---- */
   .char-anim{
     animation-name:bob;
@@ -352,7 +473,7 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
 
 <!-- ================= 角色图形库（只定义一次，页面内复用） ================= -->
 <svg class="sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
@@ -369,108 +490,133 @@
       <ellipse rx="8" ry="4.5" fill="#F3AFA9" opacity=".8"/>
     </g>
     <path id="smile" d="M-7 0 Q0 7 7 0" fill="none" stroke="#5C4A3D" stroke-width="2.4" stroke-linecap="round"/>
+    <radialGradient id="gTapioca" cx="35%" cy="28%" r="80%">
+      <stop offset="0" stop-color="#FFF8E4"/>
+      <stop offset="55%" stop-color="#F5E8C6"/>
+      <stop offset="100%" stop-color="#EAD5A6"/>
+    </radialGradient>
+    <mask id="nekoTailMask" maskUnits="userSpaceOnUse" x="20" y="-30" width="80" height="90">
+      <rect x="20" y="-30" width="80" height="90" fill="#000000"/>
+      <path d="M40 34 C68 42 82 22 74 -2 C70 -12 58 -14 52 -4" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+    </mask>
 
     <!-- 白熊 -->
     <g id="c-shirokuma" stroke-linejoin="round" stroke-linecap="round">
-      <circle cx="-42" cy="-50" r="16" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <circle cx="-42" cy="-50" r="16" fill="#FFFDF7" stroke="#D3C8BA" stroke-width="3"/>
       <circle cx="-42" cy="-50" r="8" fill="#F6E3DE"/>
-      <circle cx="42" cy="-50" r="16" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
+      <circle cx="42" cy="-50" r="16" fill="#FFFDF7" stroke="#D3C8BA" stroke-width="3"/>
       <circle cx="42" cy="-50" r="8" fill="#F6E3DE"/>
-      <ellipse cx="-57" cy="18" rx="13" ry="21" transform="rotate(18 -57 18)" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
-      <ellipse cx="57" cy="18" rx="13" ry="21" transform="rotate(-18 57 18)" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
-      <ellipse cx="0" cy="0" rx="61" ry="60" fill="#FFFDF7" stroke="#D5C9B9" stroke-width="3"/>
-      <ellipse cx="0" cy="24" rx="32" ry="30" fill="#FFF4E6" opacity=".9"/>
-      <ellipse cx="-26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D5C9B9" stroke-width="3"/>
-      <ellipse cx="26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D5C9B9" stroke-width="3"/>
+      <ellipse cx="-57" cy="18" rx="13" ry="21" transform="rotate(18 -57 18)" fill="#FFFDF7" stroke="#D3C8BA" stroke-width="3"/>
+      <ellipse cx="57" cy="18" rx="13" ry="21" transform="rotate(-18 57 18)" fill="#FFFDF7" stroke="#D3C8BA" stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="61" ry="60" fill="#FFFDF7" stroke="#D3C8BA" stroke-width="3"/>
+      <ellipse cx="0" cy="24" rx="32" ry="30" fill="#FFF4E6" opacity=".92"/>
+      <path d="M-50 18 C-48 36 -30 52 -4 55" fill="none" stroke="#E8F0EF" stroke-width="10" opacity=".55" stroke-linecap="round"/>
+      <ellipse cx="-26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D3C8BA" stroke-width="3"/>
+      <ellipse cx="26" cy="57" rx="19" ry="12" fill="#FBF3E7" stroke="#D3C8BA" stroke-width="3"/>
       <use href="#eye" x="-20" y="-6"/>
       <use href="#eye" x="20" y="-6"/>
-      <path d="M-6 6 Q0 12 6 6" fill="none" stroke="#5C4A3D" stroke-width="2.4"/>
+      <path d="M-7 6 Q-3.5 10 0 6 Q3.5 10 7 6" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
       <use href="#blush" x="-36" y="8"/>
       <use href="#blush" x="36" y="8"/>
     </g>
 
     <!-- 企鹅？ -->
     <g id="c-penguin" stroke-linejoin="round" stroke-linecap="round">
-      <ellipse cx="-50" cy="16" rx="12" ry="25" transform="rotate(16 -50 16)" fill="#9BC4B2" stroke="#78A28D" stroke-width="3"/>
-      <ellipse cx="50" cy="16" rx="12" ry="25" transform="rotate(-16 50 16)" fill="#9BC4B2" stroke="#78A28D" stroke-width="3"/>
-      <ellipse cx="0" cy="0" rx="52" ry="62" fill="#A8CDBB" stroke="#78A28D" stroke-width="3"/>
-      <ellipse cx="0" cy="18" rx="31" ry="39" fill="#FBF7EC"/>
+      <ellipse cx="-50" cy="16" rx="12" ry="25" transform="rotate(16 -50 16)" fill="#9FC8B6" stroke="#78A28D" stroke-width="3"/>
+      <ellipse cx="50" cy="16" rx="12" ry="25" transform="rotate(-16 50 16)" fill="#9FC8B6" stroke="#78A28D" stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="52" ry="62" fill="#A9CDBB" stroke="#78A28D" stroke-width="3"/>
+      <path d="M0 -47 C26 -47 35 -20 34 6 C33 38 19 56 0 56 C-19 56 -33 38 -34 6 C-35 -20 -26 -47 0 -47 Z" fill="#FBF7EC"/>
       <ellipse cx="-20" cy="59" rx="15" ry="9" fill="#F3BE5B" stroke="#D6A03E" stroke-width="2.6"/>
       <ellipse cx="20" cy="59" rx="15" ry="9" fill="#F3BE5B" stroke="#D6A03E" stroke-width="2.6"/>
-      <use href="#eye" x="-18" y="-16"/>
-      <use href="#eye" x="18" y="-16"/>
-      <path d="M0 -9 L11 -3 L0 3 L-10 -3 Z" fill="#F4C05A" stroke="#D9A343" stroke-width="2"/>
-      <use href="#blush" x="-33" y="-2"/>
-      <use href="#blush" x="33" y="-2"/>
+      <use href="#eye" x="-17" y="-14"/>
+      <use href="#eye" x="17" y="-14"/>
+      <path d="M0 -6 L12 0 L0 6 L-12 0 Z" fill="#F4C05A" stroke="#D9A343" stroke-width="2"/>
+      <use href="#blush" x="-32" y="0"/>
+      <use href="#blush" x="32" y="0"/>
     </g>
 
     <!-- 炸猪排 -->
     <g id="c-tonkatsu" stroke-linejoin="round" stroke-linecap="round">
-      <ellipse cx="0" cy="0" rx="58" ry="52" fill="#EBB868" stroke="#C9973F" stroke-width="3"/>
-      <ellipse cx="-40" cy="-26" rx="14" ry="10" transform="rotate(-15 -40 -26)" fill="#FBF0DC" stroke="#C9973F" stroke-width="2.5"/>
-      <ellipse cx="-40" cy="-25" rx="6" ry="4.5" transform="rotate(-15 -40 -25)" fill="#F2BCAF"/>
-      <ellipse cx="-55" cy="18" rx="9" ry="14" transform="rotate(18 -55 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
-      <ellipse cx="55" cy="18" rx="9" ry="14" transform="rotate(-18 55 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
-      <g fill="#D9A94E" opacity=".6">
-        <circle cx="34" cy="-22" r="2.6"/><circle cx="44" cy="-4" r="2.2"/><circle cx="30" cy="30" r="2.4"/>
-        <circle cx="8" cy="-38" r="2"/><circle cx="46" cy="24" r="2"/><circle cx="16" cy="38" r="1.8"/>
-        <circle cx="-6" cy="38" r="2.2"/><circle cx="24" cy="12" r="1.6"/>
+      <ellipse cx="2" cy="0" rx="56" ry="51" fill="#EBB868" stroke="#C9973F" stroke-width="3"/>
+      <path d="M-44 -26 C-35 -37 -19 -35 -14 -22 C-9 -9 -18 3 -30 4 C-41 5 -49 -7 -44 -26 Z" fill="#FBF0DC" stroke="#C9973F" stroke-width="2.6"/>
+      <path d="M-36 -23 C-30 -28 -24 -22 -24 -14 C-24 -5 -31 0 -36 -4 C-41 -8 -42 -19 -36 -23 Z" fill="#F2B9AE"/>
+      <path d="M-46 28 C-34 46 -6 54 20 48" fill="none" stroke="#D9A94E" stroke-width="4" opacity=".4" stroke-linecap="round"/>
+      <g fill="#D9A94E" opacity=".65">
+        <circle cx="28" cy="-30" r="2.6"/><circle cx="42" cy="-12" r="2.2"/><circle cx="38" cy="16" r="2.4"/>
+        <circle cx="12" cy="-40" r="2"/><circle cx="46" cy="30" r="2"/><circle cx="22" cy="38" r="1.8"/>
+        <circle cx="-8" cy="40" r="2.2"/><circle cx="18" cy="8" r="1.6"/><circle cx="-28" cy="34" r="2"/>
       </g>
+      <ellipse cx="-54" cy="18" rx="9" ry="14" transform="rotate(18 -54 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
+      <ellipse cx="55" cy="18" rx="9" ry="14" transform="rotate(-18 55 18)" fill="#EBB868" stroke="#C9973F" stroke-width="2.6"/>
       <ellipse cx="-18" cy="54" rx="14" ry="8" fill="#DCA94F" stroke="#BE8C3B" stroke-width="2.6"/>
       <ellipse cx="18" cy="54" rx="14" ry="8" fill="#DCA94F" stroke="#BE8C3B" stroke-width="2.6"/>
-      <use href="#eye" x="-8" y="-4"/>
-      <use href="#eye" x="20" y="-4"/>
-      <use href="#smile" x="4" y="12"/>
-      <use href="#blush" x="-26" y="14"/>
-      <use href="#blush" x="34" y="14"/>
+      <use href="#eye" x="-2" y="-4"/>
+      <use href="#eye" x="24" y="-4"/>
+      <use href="#smile" x="11" y="8"/>
+      <use href="#blush" x="-13" y="12"/>
+      <use href="#blush" x="37" y="12"/>
     </g>
 
     <!-- 猫 -->
     <g id="c-neko" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M40 34 Q74 40 70 10 Q66 -12 46 -4" fill="none" stroke="#DCC7A6" stroke-width="15" stroke-linecap="round"/>
-      <path d="M-44 -26 L-54 -62 L-18 -44 Z" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
+      <path d="M40 34 C68 42 82 22 74 -2 C70 -12 58 -14 52 -4" fill="none" stroke="#CDB99C" stroke-width="17" stroke-linecap="round"/>
+      <path d="M40 34 C68 42 82 22 74 -2 C70 -12 58 -14 52 -4" fill="none" stroke="#EBD9BC" stroke-width="12" stroke-linecap="round"/>
+      <g mask="url(#nekoTailMask)" stroke="#C2A47D" stroke-width="7" stroke-linecap="round">
+        <path d="M56 27 L60 43"/>
+        <path d="M65 21 L79.5 30.5"/>
+        <path d="M64 -19 L62 -2"/>
+      </g>
+      <path d="M-44 -26 L-54 -62 L-18 -44 Z" fill="#E9D6BA" stroke="#CDB99C" stroke-width="3"/>
       <path d="M-43 -32 L-48 -53 L-28 -42 Z" fill="#F3D3CE"/>
-      <path d="M44 -26 L54 -62 L18 -44 Z" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
+      <path d="M44 -26 L54 -62 L18 -44 Z" fill="#9E8875" stroke="#CDB99C" stroke-width="3"/>
       <path d="M43 -32 L48 -53 L28 -42 Z" fill="#F3D3CE"/>
       <ellipse cx="0" cy="4" rx="56" ry="54" fill="#F6EAD3" stroke="#CDB99C" stroke-width="3"/>
-      <path d="M12 -44 Q38 -56 48 -30 Q28 -22 12 -44 Z" fill="#E7D4B6" opacity=".85"/>
+      <path d="M-46 -26 C-34 -50 -8 -52 0 -34 C-14 -22 -32 -18 -46 -26 Z" fill="#E5C298" opacity=".95"/>
+      <path d="M8 -48 C28 -56 48 -46 50 -24 C36 -18 20 -28 8 -48 Z" fill="#9E8875" opacity=".95"/>
+      <path d="M-56 18 C-44 20 -34 32 -32 44 C-44 42 -54 32 -56 18 Z" fill="#E5C298" opacity=".8"/>
+      <ellipse cx="0" cy="10" rx="19" ry="14" fill="#FCF4E4" opacity=".9"/>
       <ellipse cx="-22" cy="52" rx="15" ry="9" fill="#FBF0DD" stroke="#CDB99C" stroke-width="2.6"/>
       <ellipse cx="22" cy="52" rx="15" ry="9" fill="#FBF0DD" stroke="#CDB99C" stroke-width="2.6"/>
       <use href="#eye" x="-19" y="-8"/>
       <use href="#eye" x="19" y="-8"/>
-      <path d="M-3 2 L3 2 L0 6 Z" fill="#DDA49D"/>
-      <path d="M0 6 Q-6 13 -11 8 M0 6 Q6 13 11 8" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M-3 4 L3 4 L0 8 Z" fill="#DDA49D"/>
+      <path d="M0 8 Q-6 15 -11 10 M0 8 Q6 15 11 10" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
       <g stroke="#C6B196" stroke-width="1.6" stroke-linecap="round">
-        <path d="M-30 4 L-46 0"/><path d="M-31 10 L-47 11"/>
-        <path d="M30 4 L46 0"/><path d="M31 10 L47 11"/>
+        <path d="M-30 6 L-46 2"/><path d="M-31 12 L-47 13"/>
+        <path d="M30 6 L46 2"/><path d="M31 12 L47 13"/>
       </g>
-      <use href="#blush" x="-35" y="10"/>
-      <use href="#blush" x="35" y="10"/>
+      <use href="#blush" x="-35" y="11"/>
+      <use href="#blush" x="35" y="11"/>
     </g>
 
     <!-- 蜥蜴 -->
     <g id="c-tokage" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M40 34 Q74 42 78 14 Q80 -4 64 -4" fill="none" stroke="#8FC9C0" stroke-width="20" stroke-linecap="round"/>
-      <ellipse cx="0" cy="2" rx="58" ry="50" fill="#8FC9C0" stroke="#6EA49B" stroke-width="3"/>
-      <ellipse cx="0" cy="22" rx="33" ry="26" fill="#F7EFCF" stroke="#E4D7B2" stroke-width="2"/>
-      <path d="M-22 16 Q0 20 22 16 M-24 26 Q0 30 24 26" stroke="#E8DBB6" stroke-width="2" fill="none"/>
-      <ellipse cx="-48" cy="20" rx="10" ry="16" transform="rotate(20 -48 20)" fill="#8FC9C0" stroke="#6EA49B" stroke-width="2.6"/>
-      <ellipse cx="48" cy="20" rx="10" ry="16" transform="rotate(-20 48 20)" fill="#8FC9C0" stroke="#6EA49B" stroke-width="2.6"/>
-      <ellipse cx="-20" cy="52" rx="16" ry="9" fill="#F7EFCF" stroke="#6EA49B" stroke-width="2.6"/>
-      <ellipse cx="20" cy="52" rx="16" ry="9" fill="#F7EFCF" stroke="#6EA49B" stroke-width="2.6"/>
+      <path d="M40 34 Q74 42 78 14 Q80 -4 64 -4" fill="none" stroke="#9BD2CB" stroke-width="20" stroke-linecap="round"/>
+      <g fill="#C8E8E1" stroke="#6FA79F" stroke-width="2.6">
+        <path d="M-33 -34 Q-29 -50 -19 -45 Q-16 -36 -22 -31 Z"/>
+        <path d="M-11 -40 Q-5 -59 6 -53 Q12 -45 5 -34 Z"/>
+        <path d="M9 -35 Q17 -51 26 -43 Q30 -34 22 -30 Z"/>
+      </g>
+      <ellipse cx="0" cy="2" rx="58" ry="50" fill="#9BD2CB" stroke="#6FA79F" stroke-width="3"/>
+      <ellipse cx="0" cy="23" rx="34" ry="25" fill="#FCF8EA" stroke="#E7DFC7" stroke-width="2"/>
+      <ellipse cx="0" cy="23" rx="24" ry="16" fill="none" stroke="#EDE4CB" stroke-width="1.6" opacity=".8"/>
+      <ellipse cx="-48" cy="20" rx="10" ry="16" transform="rotate(20 -48 20)" fill="#9BD2CB" stroke="#6FA79F" stroke-width="2.6"/>
+      <ellipse cx="48" cy="20" rx="10" ry="16" transform="rotate(-20 48 20)" fill="#9BD2CB" stroke="#6FA79F" stroke-width="2.6"/>
+      <ellipse cx="-20" cy="52" rx="16" ry="9" fill="#FCF8EA" stroke="#6FA79F" stroke-width="2.6"/>
+      <ellipse cx="20" cy="52" rx="16" ry="9" fill="#FCF8EA" stroke="#6FA79F" stroke-width="2.6"/>
       <use href="#eye" x="-18" y="-8"/>
       <use href="#eye" x="18" y="-8"/>
-      <use href="#smile" x="0" y="4"/>
+      <path d="M-5 3 Q0 7 5 3" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
       <use href="#blush" x="-34" y="4"/>
       <use href="#blush" x="34" y="4"/>
     </g>
 
     <!-- 珍珠 -->
     <g id="c-tapioca" stroke-linejoin="round" stroke-linecap="round">
-      <circle cx="-14" cy="30" r="24" fill="#F7EBCB" stroke="#D9C59C" stroke-width="3"/>
-      <circle cx="22" cy="40" r="17" fill="#F7EBCB" stroke="#D9C59C" stroke-width="3"/>
-      <circle cx="10" cy="4" r="14" fill="#F9F0D6" stroke="#D9C59C" stroke-width="3"/>
-      <ellipse cx="-21" cy="20" rx="6" ry="4" transform="rotate(-30 -21 20)" fill="#FFFFFF" opacity=".7"/>
+      <circle cx="-14" cy="30" r="24" fill="url(#gTapioca)" stroke="#D6C296" stroke-width="3"/>
+      <circle cx="22" cy="40" r="17" fill="url(#gTapioca)" stroke="#D6C296" stroke-width="3"/>
+      <circle cx="10" cy="4" r="14" fill="url(#gTapioca)" stroke="#D6C296" stroke-width="3"/>
+      <ellipse cx="-21" cy="20" rx="6" ry="4" transform="rotate(-30 -21 20)" fill="#FFFFFF" opacity=".75"/>
       <ellipse cx="16" cy="32" rx="4" ry="3" fill="#FFFFFF" opacity=".7"/>
       <ellipse cx="5" cy="-2" rx="3.5" ry="2.5" fill="#FFFFFF" opacity=".7"/>
       <use href="#eye-s" x="-22" y="28"/>
@@ -482,20 +628,28 @@
       <use href="#eye-s" x="4" y="2"/>
       <use href="#eye-s" x="16" y="2"/>
       <path d="M8 9 Q10 12 12 9" stroke="#5C4A3D" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="-29" cy="36" rx="3.2" ry="1.9" fill="#F3AFA9" opacity=".7"/>
+      <ellipse cx="32" cy="45" rx="2.6" ry="1.6" fill="#F3AFA9" opacity=".7"/>
+      <ellipse cx="1" cy="9" rx="2.4" ry="1.5" fill="#F3AFA9" opacity=".7"/>
     </g>
 
     <!-- 假蜗牛 -->
     <g id="c-nisetsumuri" stroke-linejoin="round" stroke-linecap="round">
-      <ellipse cx="0" cy="40" rx="60" ry="25" fill="#C3CEEE" stroke="#98A5CC" stroke-width="3"/>
-      <circle cx="-34" cy="14" r="28" fill="#C3CEEE" stroke="#98A5CC" stroke-width="3"/>
-      <circle cx="16" cy="2" r="34" fill="#F6F0E4" stroke="#CBBFA6" stroke-width="3"/>
-      <circle cx="16" cy="2" r="23" fill="none" stroke="#DCCFB6" stroke-width="3"/>
-      <circle cx="16" cy="2" r="12" fill="none" stroke="#DCCFB6" stroke-width="3"/>
-      <circle cx="16" cy="2" r="3.5" fill="#DCCFB6"/>
-      <path d="M-46 -8 Q-50 -26 -56 -31" fill="none" stroke="#98A5CC" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="-57" cy="-33" r="4.5" fill="#C3CEEE" stroke="#98A5CC" stroke-width="2"/>
-      <path d="M-30 -12 Q-30 -28 -34 -34" fill="none" stroke="#98A5CC" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="-34.5" cy="-36" r="4.5" fill="#C3CEEE" stroke="#98A5CC" stroke-width="2"/>
+      <path d="M-64 52 C-72 34 -64 24 -50 20 C-54 4 -46 -10 -32 -12 C-28 -28 -8 -32 4 -22 C12 -14 10 10 8 26 C32 30 54 32 58 52 C18 62 -22 62 -64 52 Z" fill="#F3E7CA" stroke="#CFBB98" stroke-width="3"/>
+      <circle cx="18" cy="0" r="33" fill="#BCD9E6" stroke="#93B3C6" stroke-width="3"/>
+      <g fill="#F6EEDC">
+        <path d="M-6 -14 C0 -24 14 -26 20 -16 C16 -8 4 -8 -6 -14 Z"/>
+        <path d="M26 -18 C34 -26 46 -20 46 -10 C38 -4 28 -8 26 -18 Z"/>
+        <path d="M32 10 C40 4 50 10 48 20 C40 26 30 20 32 10 Z"/>
+        <path d="M4 20 C10 12 20 14 22 22 C16 30 6 28 4 20 Z"/>
+      </g>
+      <path d="M18 0 C23 0 26 5 22 9 C17 14 9 9 10 2 C11 -8 22 -12 30 -4 C40 6 35 22 22 26 C6 30 -8 16 -4 0 C0 -18 22 -26 38 -12" fill="none" stroke="#A7C6D5" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-46 -8 Q-50 -26 -56 -31" fill="none" stroke="#CFBB98" stroke-width="5" stroke-linecap="round"/>
+      <path d="M-46 -8 Q-50 -26 -56 -31" fill="none" stroke="#F3E7CA" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="-57" cy="-33" r="4.5" fill="#F3E7CA" stroke="#CFBB98" stroke-width="2"/>
+      <path d="M-30 -12 Q-30 -28 -34 -34" fill="none" stroke="#CFBB98" stroke-width="5" stroke-linecap="round"/>
+      <path d="M-30 -12 Q-30 -28 -34 -34" fill="none" stroke="#F3E7CA" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="-34.5" cy="-36" r="4.5" fill="#F3E7CA" stroke="#CFBB98" stroke-width="2"/>
       <use href="#eye" x="-48" y="2"/>
       <use href="#eye" x="-27" y="4"/>
       <ellipse cx="-57" cy="15" rx="6.5" ry="4" fill="#F3AFA9" opacity=".8"/>
@@ -504,49 +658,48 @@
 
     <!-- 杂草 -->
     <g id="c-zassou" stroke-linejoin="round" stroke-linecap="round">
-      <ellipse cx="-30" cy="8" rx="15" ry="44" transform="rotate(-34 -30 8)" fill="#9AC476" stroke="#78A159" stroke-width="3"/>
-      <ellipse cx="32" cy="10" rx="14" ry="42" transform="rotate(30 32 10)" fill="#A6CC84" stroke="#78A159" stroke-width="3"/>
-      <ellipse cx="-46" cy="30" rx="12" ry="26" transform="rotate(-58 -46 30)" fill="#A6CC84" stroke="#78A159" stroke-width="3"/>
-      <ellipse cx="48" cy="32" rx="12" ry="26" transform="rotate(56 48 32)" fill="#9AC476" stroke="#78A159" stroke-width="3"/>
-      <ellipse cx="-2" cy="0" rx="18" ry="54" transform="rotate(-4 -2 0)" fill="#8DBA6B" stroke="#76A054" stroke-width="3"/>
-      <use href="#eye" x="-9.5" y="2"/>
-      <use href="#eye" x="9.5" y="2"/>
-      <ellipse cx="-13.5" cy="13" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
-      <ellipse cx="13.5" cy="13" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
-      <path d="M-4 11 Q0 16 4 11" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
-      <g transform="translate(-44 -34)">
-        <g fill="#FFFDF6" stroke="#EADFCB" stroke-width="1">
-          <circle cx="0" cy="-9" r="5"/><circle cx="8.5" cy="-3" r="5"/><circle cx="5" cy="7" r="5"/>
-          <circle cx="-5" cy="7" r="5"/><circle cx="-8.5" cy="-3" r="5"/>
-        </g>
-        <circle r="4.5" fill="#F4D06F"/>
-      </g>
+      <path d="M0 54 L-52 10 L-42 6 L-50 -8 L-36 -4 L-38 -22 L-24 -14 L-22 -34 L-10 -22 L-6 -44 L4 -28 L14 -42 L18 -22 L32 -30 L30 -10 L44 -14 L38 2 L52 8 Z" fill="#8DBA6C" stroke="#6C9450" stroke-width="3"/>
+      <path d="M-4 50 L-30 16 L-22 12 L-30 -2 L-16 2 L-20 -14 L-6 -4 Z" fill="#9CC77D" opacity=".9"/>
+      <path d="M4 50 L24 14 L18 10 L28 -4 L14 0 L18 -12 L6 -2 Z" fill="#A6CE88" opacity=".9"/>
+      <path d="M0 -22 C-10 -2 -20 20 -18 36 C-16 50 -6 56 0 56 C6 56 16 50 18 36 C20 20 10 -2 0 -22 Z" fill="#B0D695" stroke="#6C9450" stroke-width="3"/>
+      <path d="M0 -14 C-4 8 -6 30 -2 48" fill="none" stroke="#92BD73" stroke-width="2" opacity=".7"/>
+      <path d="M-7 54 C-9 59 -11 61 -12 64 M7 54 C9 59 11 61 12 64" fill="none" stroke="#7FA45E" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="-12" cy="65" rx="3.2" ry="2.2" fill="#7FA45E"/>
+      <ellipse cx="12" cy="65" rx="3.2" ry="2.2" fill="#7FA45E"/>
+      <use href="#eye" x="-9" y="26"/>
+      <use href="#eye" x="9" y="26"/>
+      <ellipse cx="-14" cy="36" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
+      <ellipse cx="14" cy="36" rx="4.5" ry="2.8" fill="#F3AFA9" opacity=".8"/>
+      <path d="M-4 34 Q0 38 4 34" fill="none" stroke="#5C4A3D" stroke-width="2.2" stroke-linecap="round"/>
     </g>
 
     <!-- 炸虾尾 -->
     <g id="c-ebifurai" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M-2 -38 C-34 -44 -50 -70 -42 -86 C-22 -80 -10 -58 -2 -38 Z" fill="#F5A48C" stroke="#D9715C" stroke-width="3"/>
-      <path d="M2 -38 C34 -44 50 -70 42 -86 C22 -80 10 -58 2 -38 Z" fill="#F5A48C" stroke="#D9715C" stroke-width="3"/>
-      <path d="M-30 -54 C-27 -64 -22 -72 -16 -77" fill="none" stroke="#FFE9D6" stroke-width="4" stroke-linecap="round" opacity=".95"/>
-      <path d="M30 -54 C27 -64 22 -72 16 -77" fill="none" stroke="#FFE9D6" stroke-width="4" stroke-linecap="round" opacity=".95"/>
-      <path d="M0 -38 C-16 -62 -12 -92 0 -96 C12 -92 16 -62 0 -38 Z" fill="#FFE9D6" stroke="#D9715C" stroke-width="3"/>
-      <ellipse cx="0" cy="10" rx="44" ry="40" fill="#EBB868" stroke="#C9973F" stroke-width="3"/>
-      <ellipse cx="-44" cy="22" rx="8" ry="13" transform="rotate(18 -44 22)" fill="#EBB868" stroke="#C9973F" stroke-width="2.4"/>
-      <ellipse cx="44" cy="22" rx="8" ry="13" transform="rotate(-18 44 22)" fill="#EBB868" stroke="#C9973F" stroke-width="2.4"/>
+      <ellipse cx="0" cy="-62" rx="11" ry="36" transform="rotate(-62 0 -28)" fill="#F08C76" stroke="#D9715C" stroke-width="3"/>
+      <ellipse cx="0" cy="-62" rx="11" ry="34" transform="rotate(-33 0 -28)" fill="#FFF0E1" stroke="#D9715C" stroke-width="3"/>
+      <ellipse cx="0" cy="-66" rx="12" ry="38" fill="#F08C76" stroke="#D9715C" stroke-width="3"/>
+      <ellipse cx="0" cy="-62" rx="11" ry="34" transform="rotate(33 0 -28)" fill="#FFF0E1" stroke="#D9715C" stroke-width="3"/>
+      <ellipse cx="0" cy="-62" rx="11" ry="36" transform="rotate(62 0 -28)" fill="#F08C76" stroke="#D9715C" stroke-width="3"/>
+      <path d="M-14 -30 Q0 -38 14 -30 Q0 -22 -14 -30 Z" fill="#D9715C" stroke="#C15E4B" stroke-width="2"/>
+      <ellipse cx="0" cy="10" rx="44" ry="38" fill="#E9C27E" stroke="#C9973F" stroke-width="3"/>
+      <path d="M-34 38 Q0 47 34 36" fill="none" stroke="#D9A94E" stroke-width="3" opacity=".55"/>
+      <ellipse cx="-42" cy="24" rx="8" ry="12" transform="rotate(24 -42 24)" fill="#E9C27E" stroke="#C9973F" stroke-width="2.4"/>
+      <ellipse cx="42" cy="24" rx="8" ry="12" transform="rotate(-24 42 24)" fill="#E9C27E" stroke="#C9973F" stroke-width="2.4"/>
+      <ellipse cx="-12" cy="49" rx="10" ry="6" fill="#E0B36A" stroke="#C9973F" stroke-width="2.4"/>
+      <ellipse cx="12" cy="49" rx="10" ry="6" fill="#E0B36A" stroke="#C9973F" stroke-width="2.4"/>
       <g fill="#D9A94E" opacity=".6">
-        <circle cx="-26" cy="-12" r="2.4"/><circle cx="26" cy="-14" r="2.2"/><circle cx="30" cy="20" r="2"/>
-        <circle cx="-30" cy="24" r="2"/><circle cx="4" cy="-26" r="1.8"/>
+        <circle cx="-26" cy="-10" r="2.4"/><circle cx="26" cy="-12" r="2.2"/><circle cx="30" cy="20" r="2"/>
+        <circle cx="-30" cy="24" r="2"/><circle cx="4" cy="-24" r="1.8"/>
       </g>
-      <use href="#eye" x="-15" y="0"/>
-      <use href="#eye" x="15" y="0"/>
-      <use href="#smile" x="0" y="12"/>
-      <use href="#blush" x="-30" y="14"/>
-      <use href="#blush" x="30" y="14"/>
+      <use href="#eye" x="-15" y="2"/>
+      <use href="#eye" x="15" y="2"/>
+      <path d="M-5 14 L5 14" fill="none" stroke="#5C4A3D" stroke-width="2.4" stroke-linecap="round"/>
     </g>
 
     <!-- 灰尘 -->
     <g id="c-hokori" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M-50 30 C-66 28 -70 8 -54 0 C-60 -20 -42 -34 -26 -26 C-20 -46 6 -52 18 -34 C38 -46 60 -30 50 -10 C68 -2 64 24 44 26 C40 42 14 48 4 36 C-8 48 -34 46 -50 30 Z" fill="#D9D2C8" stroke="#B7AC9F" stroke-width="3"/>
+      <path d="M-44 34 C-58 34 -66 22 -60 10 C-70 0 -64 -16 -50 -18 C-48 -34 -30 -40 -18 -32 C-12 -46 8 -48 18 -36 C32 -44 48 -34 48 -20 C62 -14 64 2 52 10 C58 24 46 36 32 34 C26 46 6 48 -4 38 C-14 48 -34 44 -44 34 Z" fill="#D9D2C8" stroke="#B7AC9F" stroke-width="3"/>
+      <path d="M0 -46 C0 -56 10 -60 16 -54 C12 -52 9 -48 8 -44" fill="none" stroke="#B7AC9F" stroke-width="3" stroke-linecap="round"/>
       <g fill="#C3B9AC" opacity=".55">
         <circle cx="-64" cy="-16" r="2.4"/><circle cx="58" cy="-22" r="2"/><circle cx="52" cy="38" r="2.6"/><circle cx="-54" cy="44" r="2"/>
       </g>
@@ -561,17 +714,26 @@
     <g id="c-suzume" stroke-linejoin="round" stroke-linecap="round">
       <path d="M36 34 Q66 36 72 56 Q50 56 34 46 Z" fill="#B08E64" stroke="#96754D" stroke-width="2.6"/>
       <ellipse cx="0" cy="4" rx="47" ry="44" fill="#CDAB7D" stroke="#A7855C" stroke-width="3"/>
-      <path d="M-40 -18 Q0 -56 40 -18 Q0 -32 -40 -18 Z" fill="#B08E64" opacity=".9"/>
+      <path d="M-43 -12 C-37 -42 -16 -50 0 -50 C16 -50 37 -42 43 -12 C26 -22 12 -26 0 -26 C-12 -26 -26 -22 -43 -12 Z" fill="#B08E64" opacity=".95"/>
       <ellipse cx="0" cy="22" rx="28" ry="24" fill="#F7EBD7"/>
+      <ellipse cx="-22" cy="8" rx="12.5" ry="10" fill="#FBF2E2"/>
+      <ellipse cx="22" cy="8" rx="12.5" ry="10" fill="#FBF2E2"/>
+      <circle cx="-31" cy="3" r="3" fill="#5F4A38"/>
+      <circle cx="31" cy="3" r="3" fill="#5F4A38"/>
+      <path d="M-12 14 Q0 10 12 14 Q10 32 0 34 Q-10 32 -12 14 Z" fill="#816343" opacity=".95"/>
       <ellipse cx="-42" cy="16" rx="11" ry="20" transform="rotate(14 -42 16)" fill="#B08E64" stroke="#96754D" stroke-width="2.4"/>
       <ellipse cx="42" cy="16" rx="11" ry="20" transform="rotate(-14 42 16)" fill="#B08E64" stroke="#96754D" stroke-width="2.4"/>
+      <g stroke="#96754D" stroke-width="1.8" fill="none" opacity=".8">
+        <path d="M-46 8 Q-42 16 -44 24 M-40 6 Q-36 14 -38 22"/>
+        <path d="M46 8 Q42 16 44 24 M40 6 Q36 14 38 22"/>
+      </g>
       <ellipse cx="-12" cy="51" rx="10" ry="6" fill="#E3A75F" stroke="#C58C44" stroke-width="2.2"/>
       <ellipse cx="12" cy="51" rx="10" ry="6" fill="#E3A75F" stroke="#C58C44" stroke-width="2.2"/>
-      <use href="#eye" x="-16" y="-6"/>
-      <use href="#eye" x="16" y="-6"/>
-      <path d="M0 4 L9 9 L0 14 L-9 9 Z" fill="#F0B65A" stroke="#D69A3F" stroke-width="2"/>
-      <use href="#blush" x="-30" y="8"/>
-      <use href="#blush" x="30" y="8"/>
+      <use href="#eye" x="-16" y="-8"/>
+      <use href="#eye" x="16" y="-8"/>
+      <path d="M0 3 L8 8 L0 13 L-8 8 Z" fill="#F0B65A" stroke="#D69A3F" stroke-width="2"/>
+      <use href="#blush" x="-31" y="12"/>
+      <use href="#blush" x="31" y="12"/>
     </g>
 
     <!-- 包袱布 -->
@@ -579,10 +741,11 @@
       <path d="M-26 -14 L-44 -50 L-8 -30 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
       <path d="M26 -14 L44 -50 L8 -30 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
       <path d="M-54 40 Q-60 -2 -22 -8 Q0 -18 22 -8 Q60 -2 54 40 Q0 56 -54 40 Z" fill="#F3C4BE" stroke="#D6A09A" stroke-width="3"/>
-      <g fill="#FFF8F5" opacity=".85">
-        <circle cx="-34" cy="14" r="3"/><circle cx="-20" cy="32" r="2.4"/><circle cx="30" cy="10" r="3"/>
-        <circle cx="42" cy="26" r="2.2"/><circle cx="4" cy="32" r="2.6"/><circle cx="-44" cy="30" r="2"/>
-        <circle cx="18" cy="-6" r="2.4"/>
+      <path d="M-22 -12 Q0 -18 22 -12" fill="none" stroke="#E3AFA8" stroke-width="2" opacity=".6"/>
+      <g fill="#FFF2DE" opacity=".95">
+        <circle cx="-40" cy="6" r="3.4"/><circle cx="-30" cy="30" r="3"/><circle cx="-8" cy="36" r="2.6"/>
+        <circle cx="22" cy="36" r="3"/><circle cx="40" cy="24" r="2.6"/><circle cx="38" cy="2" r="3.4"/>
+        <circle cx="8" cy="-4" r="2.6"/><circle cx="-20" cy="-2" r="2.4"/>
       </g>
       <use href="#eye" x="-17" y="6"/>
       <use href="#eye" x="17" y="6"/>
@@ -607,18 +770,26 @@
 
     <!-- 金鱼 -->
     <g id="c-kingyo" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M-30 0 Q-66 -30 -80 -12 Q-64 4 -34 14 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.6"/>
-      <path d="M-32 12 Q-66 24 -70 46 Q-48 42 -28 22 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.6"/>
-      <path d="M-6 -34 Q0 -50 14 -40 Q8 -32 -2 -30 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.4"/>
+      <path d="M-28 -2 C-52 -34 -84 -34 -86 -10 C-88 6 -60 16 -32 12 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.8"/>
+      <path d="M-30 12 C-64 20 -84 42 -68 56 C-50 62 -32 38 -22 22 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.8"/>
+      <path d="M-38 2 C-56 -20 -72 -22 -74 -10 C-76 0 -58 8 -38 8 Z" fill="#FFE7D6" opacity=".75"/>
+      <path d="M-38 18 C-58 26 -70 40 -64 46 C-54 48 -42 34 -34 24 Z" fill="#FFE7D6" opacity=".65"/>
+      <g stroke="#D97D5C" stroke-width="1.8" fill="none" opacity=".6">
+        <path d="M-76 -12 Q-58 -4 -36 8"/><path d="M-72 0 Q-54 4 -34 12"/>
+        <path d="M-62 46 Q-50 38 -34 26"/>
+      </g>
+      <path d="M-8 -32 Q0 -50 16 -40 Q10 -30 -2 -28 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.4"/>
       <ellipse cx="2" cy="6" rx="40" ry="36" fill="#F49B77" stroke="#D97D5C" stroke-width="3"/>
       <ellipse cx="2" cy="18" rx="25" ry="21" fill="#FDEBDD"/>
-      <ellipse cx="-36" cy="14" rx="8" ry="14" transform="rotate(24 -36 14)" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
-      <ellipse cx="40" cy="14" rx="8" ry="14" transform="rotate(-24 40 14)" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
+      <path d="M-36 10 Q-52 4 -56 18 Q-58 30 -46 30 Q-38 24 -34 16 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
+      <path d="M40 10 Q56 4 60 18 Q62 30 50 30 Q42 24 38 16 Z" fill="#F7B394" stroke="#DA7E60" stroke-width="2.2"/>
       <use href="#eye" x="-12" y="-4"/>
       <use href="#eye" x="16" y="-4"/>
       <circle cx="2" cy="12" r="3.2" fill="none" stroke="#B65C41" stroke-width="2"/>
       <use href="#blush" x="-25" y="8"/>
       <use href="#blush" x="28" y="8"/>
+      <circle cx="45" cy="-24" r="4.6" fill="#F2FAFB" stroke="#CFE4E7" stroke-width="2"/>
+      <circle cx="43.5" cy="-25.5" r="1.3" fill="#FFFFFF"/>
     </g>
 
     <!-- 小袋子 -->
@@ -626,7 +797,13 @@
       <path d="M-20 -26 Q-20 -52 0 -52 Q20 -52 20 -26" fill="none" stroke="#9FBCA8" stroke-width="7" stroke-linecap="round"/>
       <path d="M-46 36 Q-54 -10 -30 -22 Q0 -34 30 -22 Q54 -10 46 36 Q0 52 -46 36 Z" fill="#D9E9DD" stroke="#A9C2B2" stroke-width="3"/>
       <path d="M-30 -19 Q0 -30 30 -19" fill="none" stroke="#8FA995" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="31" cy="-20" r="4.5" fill="#8FA995"/>
+      <g stroke="#8FA995" stroke-width="1.8" stroke-linecap="round">
+        <path d="M-26 -24 L-22 -18"/><path d="M-16 -27 L-12 -21"/><path d="M-6 -29 L-2 -23"/>
+        <path d="M4 -29 L8 -23"/><path d="M14 -27 L18 -21"/><path d="M24 -24 L28 -18"/>
+      </g>
+      <path d="M30 -20 Q34 -16 33 -10" fill="none" stroke="#8FA995" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="33" cy="-8" r="3.2" fill="#8FA995"/>
+      <path d="M33 -4 C33 -7 28 -7 29.5 -2 C30.5 1 33 3 33 3 C33 3 35.5 1 36.5 -2 C38 -7 33 -7 33 -4 Z" fill="#F2B7B3"/>
       <use href="#eye" x="-16" y="4"/>
       <use href="#eye" x="16" y="4"/>
       <use href="#smile" x="0" y="14"/>
@@ -648,10 +825,37 @@
   </defs>
 </svg>
 
+<div id="lock-screen" class="lock-screen" role="dialog" aria-modal="true" aria-labelledby="lock-title">
+  <span class="lock-spark s1" aria-hidden="true">✦</span>
+  <span class="lock-spark s2" aria-hidden="true">✦</span>
+  <span class="lock-spark s3" aria-hidden="true">♡</span>
+  <span class="lock-spark s4" aria-hidden="true">✦</span>
+  <span class="lock-spark s5" aria-hidden="true">✦</span>
+  <div class="lock-card">
+    <div class="lock-art" aria-hidden="true">
+      <svg viewBox="-80 -80 160 160" xmlns="http://www.w3.org/2000/svg"><use href="#c-shirokuma" transform="translate(0 6) scale(0.78)"/></svg>
+    </div>
+    <p class="lock-kicker">RUIQING'S LITTLE CORNER</p>
+    <h2 class="lock-title" id="lock-title">睿清的小角落</h2>
+    <p class="lock-sub">输入专属暗号，和小伙伴们一起躲进角落吧。</p>
+    <form id="lock-form" novalidate>
+      <label class="sr-only" for="lock-password">暗号</label>
+      <div class="lock-field" id="lock-field">
+        <input id="lock-password" name="password" type="password" inputmode="text" autocomplete="off" placeholder="输入暗号" aria-describedby="lock-error">
+        <button type="submit">进入角落</button>
+      </div>
+      <p class="lock-error" id="lock-error" role="alert" aria-live="polite"></p>
+    </form>
+    <p class="lock-note">♡ 只属于我们的小小角落 ♡</p>
+  </div>
+</div>
+
+<div id="page-content" class="page-content" aria-hidden="true">
+
 <header class="hero">
-  <p class="eyebrow">すみっコぐらし · SUMIKKO GURASHI</p>
+  <p class="eyebrow">すみっコぐらし · RUIQING'S CORNER</p>
   <h1>
-    <span class="h1-main">角落生物们</span>
+    <span class="h1-main">睿清的小角落</span>
     <span class="h1-sub">快乐地生活在一起</span>
   </h1>
   <p class="lead">房间的每个小角落里，都住着软乎乎的小伙伴。<br>挤一挤，刚刚好。</p>
@@ -777,7 +981,7 @@
             <ellipse cx="790" cy="1036" rx="82" ry="13"/>
             <ellipse cx="190" cy="1292" rx="58" ry="11"/>
             <ellipse cx="415" cy="1293" rx="64" ry="11"/>
-            <ellipse cx="640" cy="1282" rx="64" ry="11"/>
+            <ellipse cx="640" cy="1287" rx="64" ry="11"/>
             <ellipse cx="818" cy="1285" rx="50" ry="10"/>
             <ellipse cx="235" cy="1489" rx="82" ry="14"/>
             <ellipse cx="462" cy="1487" rx="70" ry="13"/>
@@ -846,8 +1050,8 @@
               <use href="#c-nisetsumuri"/>
             </g>
           </g>
-          <g transform="translate(640 1206) scale(1.25)">
-            <g class="char-anim" data-tap data-name="杂草" data-line="总有一天，我也会开花的！" tabindex="0" role="button" aria-label="杂草" style="--delay:-3.4s;--dur:4.9s">
+          <g transform="translate(640 1202) scale(1.25)">
+            <g class="char-anim" data-tap data-name="杂草" data-line="总有一天，我会变成漂亮的花束！" tabindex="0" role="button" aria-label="杂草" style="--delay:-3.4s;--dur:4.9s">
               <use href="#c-zassou"/>
             </g>
           </g>
@@ -939,13 +1143,13 @@
       </article>
 
       <article class="card" style="--tint:#F7EEE0">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-neko" transform="translate(-13 .7) scale(1.31)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-neko" transform="translate(-21.6 .6) scale(1.25)"/></svg></div>
         <h3>猫 <span>ねこ</span></h3>
-        <p>害羞的小猫，喜欢在角落咔嚓咔嚓地磨爪子。</p>
+        <p>害羞的三花猫，喜欢在角落咔嚓咔嚓地磨爪子。</p>
       </article>
 
       <article class="card" style="--tint:#E3F2EF">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-tokage" transform="translate(-26.5 -6.3) scale(1.15)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-tokage" transform="translate(-18 -1.2) scale(1.2)"/></svg></div>
         <h3>蜥蜴 <span>とかげ</span></h3>
         <p>其实是恐龙，却一本正经地假装成蜥蜴。</p>
       </article>
@@ -957,19 +1161,19 @@
       </article>
 
       <article class="card" style="--tint:#ECEEF9">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-nisetsumuri" transform="translate(9.8 -23) scale(1.64)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-nisetsumuri" transform="translate(7 -18) scale(1.4)"/></svg></div>
         <h3>假蜗牛 <span>にせつむり</span></h3>
-        <p>明明是蛞蝓，却一直努力地扮成一只蜗牛。</p>
+        <p>明明是蛞蝓，却戴着浅蓝的壳努力扮成蜗牛。</p>
       </article>
 
       <article class="card" style="--tint:#EAF3E0">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-zassou" transform="translate(-2.2 0) scale(1.47)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-zassou" transform="translate(0 -18.4) scale(1.6)"/></svg></div>
         <h3>杂草 <span>ざっそう</span></h3>
-        <p>有梦想的小杂草，也想被温柔地对待。</p>
+        <p>总梦想着有一天，被扎成漂亮的花束。</p>
       </article>
 
       <article class="card" style="--tint:#FBEDD9">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-ebifurai" transform="translate(0 29) scale(1.26)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-ebifurai" transform="translate(0 28) scale(1.15)"/></svg></div>
         <h3>炸虾尾 <span>えびふらいのしっぽ</span></h3>
         <p>炸虾的尾巴，香喷喷地留到了最后。</p>
       </article>
@@ -989,7 +1193,7 @@
       <article class="card" style="--tint:#FBE9E7">
         <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-furoshiki" transform="translate(0 3.8) scale(1.53)"/></svg></div>
         <h3>包袱布 <span>ふろしき</span></h3>
-        <p>软软的包袱布，能包住所有小小的心事。</p>
+        <p>粉底奶油色水玉的包袱布，能包住所有小心事。</p>
       </article>
 
       <article class="card" style="--tint:#F6F3EA">
@@ -999,7 +1203,7 @@
       </article>
 
       <article class="card" style="--tint:#FDECE4">
-        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-kingyo" transform="translate(23 5.8) scale(1.44)"/></svg></div>
+        <div class="card-art"><svg viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"><use href="#c-kingyo" transform="translate(16 -4) scale(1.25)"/></svg></div>
         <h3>金鱼 <span>きんぎょ</span></h3>
         <p>在空气里游泳的小金鱼，噗噜噗噜吐泡泡。</p>
       </article>
@@ -1020,10 +1224,13 @@
   </section>
 
   <footer>
-    <p>非官方粉丝同人作品 · 角色版权归 San-X 所有</p>
+    <p>睿清的小角落 · 非官方粉丝同人作品 · 角色版权归 San-X 所有</p>
     <p class="made">made with <span>♡</span> for the little corners</p>
+    <button id="relock-btn" class="relock" type="button">锁定小角落</button>
   </footer>
 </main>
+
+</div><!-- /page-content -->
 
 <script>
 (() => {
@@ -1098,6 +1305,86 @@
     e.preventDefault();
     react(target);
   });
+})();
+</script>
+
+<script>
+(() => {
+  const LOCK_KEY = 'ruiqing-unlocked';
+  const PASSWORD_HASH = 4799627755105834;
+  const lockScreen = document.getElementById('lock-screen');
+  const pageContent = document.getElementById('page-content');
+  const form = document.getElementById('lock-form');
+  const field = document.getElementById('lock-field');
+  const input = document.getElementById('lock-password');
+  const error = document.getElementById('lock-error');
+  const relockBtn = document.getElementById('relock-btn');
+
+  function cyrb53(str, seed = 0) {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) {
+      ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  }
+
+  function showLocked() {
+    try { sessionStorage.removeItem(LOCK_KEY); } catch (e) {}
+    document.documentElement.classList.remove('pre-unlocked');
+    document.body.classList.add('locked');
+    lockScreen.removeAttribute('aria-hidden');
+    pageContent.setAttribute('aria-hidden', 'true');
+    error.textContent = '';
+    input.value = '';
+    window.scrollTo(0, 0);
+    window.setTimeout(() => input.focus(), 120);
+  }
+
+  function unlock(remember) {
+    document.body.classList.remove('locked');
+    document.documentElement.classList.remove('pre-unlocked');
+    lockScreen.setAttribute('aria-hidden', 'true');
+    pageContent.removeAttribute('aria-hidden');
+    error.textContent = '';
+    if (remember) {
+      try { sessionStorage.setItem(LOCK_KEY, '1'); } catch (e) {}
+    }
+    const title = document.querySelector('.h1-main');
+    if (title) {
+      title.setAttribute('tabindex', '-1');
+      title.focus({ preventScroll: true });
+    }
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (value && cyrb53('ruiqing::' + value) === PASSWORD_HASH) {
+      unlock(true);
+    } else {
+      error.textContent = value ? '暗号不对，再想一想～' : '先输入暗号哦。';
+      field.classList.remove('shake');
+      void field.offsetWidth;
+      field.classList.add('shake');
+      input.focus();
+      input.select();
+    }
+  });
+
+  field.addEventListener('animationend', () => field.classList.remove('shake'));
+  input.addEventListener('input', () => {
+    if (error.textContent) error.textContent = '';
+  });
+
+  if (relockBtn) relockBtn.addEventListener('click', showLocked);
+
+  if (document.documentElement.classList.contains('pre-unlocked')) {
+    unlock(false);
+  }
 })();
 </script>
 </body>
