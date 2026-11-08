@@ -792,6 +792,18 @@
   .care-affection-bar{height:8px;margin-top:4px;border-radius:999px;background:#F3E6D6;overflow:hidden}
   .care-affection-bar span{display:block;width:0;height:100%;border-radius:999px;background:linear-gradient(90deg,#F2B7B3,#E59A94);transition:width .35s ease}
   .care-level-note{margin:5px 0 0;min-height:14px;font-size:9.5px;line-height:1.5;color:#B49A86}
+  .care-cloud{
+    display:flex;align-items:center;gap:5px;margin:4px 0 0;
+    font-size:8.5px;line-height:1.5;letter-spacing:.02em;color:#93A48B;
+  }
+  .care-cloud::before{
+    content:"";width:5px;height:5px;flex:none;border-radius:50%;
+    background:#A9CBB8;box-shadow:0 0 0 2px rgba(169,203,184,.18);
+  }
+  .care-cloud[data-state="syncing"]{color:#B49A86}
+  .care-cloud[data-state="syncing"]::before{background:#E3BF7F;box-shadow:0 0 0 2px rgba(227,191,127,.18)}
+  .care-cloud[data-state="offline"]{color:#B49A86}
+  .care-cloud[data-state="offline"]::before{background:#D8B7A4;box-shadow:0 0 0 2px rgba(216,183,164,.18)}
   .care-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
   .care-action{
     padding:5px 8px;border:1px solid #EBDAC9;border-radius:999px;background:#FFFDF8;
@@ -1738,7 +1750,7 @@
     <div class="care-entry-copy">
       <p class="care-entry-kicker">SUMIKKO HOME · 小窝</p>
       <h2 id="care-entry-title">喂饱小伙伴</h2>
-      <p>用游戏里赚到的金币买食物，喂给角落生物，提升好感度，解锁更多互动动作。</p>
+      <p>用游戏里赚到的金币买食物，喂给角落生物。所有玩家的喂食都会累计进全站共享的好感度，一起解锁更多互动动作。</p>
     </div>
     <div class="care-entry-side">
       <span class="coin-pill"><span class="coin-dot" aria-hidden="true">✦</span><strong id="care-entry-coins">0</strong> 金币</span>
@@ -2022,7 +2034,7 @@
     <div class="care-body">
       <section class="care-main">
         <div class="care-block">
-          <div class="care-section-title"><span>小伙伴们</span><span class="care-section-sub">好感度会一直保存在本机</span></div>
+          <div class="care-section-title"><span>小伙伴们</span><span class="care-section-sub">全站共享 · 云端保存</span></div>
           <div id="care-char-strip" class="care-char-strip" role="listbox" aria-label="选择要互动的小伙伴"></div>
         </div>
         <div class="care-detail">
@@ -2033,9 +2045,10 @@
           <div class="care-detail-info">
             <p class="care-kicker">YOUR LITTLE FRIEND</p>
             <h2 id="care-name">白熊</h2>
-            <div class="care-affection-row"><span id="care-level">好感度 Lv.1</span><strong id="care-points">0 / 12</strong></div>
+            <div class="care-affection-row"><span id="care-level">全站 Lv.1</span><strong id="care-points">全站 0 / 85</strong></div>
             <div class="care-affection-bar"><span id="care-affection-fill"></span></div>
             <p id="care-level-note" class="care-level-note">再喂一点，就能解锁新动作。</p>
+            <p id="care-cloud" class="care-cloud" data-state="syncing" aria-live="polite">正在连接云端…</p>
             <div id="care-actions" class="care-actions" aria-label="互动动作"></div>
           </div>
         </div>
@@ -2048,7 +2061,7 @@
       <aside class="care-shop">
         <div class="care-section-title"><span>小角落商店</span><span class="care-section-sub">用金币换好吃的</span></div>
         <div id="care-shop-list" class="food-row"></div>
-        <p class="care-shop-note">玩游戏可以赚金币。食物、金币和好感度都会保存在本机浏览器里，下次打开还在。</p>
+        <p class="care-shop-note">玩游戏可以赚金币。金币和食物会按当前浏览器匿名保存到云端；好感度由全站所有玩家共享，大家一起喂。</p>
       </aside>
     </div>
     <div id="care-toast" class="care-toast" role="status" aria-live="polite"></div>
@@ -2458,10 +2471,10 @@
       const body = concatBytes(Uint8Array.from([pid >> 8, pid & 255]), mqttString(topic), Uint8Array.from([0]));
       this.send(mqttPacket(0x82, body));
     }
-    publish(topic, payload) {
+    publish(topic, payload, retain) {
       if (!this.connected) return false;
       const body = concatBytes(mqttString(topic), encoder.encode(payload));
-      this.send(mqttPacket(0x30, body));
+      this.send(mqttPacket(retain ? 0x31 : 0x30, body));
       return true;
     }
     send(bytes) {
@@ -2533,6 +2546,8 @@
       }
     }
   }
+
+  window.MqttLite = MqttLite;
 
   /* ---------- UI: overlay / modes / setup ---------- */
   function openGame() {
@@ -3354,6 +3369,18 @@
   'use strict';
 
   const PROFILE_KEY = 'ruiqing-sumikko-profile-v1';
+  const PROFILE_ID_KEY = 'ruiqing-sumikko-profile-id-v1';
+  const CLOUD_BROKER = 'wss://broker.emqx.io:8084/mqtt';
+  const CLOUD_WORLD = (() => {
+    try {
+      const override = new URLSearchParams(window.location.search).get('world');
+      if (override && /^[a-z0-9-]{1,40}$/.test(override)) return override;
+    } catch (e) {}
+    return 'ruiqing';
+  })();
+  const CLOUD_PROFILE_PREFIX = 'sumikko-cave/v1/world/' + CLOUD_WORLD + '/profiles/';
+  const CLOUD_TOPIC_FILTER = CLOUD_PROFILE_PREFIX + '+';
+  const CLOUD_SYNC_WAIT = 1200;
   const CHARS = [
     { key:'shirokuma', name:'白熊', sym:'c-shirokuma', tf:'translate(0 -2.6) scale(1.31)', tint:'#EAF2F6' },
     { key:'penguin', name:'企鹅？', sym:'c-penguin', tf:'translate(0 -3.5) scale(1.38)', tint:'#E7F1E9' },
@@ -3431,14 +3458,41 @@
     fill: $('care-affection-fill'), levelNote: $('care-level-note'),
     actions: $('care-actions'), speech: $('care-speech'),
     inventory: $('care-inventory'), shop: $('care-shop-list'),
-    toast: $('care-toast')
+    toast: $('care-toast'), cloud: $('care-cloud')
   };
+  const profileId = loadProfileId();
   let profile = loadProfile();
   let toastTimer = 0;
   let actTimer = 0;
+  const cloudProfiles = new Map();
+  let cloudMqtt = null;
+  let cloudConnected = false;
+  let cloudSynced = false;
+  let cloudDirty = true;
+  let cloudSyncTimer = 0;
+  let cloudRenderTimer = 0;
 
+  function randomHex(length) {
+    const bytes = new Uint8Array(Math.ceil(length / 2));
+    try {
+      if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+      else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    } catch (e) {
+      for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    }
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('').slice(0, length);
+  }
+  function loadProfileId() {
+    try {
+      const saved = localStorage.getItem(PROFILE_ID_KEY);
+      if (saved && /^[a-f0-9]{16,32}$/.test(saved)) return saved;
+    } catch (e) {}
+    const id = randomHex(24);
+    try { localStorage.setItem(PROFILE_ID_KEY, id); } catch (e) {}
+    return id;
+  }
   function defaultProfile() {
-    const p = { version:1, coins:0, inventory:{}, affection:{}, lastChar:'shirokuma' };
+    const p = { version:2, coins:0, inventory:{}, affection:{}, lastChar:'shirokuma', updatedAt:0 };
     FOODS.forEach((food) => { p.inventory[food.key] = 0; });
     CHARS.forEach((char) => { p.affection[char.key] = 0; });
     return p;
@@ -3458,6 +3512,7 @@
       });
     }
     if (raw.lastChar && CHARS.some((char) => char.key === raw.lastChar)) p.lastChar = raw.lastChar;
+    p.updatedAt = Math.max(0, Math.floor(Number(raw.updatedAt) || 0));
     return p;
   }
   function loadProfile() {
@@ -3468,8 +3523,164 @@
     return defaultProfile();
   }
   function saveProfile() {
+    profile.updatedAt = Date.now();
     try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (e) {}
     renderCoins();
+    cloudDirty = true;
+    if (cloudConnected && cloudSynced) publishOwnProfile();
+    else renderCloudState();
+  }
+  function globalAffection(key) {
+    let total = profile.affection[key] || 0;
+    cloudProfiles.forEach((other) => {
+      total += (other.affection && other.affection[key]) || 0;
+    });
+    return total;
+  }
+  function contributorCount() {
+    let count = CHARS.some((char) => (profile.affection[char.key] || 0) > 0) ? 1 : 0;
+    cloudProfiles.forEach((other) => {
+      if (CHARS.some((char) => ((other.affection && other.affection[char.key]) || 0) > 0)) count += 1;
+    });
+    return count;
+  }
+  function hasCloudSupport() {
+    return !!(window.MqttLite && window.WebSocket);
+  }
+  function clearCloudSyncTimer() {
+    if (!cloudSyncTimer) return;
+    window.clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = 0;
+  }
+  function renderCloudState() {
+    if (!ui.cloud) return;
+    let state = 'syncing';
+    let text = '正在连接云端…';
+    if (!hasCloudSupport()) {
+      state = 'offline';
+      text = '云端不可用，金币和好感度暂存本机';
+    } else if (!cloudConnected) {
+      state = 'syncing';
+      text = '正在连接云端…（本机暂存）';
+    } else if (!cloudSynced || cloudDirty) {
+      state = 'syncing';
+      text = '正在同步全站好感度…';
+    } else {
+      state = 'synced';
+      const count = contributorCount();
+      text = '全站共享 · 云端已同步' + (count > 0 ? ' · ' + count + ' 位小伙伴一起喂过' : '');
+    }
+    ui.cloud.dataset.state = state;
+    ui.cloud.textContent = text;
+  }
+  function publishOwnProfile(force) {
+    if (!cloudMqtt || !cloudConnected) {
+      cloudDirty = true;
+      renderCloudState();
+      return;
+    }
+    if (!cloudSynced && !force) {
+      cloudDirty = true;
+      renderCloudState();
+      return;
+    }
+    if (!force && !cloudDirty) {
+      renderCloudState();
+      return;
+    }
+    const published = cloudMqtt.publish(CLOUD_PROFILE_PREFIX + profileId, JSON.stringify(profile), true);
+    if (published) cloudDirty = false;
+    renderCloudState();
+  }
+  function beginCloudSync() {
+    clearCloudSyncTimer();
+    cloudSynced = false;
+    cloudSyncTimer = window.setTimeout(() => {
+      cloudSyncTimer = 0;
+      if (!cloudConnected) return;
+      cloudSynced = true;
+      publishOwnProfile(true);
+      scheduleSharedRender();
+    }, CLOUD_SYNC_WAIT);
+    renderCloudState();
+  }
+  function scheduleSharedRender() {
+    renderCloudState();
+    if (cloudRenderTimer) return;
+    cloudRenderTimer = window.setTimeout(() => {
+      cloudRenderTimer = 0;
+      if (!ui.overlay || ui.overlay.hidden) return;
+      renderCharStrip();
+      renderDetail();
+      renderInventory();
+    }, 90);
+  }
+  function handleCloudMessage(topic, payload) {
+    if (!topic || topic.indexOf(CLOUD_PROFILE_PREFIX) !== 0) return;
+    const id = topic.slice(CLOUD_PROFILE_PREFIX.length);
+    if (!id || id.indexOf('/') !== -1) return;
+    if (!payload) {
+      if (id !== profileId && cloudProfiles.delete(id)) scheduleSharedRender();
+      return;
+    }
+    let data;
+    try { data = JSON.parse(payload); } catch (e) { return; }
+    const incoming = normalizeProfile(data);
+    if (id === profileId) {
+      if (incoming.updatedAt > profile.updatedAt) {
+        profile = incoming;
+        try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (e) {}
+        cloudDirty = false;
+        if (!cloudSynced) {
+          cloudSynced = true;
+          clearCloudSyncTimer();
+        }
+        renderAll();
+        setDefaultSpeech();
+        renderCloudState();
+      } else if (!cloudSynced) {
+        clearCloudSyncTimer();
+        cloudSynced = true;
+        if (incoming.updatedAt < profile.updatedAt) {
+          cloudDirty = true;
+          publishOwnProfile(true);
+        } else {
+          cloudDirty = false;
+          renderCloudState();
+        }
+      }
+      return;
+    }
+    cloudProfiles.set(id, incoming);
+    scheduleSharedRender();
+  }
+  function connectCloud() {
+    if (!hasCloudSupport()) {
+      renderCloudState();
+      return;
+    }
+    cloudMqtt = new window.MqttLite({
+      urls: [CLOUD_BROKER],
+      clientId: 'wr' + randomHex(14),
+      onStatus: (status) => {
+        if (status === 'connected') {
+          cloudConnected = true;
+          renderCloudState();
+          return;
+        }
+        cloudConnected = false;
+        cloudSynced = false;
+        clearCloudSyncTimer();
+        renderCloudState();
+      },
+      onMessage: (topic, payload) => handleCloudMessage(topic, payload),
+      onReady: () => {
+        cloudConnected = true;
+        beginCloudSync();
+      }
+    });
+    cloudMqtt.subscribe(CLOUD_TOPIC_FILTER);
+    cloudMqtt.connect();
   }
   function currentMeta() {
     return CHARS.find((char) => char.key === profile.lastChar) || CHARS[0];
@@ -3485,7 +3696,7 @@
     return '<svg viewBox="-100 -100 200 200" aria-hidden="true"><use href="#' + meta.sym + '" transform="' + meta.tf + '"/></svg>';
   }
   function isMaxed() {
-    return (profile.affection[currentMeta().key] || 0) >= MAX_AFFECTION;
+    return globalAffection(currentMeta().key) >= MAX_AFFECTION;
   }
   function renderCoins() {
     ui.entryCoins.textContent = String(profile.coins);
@@ -3497,19 +3708,20 @@
     renderDetail();
     renderInventory();
     renderShop();
+    renderCloudState();
   }
   function renderCharStrip() {
     ui.strip.innerHTML = '';
     CHARS.forEach((meta) => {
-      const level = levelIndex(profile.affection[meta.key] || 0) + 1;
+      const level = levelIndex(globalAffection(meta.key)) + 1;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'care-char-btn';
       button.style.setProperty('--tint', meta.tint);
       button.setAttribute('role', 'option');
       button.setAttribute('aria-selected', meta.key === profile.lastChar ? 'true' : 'false');
-      button.setAttribute('aria-label', meta.name + '，好感度 Lv.' + level);
-      button.title = meta.name + ' · 好感度 Lv.' + level;
+      button.setAttribute('aria-label', meta.name + '，全站好感度 Lv.' + level);
+      button.title = meta.name + ' · 全站好感度 Lv.' + level;
       button.innerHTML = '<span class="care-char-face">' + charSvg(meta) + '</span>' +
         '<span class="care-level-badge">Lv.' + level + '</span>';
       button.addEventListener('click', () => selectChar(meta.key));
@@ -3524,20 +3736,21 @@
   }
   function renderDetail() {
     const meta = currentMeta();
-    const points = profile.affection[meta.key] || 0;
+    const own = profile.affection[meta.key] || 0;
+    const points = globalAffection(meta.key);
     const index = levelIndex(points);
     const level = index + 1;
     ui.portrait.style.setProperty('--tint', meta.tint);
     ui.portrait.innerHTML = charSvg(meta);
     ui.name.textContent = meta.name;
-    ui.level.textContent = '好感度 Lv.' + level + ' · ' + LEVEL_TITLES[index];
-    ui.points.textContent = points + ' / ' + MAX_AFFECTION;
+    ui.level.textContent = '全站 Lv.' + level + ' · ' + LEVEL_TITLES[index];
+    ui.points.textContent = points >= MAX_AFFECTION ? '全站 ' + points + ' 点 · 已满' : '全站 ' + points + ' / ' + MAX_AFFECTION;
     ui.fill.style.width = Math.min(100, (points / MAX_AFFECTION) * 100) + '%';
     if (points >= MAX_AFFECTION) {
-      ui.levelNote.textContent = '好感度满啦，已经是最喜欢的朋友。';
+      ui.levelNote.textContent = '全站好感度满啦，已经是最喜欢的朋友 · 你贡献了 ' + own + ' 点';
     } else {
       const next = LEVELS[index + 1];
-      ui.levelNote.textContent = '距离 Lv.' + (index + 2) + ' 还差 ' + (next - points) + ' 点，解锁「' + ACTIONS[index + 1].name + '」';
+      ui.levelNote.textContent = '全站还差 ' + (next - points) + ' 点到 Lv.' + (index + 2) + '，解锁「' + ACTIONS[index + 1].name + '」 · 你贡献了 ' + own + ' 点';
     }
     renderActions(level);
   }
@@ -3550,8 +3763,8 @@
       button.className = 'care-action';
       button.disabled = !unlocked;
       button.innerHTML = '<b>' + action.name + '</b>' + (unlocked ? '' : '<small>Lv.' + action.level + '</small>');
-      button.title = unlocked ? action.line : '好感度 Lv.' + action.level + ' 解锁';
-      button.setAttribute('aria-label', action.name + (unlocked ? '' : '，好感度 Lv.' + action.level + ' 解锁'));
+      button.title = unlocked ? action.line : '全站好感度 Lv.' + action.level + ' 解锁';
+      button.setAttribute('aria-label', action.name + (unlocked ? '' : '，全站好感度 Lv.' + action.level + ' 解锁'));
       if (unlocked) button.addEventListener('click', () => doAction(action));
       ui.actions.appendChild(button);
     });
@@ -3565,7 +3778,7 @@
       const card = document.createElement('div');
       card.className = 'food-card';
       card.innerHTML = '<div class="food-icon">' + food.icon + '</div>' +
-        '<div class="food-info"><h4>' + food.name + '</h4><p>×' + count + ' · +' + food.love + ' 好感</p></div>';
+        '<div class="food-info"><h4>' + food.name + '</h4><p>×' + count + ' · 全站 +' + food.love + ' 好感</p></div>';
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'food-btn';
@@ -3583,7 +3796,7 @@
       const card = document.createElement('div');
       card.className = 'food-card';
       card.innerHTML = '<div class="food-icon">' + food.icon + '</div>' +
-        '<div class="food-info"><h4>' + food.name + '</h4><p>' + food.price + ' 金币 · +' + food.love + ' 好感</p></div>';
+        '<div class="food-info"><h4>' + food.name + '</h4><p>' + food.price + ' 金币 · 全站 +' + food.love + ' 好感</p></div>';
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'food-btn buy';
@@ -3608,7 +3821,7 @@
   }
   function feedFood(food) {
     const meta = currentMeta();
-    const points = profile.affection[meta.key] || 0;
+    const points = globalAffection(meta.key);
     if (points >= MAX_AFFECTION) {
       showToast(meta.name + '已经吃得饱饱的啦。');
       return;
@@ -3620,12 +3833,13 @@
     }
     const beforeLevel = levelIndex(points);
     profile.inventory[food.key] = count - 1;
-    profile.affection[meta.key] = Math.min(MAX_AFFECTION, points + food.love);
+    profile.affection[meta.key] = Math.min(MAX_AFFECTION, (profile.affection[meta.key] || 0) + food.love);
     saveProfile();
     renderAll();
     animatePortrait('act-hop');
     spawnCareHearts(5);
-    const afterLevel = levelIndex(profile.affection[meta.key]);
+    const afterPoints = globalAffection(meta.key);
+    const afterLevel = levelIndex(afterPoints);
     const lines = [
       '好吃…谢谢你！',
       '唔，和你一起吃更香。',
@@ -3635,16 +3849,16 @@
     ];
     setSpeech(meta.name + '：' + lines[afterLevel]);
     if (afterLevel > beforeLevel) {
-      showToast('好感度升到 Lv.' + (afterLevel + 1) + ' · ' + LEVEL_TITLES[afterLevel] + '，解锁「' + ACTIONS[afterLevel].name + '」');
+      showToast('全站好感度升到 Lv.' + (afterLevel + 1) + ' · ' + LEVEL_TITLES[afterLevel] + '，解锁「' + ACTIONS[afterLevel].name + '」');
     } else {
-      showToast('好感度 +' + food.love);
+      showToast('全站好感度 +' + Math.max(0, afterPoints - points));
     }
   }
   function doAction(action) {
     const meta = currentMeta();
-    const level = levelIndex(profile.affection[meta.key] || 0) + 1;
+    const level = levelIndex(globalAffection(meta.key)) + 1;
     if (level < action.level) {
-      showToast('好感度还不够，再喂喂看吧。');
+      showToast('全站好感度还不够，再喂喂看吧。');
       return;
     }
     animatePortrait('act-' + action.key);
@@ -3680,7 +3894,7 @@
   }
   function setDefaultSpeech() {
     const meta = currentMeta();
-    const index = levelIndex(profile.affection[meta.key] || 0);
+    const index = levelIndex(globalAffection(meta.key));
     setSpeech(meta.name + '：' + LEVEL_LINES[index]);
   }
   function showToast(text) {
@@ -3723,6 +3937,7 @@
     profile.coins += reward;
     saveProfile();
     renderCoins();
+    if (!ui.overlay.hidden) renderAll();
     const line = document.getElementById('game-over-coins');
     if (line) line.textContent = '金币 +' + reward + '，已放进小窝';
   });
@@ -3730,6 +3945,7 @@
     if (event.key !== PROFILE_KEY) return;
     profile = loadProfile();
     renderCoins();
+    renderCloudState();
     if (!ui.overlay.hidden) {
       renderAll();
       setDefaultSpeech();
@@ -3742,7 +3958,7 @@
       if (!tap) return;
       const meta = CHARS.find((char) => char.name === tap.dataset.name);
       if (!meta) return;
-      const index = levelIndex(profile.affection[meta.key] || 0);
+      const index = levelIndex(globalAffection(meta.key));
       if (index <= 0 || !SCENE_LINES[index]) return;
       const speech = document.getElementById('speech');
       if (speech) speech.textContent = meta.name + '：「' + SCENE_LINES[index] + '」';
@@ -3750,6 +3966,8 @@
   }
 
   renderCoins();
+  renderCloudState();
+  connectCloud();
 })();
 </script>
 </body>
